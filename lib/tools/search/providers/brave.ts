@@ -1,3 +1,4 @@
+import { matchesHostScope, normalizeHostname } from '@/lib/acuity/search/scope'
 import {
   SearchImageItem,
   SearchResults,
@@ -85,7 +86,15 @@ export class BraveSearchProvider extends BaseSearchProvider {
     const promises: Promise<void>[] = []
 
     if (contentTypes.includes('web')) {
-      promises.push(this.searchWeb(query, maxResults, results))
+      promises.push(
+        this.searchWeb(
+          query,
+          maxResults,
+          results,
+          includeDomains,
+          excludeDomains
+        )
+      )
     }
 
     if (contentTypes.includes('video')) {
@@ -117,13 +126,36 @@ export class BraveSearchProvider extends BaseSearchProvider {
   private async searchWeb(
     query: string,
     maxResults: number,
-    results: SearchResults
+    results: SearchResults,
+    includeDomains: string[] = [],
+    excludeDomains: string[] = []
   ): Promise<void> {
     try {
+      const normalizedIncludes = includeDomains
+        .map(d => normalizeHostname(d))
+        .filter((d): d is string => Boolean(d))
+      const normalizedExcludes = excludeDomains
+        .map(d => normalizeHostname(d))
+        .filter((d): d is string => Boolean(d))
+
+      const queryParts = [query]
+      if (normalizedIncludes.length === 1) {
+        queryParts.push(`site:${normalizedIncludes[0]}`)
+      } else if (normalizedIncludes.length > 1) {
+        queryParts.push(
+          `(${normalizedIncludes.map(h => `site:${h}`).join(' OR ')})`
+        )
+      }
+      for (const ex of normalizedExcludes) {
+        queryParts.push(`-site:${ex}`)
+      }
+      const effectiveQuery = queryParts.join(' ')
+      const cappedCount = Math.min(Math.max(maxResults, 1), 20)
+
       const response = await fetch(
         `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(
-          query
-        )}&count=${maxResults}`,
+          effectiveQuery
+        )}&count=${cappedCount}`,
         {
           headers: {
             Accept: 'application/json',
@@ -139,8 +171,34 @@ export class BraveSearchProvider extends BaseSearchProvider {
       }
 
       const data = await response.json()
-      results.results = (data.web?.results || [])
-        .slice(0, maxResults)
+      const rawResults: BraveWebResult[] = data.web?.results || []
+      const filteredResults = rawResults.filter(item => {
+        if (
+          normalizedIncludes.length === 0 &&
+          normalizedExcludes.length === 0
+        ) {
+          return true
+        }
+        try {
+          const host = normalizeHostname(new URL(item.url).hostname)
+          if (!host) return false
+          if (normalizedExcludes.some(ex => matchesHostScope(host, ex, true))) {
+            return false
+          }
+          if (
+            normalizedIncludes.length > 0 &&
+            !normalizedIncludes.some(inc => matchesHostScope(host, inc, true))
+          ) {
+            return false
+          }
+          return true
+        } catch {
+          return false
+        }
+      })
+
+      results.results = filteredResults
+        .slice(0, cappedCount)
         .map((result: BraveWebResult) => ({
           title: result.title || 'No title',
           content: result.description || 'No description available',

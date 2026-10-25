@@ -1,45 +1,69 @@
 @import 'tailwindcss';
 @source "../node_modules/streamdown/dist/index.js";
 
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/Cormorant-Garamond.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrains-Mono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0 0 0);
-  --popover: oklch(0.99 0 0);
-  --popover-foreground: oklch(0 0 0);
-  --primary: oklch(0 0 0);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.94 0 0);
-  --secondary-foreground: oklch(0 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.44 0 0);
-  --accent: oklch(0.94 0 0);
-  --accent-foreground: oklch(0 0 0);
-  --destructive: oklch(0.63 0.19 23.03);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.94 0 0);
-  --ring: oklch(0 0 0);
-  --chart-1: oklch(0.81 0.17 75.35);
-  --chart-2: oklch(0.55 0.22 264.53);
-  --chart-3: oklch(0.72 0 0);
-  --chart-4: oklch(0.92 0 0);
-  --chart-5: oklch(0.56 0 0);
-  --sidebar: oklch(0.97 0 0);
-  --sidebar-foreground: oklch(0 0 0);
-  --sidebar-primary: oklch(0 0 0);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.94 0 0);
-  --sidebar-accent-foreground: oklch(0 0 0);
-  --sidebar-border: oklch(0.94 0 0);
-  --sidebar-ring: oklch(0 0 0);
-  --font-sans: Geist, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
-  --radius: 0.5rem;
+  --background: #09090f;
+  --foreground: #fafafa;
+  --card: #181820;
+  --card-foreground: #fafafa;
+  --popover: #111118;
+  --popover-foreground: #fafafa;
+  --primary: #d4a843;
+  --primary-foreground: #09090f;
+  --secondary: #181820;
+  --secondary-foreground: #fafafa;
+  --muted: #111118;
+  --muted-foreground: #b3b0bd;
+  --accent: #7c5ce0;
+  --accent-foreground: #fafafa;
+  --destructive: #d16060;
+  --destructive-foreground: #fafafa;
+  --border: #35313c;
+  --input: #35313c;
+  --ring: #d4a843;
+  --chart-1: #d4a843;
+  --chart-2: #7c5ce0;
+  --chart-3: #4ca771;
+  --chart-4: #6d83d8;
+  --chart-5: #e8c96a;
+  --sidebar: #111118;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #d4a843;
+  --sidebar-primary-foreground: #09090f;
+  --sidebar-accent: #181820;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #35313c;
+  --sidebar-ring: #d4a843;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 0.75rem;
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
   --shadow-sm:
@@ -61,42 +85,42 @@
 }
 
 .dark {
-  --background: oklch(0 0 0);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.14 0 0);
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: oklch(1 0 0);
-  --primary-foreground: oklch(0 0 0);
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.23 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.32 0 0);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.69 0.2 23.91);
-  --destructive-foreground: oklch(0 0 0);
-  --border: oklch(0.26 0 0);
-  --input: oklch(0.32 0 0);
-  --ring: oklch(0.72 0 0);
-  --chart-1: oklch(0.81 0.17 75.35);
-  --chart-2: oklch(0.58 0.21 260.84);
-  --chart-3: oklch(0.56 0 0);
-  --chart-4: oklch(0.44 0 0);
-  --chart-5: oklch(0.92 0 0);
-  --sidebar: oklch(0.23 0 0);
-  --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(1 0 0);
-  --sidebar-primary-foreground: oklch(0 0 0);
-  --sidebar-accent: oklch(0.32 0 0);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.32 0 0);
-  --sidebar-ring: oklch(0.72 0 0);
-  --font-sans: Geist, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
-  --radius: 0.5rem;
+  --background: #09090f;
+  --foreground: #fafafa;
+  --card: #181820;
+  --card-foreground: #fafafa;
+  --popover: #111118;
+  --popover-foreground: #fafafa;
+  --primary: #d4a843;
+  --primary-foreground: #09090f;
+  --secondary: #181820;
+  --secondary-foreground: #fafafa;
+  --muted: #111118;
+  --muted-foreground: #b3b0bd;
+  --accent: #7c5ce0;
+  --accent-foreground: #fafafa;
+  --destructive: #d16060;
+  --destructive-foreground: #fafafa;
+  --border: #35313c;
+  --input: #35313c;
+  --ring: #d4a843;
+  --chart-1: #d4a843;
+  --chart-2: #7c5ce0;
+  --chart-3: #4ca771;
+  --chart-4: #6d83d8;
+  --chart-5: #e8c96a;
+  --sidebar: #111118;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #d4a843;
+  --sidebar-primary-foreground: #09090f;
+  --sidebar-accent: #181820;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #35313c;
+  --sidebar-ring: #d4a843;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 0.75rem;
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
   --shadow-sm:

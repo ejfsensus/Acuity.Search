@@ -1,123 +1,124 @@
 <div align="center">
 
-# Morphic
+<img src="./public/acuity-mark.svg" alt="Acuity.Search Emblem" width="72" height="72" />
 
-An AI-powered search engine with a generative UI.
+# Acuity.Search
 
-[![DeepWiki](https://img.shields.io/badge/DeepWiki-miurla%2Fmorphic-blue.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAyCAYAAAAnWDnqAAAAAXNSR0IArs4c6QAAA05JREFUaEPtmUtyEzEQhtWTQyQLHNak2AB7ZnyXZMEjXMGeK/AIi+QuHrMnbChYY7MIh8g01fJoopFb0uhhEqqcbWTp06/uv1saEDv4O3n3dV60RfP947Mm9/SQc0ICFQgzfc4CYZoTPAswgSJCCUJUnAAoRHOAUOcATwbmVLWdGoH//PB8mnKqScAhsD0kYP3j/Yt5LPQe2KvcXmGvRHcDnpxfL2zOYJ1mFwrryWTz0advv1Ut4CJgf5uhDuDj5eUcAUoahrdY/56ebRWeraTjMt/00Sh3UDtjgHtQNHwcRGOC98BJEAEymycmYcWwOprTgcB6VZ5JK5TAJ+fXGLBm3FDAmn6oPPjR4rKCAoJCal2eAiQp2x0vxTPB3ALO2CRkwmDy5WohzBDwSEFKRwPbknEggCPB/imwrycgxX2NzoMCHhPkDwqYMr9tRcP5qNrMZHkVnOjRMWwLCcr8ohBVb1OMjxLwGCvjTikrsBOiA6fNyCrm8V1rP93iVPpwaE+gO0SsWmPiXB+jikdf6SizrT5qKasx5j8ABbHpFTx+vFXp9EnYQmLx02h1QTTrl6eDqxLnGjporxl3NL3agEvXdT0WmEost648sQOYAeJS9Q7bfUVoMGnjo4AZdUMQku50McDcMWcBPvr0SzbTAFDfvJqwLzgxwATnCgnp4wDl6Aa+Ax283gghmj+vj7feE2KBBRMW3FzOpLOADl0Isb5587h/U4gGvkt5v60Z1VLG8BhYjbzRwyQZemwAd6cCR5/XFWLYZRIMpX39AR0tjaGGiGzLVyhse5C9RKC6ai42ppWPKiBagOvaYk8lO7DajerabOZP46Lby5wKjw1HCRx7p9sVMOWGzb/vA1hwiWc6jm3MvQDTogQkiqIhJV0nBQBTU+3okKCFDy9WwferkHjtxib7t3xIUQtHxnIwtx4mpg26/HfwVNVDb4oI9RHmx5WGelRVlrtiw43zboCLaxv46AZeB3IlTkwouebTr1y2NjSpHz68WNFjHvupy3q8TFn3Hos2IAk4Ju5dCo8B3wP7VPr/FGaKiG+T+v+TQqIrOqMTL1VdWV1DdmcbO8KXBz6esmYWYKPwDL5b5FA1a0hwapHiom0r/cKaoqr+27/XcrS5UwSMbQAAAABJRU5ErkJggg==)](https://deepwiki.com/miurla/morphic) [![GitHub stars](https://img.shields.io/github/stars/miurla/morphic?style=flat&colorA=000000&colorB=000000)](https://github.com/miurla/morphic/stargazers) [![GitHub forks](https://img.shields.io/github/forks/miurla/morphic?style=flat&colorA=000000&colorB=000000)](https://github.com/miurla/morphic/network/members)
+**Open enquiry. Wider sources. Traceable answers.**
 
-<a href="https://vercel.com/oss">
-  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" />
-</a>
-
-<br />
-<br />
-
-<a href="https://trendshift.io/repositories/9207" target="_blank"><img src="https://trendshift.io/api/badge/repositories/9207" alt="miurla%2Fmorphic | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-<img src="./public/screenshot-2026-06-10.png" />
+Acuity Institute’s federated research and archival discovery instrument for spirituality, esoteric traditions, consciousness studies, overlooked literature, historical archives, institutional records, and open inquiry.
 
 </div>
 
-## Features
+---
 
-- AI-powered search with grounded, cited answers
-- Generative UI — answers render rich inline components (source-credited images, grids, headings) live from a streamed JSON spec, beyond plain markdown
-- Search modes: Quick and Adaptive
-- Model selector with dynamic provider detection (OpenAI, Anthropic, Google, Ollama, Vercel AI Gateway, OpenAI-compatible providers)
-- Multiple search providers (Tavily, SearXNG, Brave, Exa)
-- Chat history stored in PostgreSQL
-- Share search results with unique URLs
-- File upload support
-- User authentication with built-in accounts (Better Auth) or Supabase Auth
-- Guest mode for anonymous usage
-- Docker deployment ready
+## Overview
 
-## Installation
+**Acuity.Search** is a standalone research product in the [Acuity Institute](https://acuity.institute) ecosystem, adapted from the open-source [Morphic](https://github.com/miurla/morphic) baseline (`011ce44d0edc446212e2aa823088f37f98383b76`, Apache-2.0).
 
-### Docker (Recommended)
+Unlike single-provider AI search wrappers, Acuity.Search separates **source discovery**, **strict domain/path enforcement**, **verbatim evidence extraction**, and **optional model synthesis** so researchers can examine primary texts and archival records with complete provenance.
 
-The quickest way to run Morphic locally:
+### Core Capabilities
+
+- **Three Discovery Modes:**
+  - **General:** Multi-provider open inquiry across independent web and scholarly indexes.
+  - **Literature:** Edition-aware discovery for primary texts, translations, manuscripts, and archival holdings—keeping distinct translators and editions separate and distinguishing `fulltext-excerpt`, `snippet`, `catalogue-metadata`, `scan-no-text`, and `unavailable` states.
+  - **Collections:** Strict domain-group discovery across the **110-source Acuity Seed Catalogue** (10 thematic groups, 146 URLs, 117 normalized hostnames, 20 starter-priority repositories) plus custom user include/exclude domain rules.
+- **Four Federated Search Providers:**
+  - **External SearXNG** (`safesearch=0` default, no artificial 1-year cutoff, no hard-coded Google/Bing engine restriction, server-side gateway header support, per-engine diagnostics)
+  - **Brave Search** (`count <= 20` enforcement, compiled `site:` / `-site:` operators, local host/path verification)
+  - **Tavily Search** (`include_answers: false`, `include_images: false` default, no opaque `instagram.com` editorial blacklist, local host/path verification)
+  - **Exa** (`highlights` array extraction, native domain filters, local host/path verification)
+- **Reciprocal Rank Fusion (RRF) & Transparent Ordering:**
+  - Deduplicates identical normalized URLs across providers using $score(d) = \sum_{p \in P(d)} \frac{1}{60 + rank_p(d)}$ while retaining every provider's provenance, or switches to **Provider order** or **Newest**.
+- **Works With or Without an LLM (`ACUITY_SEARCH_LLM_MODE=unconfigured`):**
+  - Search, collection scoping, source inspection, Evidence Ledger verification, selected-output sharing, and Markdown / JSON bundle exports work out-of-the-box without any LLM key configured.
+- **Immutable Evidence Ledger & Citation Verification:**
+  - Bounded SSRF-guarded, redirect-verified, canonical-checked extraction produces SHA-256-hashed `EvidenceRecord` items and deterministically verifies `[S1]`, `[S2]` citations.
+- **Selected-Output Share Snapshots & Codex Research Bundles:**
+  - Replaces whole-chat public links with previewed, revocable, expiring snapshots of user-selected sources and evidence (`/share/[token]`), and exports `acuity.research-bundle.v1` JSON bundles with detached SHA-256 manifests.
+
+---
+
+## Quick Start
+
+### 1. Install Dependencies
 
 ```bash
-docker pull ghcr.io/miurla/morphic:latest
+bun install --frozen-lockfile
 ```
 
-Then set up with Docker Compose:
+### 2. Configure Environment
 
-1. Clone the repository and configure environment:
+Copy `.env.acuity.example` to `.env.local`:
 
 ```bash
-git clone https://github.com/miurla/morphic.git
-cd morphic
-cp .env.local.example .env.local
+cp .env.acuity.example .env.local
 ```
 
-2. Edit `.env.local` and set at least one AI provider API key:
+Configure at least one search provider in `.env.local` (no LLM key is required to run search, inspect sources, or export bundles):
 
-```bash
-OPENAI_API_KEY=your_openai_key
+```dotenv
+# External SearXNG instance (not bundled in production compose)
+SEARXNG_API_URL=https://your-searxng-instance.org
+SEARXNG_SAFESEARCH=0
+
+# Optional commercial search providers
+BRAVE_SEARCH_API_KEY=
+TAVILY_API_KEY=
+EXA_API_KEY=
+
+# Provider-neutral LLM synthesis (defaults to unconfigured / results-only)
+ACUITY_SEARCH_LLM_MODE=unconfigured
 ```
 
-See [supported providers](./docs/CONFIGURATION.md#supported-providers) for other options (Anthropic, Google, Ollama, Vercel AI Gateway, OpenAI-compatible providers).
-
-3. Start all services:
+### 3. Validate the Domain Registry & Run Development Server
 
 ```bash
-docker compose up -d
-```
-
-4. Visit http://localhost:3000 and select your model from the model selector.
-
-Docker Compose starts PostgreSQL, Redis, SearXNG, and Morphic automatically. No additional search API key is needed — SearXNG is included.
-
-See the [Docker Guide](./docs/DOCKER.md) for more options including building from source and file upload configuration.
-
-### Local Development
-
-1. Clone and install:
-
-```bash
-git clone https://github.com/miurla/morphic.git
-cd morphic
-bun install
-```
-
-2. Configure environment:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local` and set your API keys:
-
-```bash
-OPENAI_API_KEY=your_openai_key
-TAVILY_API_KEY=your_tavily_key
-```
-
-To enable chat history, authentication, file upload, and other features, see [CONFIGURATION.md](./docs/CONFIGURATION.md).
-
-For what a self-hosted instance sends outbound, and what is off by default, see [PRIVACY.md](./docs/PRIVACY.md).
-
-3. Start the dev server:
-
-```bash
+bun scripts/acuity-validate-registry.ts
 bun dev
 ```
 
-Visit http://localhost:3000.
+Open `http://localhost:3000`.
 
-## Deploy
+---
 
-### Vercel
+## Verification, Build & Backup Commands
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmiurla%2Fmorphic&env=OPENAI_API_KEY,TAVILY_API_KEY,ENABLE_AUTH)
+```bash
+# Validate the 110-source / 10-group / 146-URL / 117-host seed registry
+bun scripts/acuity-validate-registry.ts
 
-## Contributing
+# TypeScript check
+bun run typecheck
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started, including local development setup.
+# ESLint check
+bun run lint
 
-## License
+# Prettier format check
+bun run format:check
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+# Run full Vitest suite (unit, adapter, UI, and all 12 acceptance fixtures)
+bun run test
+
+# Production Next.js build
+bun run build
+
+# Generate and restore-test the standalone backup ZIP archive
+python3 scripts/acuity-backup.py
+```
+
+---
+
+## Documentation
+
+- [Architecture & Operations Guide (`docs/ACUITY-SEARCH.md`)](./docs/ACUITY-SEARCH.md)
+- [Upstream Baseline & Seam Audit (`docs/UPSTREAM-AUDIT.md`)](./docs/UPSTREAM-AUDIT.md)
+- [Build Status & Verification Report (`BUILD-STATUS.md`)](./BUILD-STATUS.md)
+- [Environment Template (`.env.acuity.example`)](./.env.acuity.example)
+
+---
+
+## Attribution & License
+
+Acuity.Search is built upon the open-source [Morphic](https://github.com/miurla/morphic) project (Copyright © Morphic Contributors), licensed under the [Apache License 2.0](./LICENSE). Self-hosted typography (`Cormorant Garamond`, `Inter`, `JetBrains Mono`) is distributed under the SIL Open Font License 1.1 in [`public/fonts/`](./public/fonts/).

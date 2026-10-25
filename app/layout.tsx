@@ -1,7 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter as FontSans } from 'next/font/google'
-
-import { Analytics } from '@vercel/analytics/next'
 
 import { getCurrentUser, getCurrentUserId } from '@/lib/auth/get-current-user'
 import { getAuthProvider, withShareOptIn } from '@/lib/auth/provider'
@@ -20,7 +17,6 @@ import { Toaster } from '@/components/ui/sonner'
 
 import AppSidebar from '@/components/app-sidebar'
 import ArtifactRoot from '@/components/artifact/artifact-root'
-import Header from '@/components/header'
 import { KeyboardShortcutHandler } from '@/components/keyboard-shortcut-handler'
 import { LibraryProvider } from '@/components/library/library-context'
 import { PostHogProvider } from '@/components/posthog-provider'
@@ -29,17 +25,11 @@ import { UsageBudgetProvider } from '@/components/usage-budget-provider'
 
 import './globals.css'
 
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans'
-})
-
-const title = 'Morphic'
-const description =
-  'A fully open-source AI-powered answer engine with a generative UI.'
+const title = 'Acuity.Search'
+const description = 'Open enquiry. Wider sources. Traceable answers.'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://morphic.sh'),
+  metadataBase: new URL('https://acuity.institute'),
   title,
   description,
   openGraph: {
@@ -49,16 +39,14 @@ export const metadata: Metadata = {
   twitter: {
     title,
     description,
-    card: 'summary_large_image',
-    creator: '@miiura'
+    card: 'summary_large_image'
   }
 }
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  minimumScale: 1,
-  maximumScale: 1
+  minimumScale: 1
 }
 
 export default async function RootLayout({
@@ -67,10 +55,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const user = await getCurrentUser()
-  // Sharing is opt-in for Better Auth (ENABLE_SHARE=true); the flag is
-  // folded into the capabilities on the server so a prebuilt image can
-  // still toggle it at runtime. Supabase shares without the flag, as it
-  // always has. shareChat enforces the same rule again.
   const authProvider = getAuthProvider()
   const capabilities = withShareOptIn(
     authProvider.capabilities,
@@ -106,17 +90,16 @@ export default async function RootLayout({
     : null
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={cn(
-          'fixed inset-0 flex flex-col font-sans antialiased overflow-hidden',
-          fontSans.variable
+          'fixed inset-0 flex flex-col font-sans antialiased overflow-hidden bg-[#09090f] text-[#fafafa]'
         )}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <PostHogProvider userId={user?.id ?? null}>
@@ -132,7 +115,6 @@ export default async function RootLayout({
                       {userId && <AppSidebar user={user} />}
                       <KeyboardShortcutHandler />
                       <div className="flex flex-col flex-1 min-w-0">
-                        <Header user={user} />
                         <main className="flex flex-1 min-h-0 min-w-0 overflow-hidden">
                           <ArtifactRoot>{children}</ArtifactRoot>
                         </main>
@@ -144,7 +126,6 @@ export default async function RootLayout({
             </AppUserProvider>
           </PostHogProvider>
           <Toaster />
-          {isCloudDeployment && <Analytics />}
         </ThemeProvider>
       </body>
     </html>

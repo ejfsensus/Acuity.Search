@@ -5,12 +5,12 @@ import { parseVersionCheckConfig } from '../config'
 describe('parseVersionCheckConfig', () => {
   test.each([
     {
-      name: 'defaults when nothing is set',
+      name: 'defaults to disabled when nothing is set',
       env: {},
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 86400,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -19,7 +19,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'acme/morphic',
         ttlSeconds: 86400,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -28,7 +28,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 3600,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -37,7 +37,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 300,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -46,7 +46,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 300,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -55,7 +55,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 86400,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -64,7 +64,7 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 86400,
-        disabled: false
+        disabled: true
       }
     },
     {
@@ -73,11 +73,11 @@ describe('parseVersionCheckConfig', () => {
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 3600,
-        disabled: false
+        disabled: true
       }
     },
     {
-      name: 'disabled flag',
+      name: 'disabled flag true',
       env: { MORPHIC_UPDATE_CHECK_DISABLED: 'true' },
       expected: {
         repo: 'miurla/morphic',
@@ -86,8 +86,8 @@ describe('parseVersionCheckConfig', () => {
       }
     },
     {
-      name: 'disabled only matches the literal true',
-      env: { MORPHIC_UPDATE_CHECK_DISABLED: 'yes' },
+      name: 'explicit false enables update check',
+      env: { MORPHIC_UPDATE_CHECK_DISABLED: 'false' },
       expected: {
         repo: 'miurla/morphic',
         ttlSeconds: 86400,

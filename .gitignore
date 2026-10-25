@@ -42,3 +42,8 @@ _local/
 
 # claude code local state (settings, launch config, worktrees)
 .claude/
+
+# Acuity specification pack and generated backup archives
+/Acuity-Search-Agent-Pack/
+/*.zip
+

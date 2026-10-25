@@ -1,21 +1,21 @@
-import { getCurrentUserId } from '@/lib/auth/get-current-user'
-import { isAnonymousMode } from '@/lib/auth/provider'
-import { getModelSelectorData } from '@/lib/model-selector/get-model-selector-data'
+import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
+import { loadDomainRegistry } from '@/lib/acuity/registry'
 
-import { Chat } from '@/components/chat'
+import { AcuitySearchWorkspace } from '@/components/acuity/acuity-search-workspace'
 
 export default async function Page() {
-  const userId = await getCurrentUserId()
-  const isCloudDeployment = process.env.MORPHIC_CLOUD_DEPLOYMENT === 'true'
-  const libraryAvailable = !isAnonymousMode()
-  const modelSelectorData = await getModelSelectorData()
+  const registry = loadDomainRegistry()
+  const providerStatuses = getProviderStatuses()
+  const config = getAcuityConfig()
 
   return (
-    <Chat
-      isGuest={!userId}
-      isCloudDeployment={isCloudDeployment}
-      libraryAvailable={libraryAvailable}
-      modelSelectorData={modelSelectorData}
+    <AcuitySearchWorkspace
+      topicGroups={registry.topicGroups}
+      entries={registry.entries}
+      crossCuttingTags={registry.crossCuttingTags}
+      providerStatuses={providerStatuses}
+      llmMode={config.llm.mode}
+      llmConfigured={config.llm.configured}
     />
   )
 }

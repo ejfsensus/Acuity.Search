@@ -41,11 +41,20 @@ describe('GET /api/favicon', () => {
   beforeEach(() => {
     vi.resetModules()
     safeFetch.mockReset()
-    delete process.env.FAVICON_PROVIDER_URL
+    process.env.FAVICON_PROVIDER_URL = 'google'
   })
 
   afterEach(() => {
     delete process.env.FAVICON_PROVIDER_URL
+  })
+
+  it('defaults to off when FAVICON_PROVIDER_URL is unset', async () => {
+    delete process.env.FAVICON_PROVIDER_URL
+
+    const response = await get(`domain=${freshDomain()}&sz=16`)
+
+    expect(response.status).toBe(404)
+    expect(safeFetch).not.toHaveBeenCalled()
   })
 
   it('serves the icon from our own origin, cached and non-sniffable', async () => {

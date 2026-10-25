@@ -38,7 +38,9 @@ export function parseVersionCheckConfig(
     }
   }
 
-  const disabled = env.MORPHIC_UPDATE_CHECK_DISABLED === 'true'
+  // Acuity.Search privacy default: upstream GitHub release checks are disabled
+  // unless explicitly enabled with MORPHIC_UPDATE_CHECK_DISABLED=false.
+  const disabled = env.MORPHIC_UPDATE_CHECK_DISABLED !== 'false'
 
   return { repo, ttlSeconds, disabled }
 }

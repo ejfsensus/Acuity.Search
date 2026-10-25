@@ -1,0 +1,3767 @@
+{
+  "schemaVersion": "acuity.search.domains.v1",
+  "createdAt": "2026-10-25",
+  "status": "planning-seed-not-runtime-validation",
+  "provenance": {
+    "file": "Pasted text(20261025-134249).txt",
+    "sha256": "259c0c2ed163632a7e67a42a640890c0b9938c34b7db7c58961ea690594f6e08",
+    "note": "User-supplied descriptions and access assertions are preserved as claims, not independently verified facts."
+  },
+  "counts": {
+    "entries": 110,
+    "groups": 10,
+    "uniqueUrls": 146,
+    "uniqueHostsWithoutWww": 117
+  },
+  "matchingPolicy": {
+    "defaultScope": "selected-targets-only",
+    "hostMatch": "exact-host-or-explicit-www-alias",
+    "subdomains": "explicit-only",
+    "paths": "segment-aware-normalized-prefix",
+    "expansion": "explicit-user-action"
+  },
+  "groups": [
+    {
+      "id": "gnostic-hermetic",
+      "title": "Gnostic, Hermetic & Early Christian Texts",
+      "suppliedTitle": "Gnosticism, Hermeticism & Early Christian Mysticism",
+      "tags": [
+        "gnosticism",
+        "hermeticism",
+        "alchemy",
+        "patristics",
+        "christian-mysticism"
+      ],
+      "sourceIds": [
+        "src-001",
+        "src-002",
+        "src-003",
+        "src-004",
+        "src-005",
+        "src-006",
+        "src-007",
+        "src-008",
+        "src-009",
+        "src-010",
+        "src-011"
+      ]
+    },
+    {
+      "id": "kabbalah-jewish-mysticism",
+      "title": "Kabbalah & Jewish Mysticism",
+      "suppliedTitle": "Kabbalah, Jewish Mysticism & Merkabah",
+      "tags": ["kabbalah", "merkabah", "hekhalot", "jewish-mysticism"],
+      "sourceIds": [
+        "src-012",
+        "src-013",
+        "src-014",
+        "src-015",
+        "src-016",
+        "src-017",
+        "src-018",
+        "src-019",
+        "src-020"
+      ]
+    },
+    {
+      "id": "classical-cosmology",
+      "title": "Platonism, Geometry & Classical Cosmology",
+      "suppliedTitle": "Neoplatonism, Sacred Geometry & Classical Cosmology",
+      "tags": [
+        "neoplatonism",
+        "platonism",
+        "geometry",
+        "classics",
+        "cosmology"
+      ],
+      "sourceIds": [
+        "src-021",
+        "src-022",
+        "src-023",
+        "src-024",
+        "src-025",
+        "src-026",
+        "src-027",
+        "src-028",
+        "src-029"
+      ]
+    },
+    {
+      "id": "contemplative-traditions",
+      "title": "Sufi, Buddhist, Vedantic & Contemplative Traditions",
+      "suppliedTitle": "Sufi, Islamic Illuminationism & Eastern Contemplative Traditions",
+      "tags": [
+        "sufism",
+        "islamic-philosophy",
+        "buddhism",
+        "dzogchen",
+        "vedanta",
+        "daoism",
+        "hesychasm"
+      ],
+      "sourceIds": [
+        "src-030",
+        "src-031",
+        "src-032",
+        "src-033",
+        "src-034",
+        "src-035",
+        "src-036",
+        "src-037",
+        "src-038",
+        "src-039"
+      ]
+    },
+    {
+      "id": "comparative-texts",
+      "title": "Comparative Religion & Digital Libraries",
+      "suppliedTitle": "Comparative Mysticism & Sacred Texts (Mega-Repositories)",
+      "tags": [
+        "comparative-religion",
+        "scripture",
+        "ebooks",
+        "manuscripts",
+        "digital-libraries"
+      ],
+      "sourceIds": [
+        "src-040",
+        "src-041",
+        "src-042",
+        "src-043",
+        "src-044",
+        "src-045",
+        "src-046",
+        "src-047",
+        "src-048"
+      ]
+    },
+    {
+      "id": "modern-esoteric",
+      "title": "Theosophy, Anthroposophy & Modern Esoteric Traditions",
+      "suppliedTitle": "Theosophy, Anthroposophy & Modern Positive Esoteric Synthesis",
+      "tags": [
+        "theosophy",
+        "anthroposophy",
+        "rosicrucianism",
+        "modern-esotericism"
+      ],
+      "sourceIds": [
+        "src-049",
+        "src-050",
+        "src-051",
+        "src-052",
+        "src-053",
+        "src-054",
+        "src-055",
+        "src-056",
+        "src-057",
+        "src-058",
+        "src-059"
+      ]
+    },
+    {
+      "id": "power-media-networks",
+      "title": "Power, Institutions & Media Analysis",
+      "suppliedTitle": "Political Symbolism, Elite Agendas & Media Analysis",
+      "tags": [
+        "institutions",
+        "political-networks",
+        "media",
+        "investigative-journalism",
+        "political-symbolism"
+      ],
+      "sourceIds": [
+        "src-060",
+        "src-061",
+        "src-062",
+        "src-063",
+        "src-064",
+        "src-065",
+        "src-066",
+        "src-067",
+        "src-068",
+        "src-069",
+        "src-070"
+      ]
+    },
+    {
+      "id": "records-foia",
+      "title": "Public Records, FOIA & Declassified Documents",
+      "suppliedTitle": "Government Documents, FOIA & Declassified Records",
+      "tags": [
+        "foia",
+        "declassified",
+        "government-records",
+        "archives",
+        "intelligence-history"
+      ],
+      "sourceIds": [
+        "src-071",
+        "src-072",
+        "src-073",
+        "src-074",
+        "src-075",
+        "src-076",
+        "src-077",
+        "src-078",
+        "src-079",
+        "src-080",
+        "src-081",
+        "src-082"
+      ]
+    },
+    {
+      "id": "alternative-history",
+      "title": "Alternative History, Symbolism & Anomalies",
+      "suppliedTitle": "Alternative & Revisionist History",
+      "tags": [
+        "alternative-history",
+        "archaeology",
+        "historical-symbolism",
+        "forteana"
+      ],
+      "sourceIds": [
+        "src-083",
+        "src-084",
+        "src-085",
+        "src-086",
+        "src-087",
+        "src-088",
+        "src-089",
+        "src-090",
+        "src-091",
+        "src-092"
+      ]
+    },
+    {
+      "id": "consciousness",
+      "title": "Consciousness, Mind & Transpersonal Studies",
+      "suppliedTitle": "Consciousness Research & Transpersonal Studies",
+      "tags": [
+        "consciousness",
+        "philosophy-of-mind",
+        "transpersonal",
+        "psychical-research",
+        "archetypes"
+      ],
+      "sourceIds": [
+        "src-093",
+        "src-094",
+        "src-095",
+        "src-096",
+        "src-097",
+        "src-098",
+        "src-099",
+        "src-100",
+        "src-101",
+        "src-102",
+        "src-103",
+        "src-104",
+        "src-105",
+        "src-106",
+        "src-107",
+        "src-108",
+        "src-109",
+        "src-110"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "src-001",
+      "suppliedNumber": 1,
+      "title": "The Gnostic Society Library",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["gnosticism", "nag-hammadi", "hermeticism"],
+      "suppliedUrls": [
+        "https://www.gnosis.org",
+        "https://www.gnosis.org/naghamm/nhl.html"
+      ],
+      "targets": [
+        {
+          "hostname": "gnosis.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.gnosis.org",
+          "referenceUrls": [
+            "https://www.gnosis.org",
+            "https://www.gnosis.org/naghamm/nhl.html"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "The premier online archive of primary Gnostic scriptures, historical commentary, and audio lectures curated by the Ecclesia Gnostica.",
+      "suppliedStrength": "Largest free, complete English collection of the Nag Hammadi Library, *Pistis Sophia*, and Berlin Gnostic Codex.",
+      "suppliedAccessModel": "Fully free; plain HTML ideal for `site:gnosis.org` indexing.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-002",
+      "suppliedNumber": 2,
+      "title": "Twilit Grotto: Archives of Western Esoterica",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["hermeticism", "grimoires", "alchemy"],
+      "suppliedUrls": ["https://www.esotericarchives.com"],
+      "targets": [
+        {
+          "hostname": "esotericarchives.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.esotericarchives.com",
+          "referenceUrls": ["https://www.esotericarchives.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Scholarly digital library maintained by Joseph H. Peterson featuring critical editions of Renaissance magic, Hermeticism, and grimoire texts.",
+      "suppliedStrength": "Side-by-side Latin/English primary texts of Agrippa, John Dee, Giordano Bruno, and the *Ars Notoria*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-003",
+      "suppliedNumber": 3,
+      "title": "Early Christian Writings",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["early-christianity", "gnosticism", "patristics"],
+      "suppliedUrls": [
+        "https://www.earlychristianwritings.com",
+        "https://www.earlychristianwritings.com/gnostics.html"
+      ],
+      "targets": [
+        {
+          "hostname": "earlychristianwritings.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.earlychristianwritings.com",
+          "referenceUrls": [
+            "https://www.earlychristianwritings.com",
+            "https://www.earlychristianwritings.com/gnostics.html"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Chronological database of every Christian, Gnostic, and Patristic text written during the first three centuries CE.",
+      "suppliedStrength": "Cross-referencing orthodox heresy hunters (Irenaeus, Hippolytus, Epiphanius) directly against surviving Gnostic fragments.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-004",
+      "suppliedNumber": 4,
+      "title": "The Alchemy Web Site (Levity)",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["alchemy", "rosicrucianism", "emblems"],
+      "suppliedUrls": [
+        "https://www.alchemywebsite.com",
+        "https://www.alchemywebsite.com/texts.html"
+      ],
+      "targets": [
+        {
+          "hostname": "alchemywebsite.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.alchemywebsite.com",
+          "referenceUrls": [
+            "https://www.alchemywebsite.com",
+            "https://www.alchemywebsite.com/texts.html"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Adam McLean’s massive repository of over 4,000 pages of Hermetic, alchemical, and Rosicrucian manuscripts and emblem books.",
+      "suppliedStrength": "Unmatched collection of rare 16th- and 17th-century Hermetic laboratory and spiritual alchemy treaties.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-005",
+      "suppliedNumber": 5,
+      "title": "The Hermetic Library",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["hermeticism", "qabalah", "magical-traditions"],
+      "suppliedUrls": ["https://hermetic.com"],
+      "targets": [
+        {
+          "hostname": "hermetic.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://hermetic.com",
+          "referenceUrls": ["https://hermetic.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Long-running text archive dedicated to Western esotericism, Hermetic Qabalah, Neoplatonism, and modern magical currents.",
+      "suppliedStrength": "Complete texts of the *Corpus Hermeticum*, *Chaldean Oracles*, and Golden Dawn cipher manuscripts.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-006",
+      "suppliedNumber": 6,
+      "title": "The Tertullian Project",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["patristics", "syriac", "early-christianity"],
+      "suppliedUrls": [
+        "https://www.tertullian.org",
+        "https://www.tertullian.org/fathers/"
+      ],
+      "targets": [
+        {
+          "hostname": "tertullian.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.tertullian.org",
+          "referenceUrls": [
+            "https://www.tertullian.org",
+            "https://www.tertullian.org/fathers/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Scholarly archive by Roger Pearse hosting Patristic texts, including rare untranslated Syriac, Greek, and Latin manuscripts.",
+      "suppliedStrength": "Primary polemical texts detailing the mechanics of early Marcionite, Valentinian, and Manichaean systems.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-007",
+      "suppliedNumber": 7,
+      "title": "New Advent (Fathers of the Church)",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["patristics", "christian-reference"],
+      "suppliedUrls": [
+        "https://www.newadvent.org",
+        "https://www.newadvent.org/fathers/"
+      ],
+      "targets": [
+        {
+          "hostname": "newadvent.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.newadvent.org",
+          "referenceUrls": [
+            "https://www.newadvent.org",
+            "https://www.newadvent.org/fathers/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Complete digital edition of the 38-volume *Ante-Nicene, Nicene, and Post-Nicene Fathers* series alongside the 1913 Catholic Encyclopedia.",
+      "suppliedStrength": "Exhaustive searchable index of Origen, Clement of Alexandria, and Pseudo-Dionysius the Areopagite.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-008",
+      "suppliedNumber": 8,
+      "title": "Christian Classics Ethereal Library (CCEL)",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["christian-mysticism", "contemplation"],
+      "suppliedUrls": ["https://www.ccel.org"],
+      "targets": [
+        {
+          "hostname": "ccel.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.ccel.org",
+          "referenceUrls": ["https://www.ccel.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Digital theological library hosted at Calvin University featuring hundreds of classic Christian mystical treatises.",
+      "suppliedStrength": "Critical editions of Meister Eckhart, Jacob Boehme, John of the Cross, Teresa of Ávila, and *The Cloud of Unknowing*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-009",
+      "suppliedNumber": 9,
+      "title": "Mandaean Network / Mandaean World",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["mandaean-tradition", "gnosticism"],
+      "suppliedUrls": ["https://mandaeanworld.com"],
+      "targets": [
+        {
+          "hostname": "mandaeanworld.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://mandaeanworld.com",
+          "referenceUrls": ["https://mandaeanworld.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Digital repository preserving the scriptures, rituals, and history of the Mandaeans—the sole surviving ancient Gnostic community.",
+      "suppliedStrength": "English translations and Aramaic/Mandaic editions of the *Ginza Rabba*, *Book of John*, and *Qolasta*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-010",
+      "suppliedNumber": 10,
+      "title": "The Ritman Library (Embassy of the Free Mind)",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["hermeticism", "rosicrucianism", "manuscripts"],
+      "suppliedUrls": [
+        "https://embassyofthefreemind.com",
+        "https://embassyofthefreemind.com/en/library/online-catalogue"
+      ],
+      "targets": [
+        {
+          "hostname": "embassyofthefreemind.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://embassyofthefreemind.com",
+          "referenceUrls": [
+            "https://embassyofthefreemind.com",
+            "https://embassyofthefreemind.com/en/library/online-catalogue"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Amsterdam’s Bibliotheca Philosophica Hermetica, digitizing thousands of rare manuscripts on Hermeticism, Rosicrucianism, and mysticism.",
+      "suppliedStrength": "High-resolution scans and transcriptions of pre-1800 European Hermetic and Christian Kabbalistic books.",
+      "suppliedAccessModel": "Free open-access digital catalog.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-011",
+      "suppliedNumber": 11,
+      "title": "e-codices (Virtual Manuscript Library of Switzerland)",
+      "groupIds": ["gnostic-hermetic"],
+      "tags": ["manuscripts", "medieval-history", "alchemy"],
+      "suppliedUrls": ["https://www.e-codices.unifr.ch"],
+      "targets": [
+        {
+          "hostname": "e-codices.unifr.ch",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.e-codices.unifr.ch",
+          "referenceUrls": ["https://www.e-codices.unifr.ch"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["manuscript-collection"],
+      "suppliedDescription": "Academic consortium providing digitized medieval and early modern manuscripts from Swiss collections, including C.G. Jung’s alchemical manuscripts.",
+      "suppliedStrength": "Primary manuscript witnesses of medieval mysticism, alchemy, and early Hermetic texts.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-012",
+      "suppliedNumber": 12,
+      "title": "Sefaria",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["jewish-texts", "kabbalah", "hebrew", "aramaic"],
+      "suppliedUrls": [
+        "https://www.sefaria.org",
+        "https://www.sefaria.org/texts/Kabbalah"
+      ],
+      "targets": [
+        {
+          "hostname": "sefaria.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.sefaria.org",
+          "referenceUrls": [
+            "https://www.sefaria.org",
+            "https://www.sefaria.org/texts/Kabbalah"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Open-source living library of Torah and Judaic texts with dynamic intertextual links between Hebrew/Aramaic originals and English translations.",
+      "suppliedStrength": "Complete searchable *Zohar*, *Sefer Yetzirah*, *Sefer HaBahir*, Cordovero’s *Pardes Rimonim*, and Lurianic texts.",
+      "suppliedAccessModel": "Fully free (public domain / CC licenses).",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-013",
+      "suppliedNumber": 13,
+      "title": "Hekhalot & Merkavah Literature (Jim Davila / St Andrews)",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["hekhalot", "merkabah", "pseudepigrapha"],
+      "suppliedUrls": ["https://www.st-andrews.ac.uk/divinity/rt/otp/"],
+      "targets": [
+        {
+          "hostname": "st-andrews.ac.uk",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/divinity/rt/otp/",
+          "seedUrl": "https://www.st-andrews.ac.uk/divinity/rt/otp/",
+          "referenceUrls": ["https://www.st-andrews.ac.uk/divinity/rt/otp/"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["academic-resource"],
+      "suppliedDescription": "Academic portal hosted by Prof. James R. Davila dedicated to the *Old Testament Pseudepigrapha* and early Jewish Hekhalot mysticism.",
+      "suppliedStrength": "Scholarly analysis and translation notes on *3 Enoch*, *Hekhalot Rabbati*, and the *Shi'ur Qomah* (ascents to the Chariot).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-014",
+      "suppliedNumber": 14,
+      "title": "Kabbalah.info (Bnei Baruch Archive)",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["kabbalah", "ashlag", "lurianic-tradition"],
+      "suppliedUrls": [
+        "https://www.kabbalah.info",
+        "https://www.kabbalah.info/eng/content/view/frame/2373/"
+      ],
+      "targets": [
+        {
+          "hostname": "kabbalah.info",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.kabbalah.info",
+          "referenceUrls": [
+            "https://www.kabbalah.info",
+            "https://www.kabbalah.info/eng/content/view/frame/2373/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Extensive digital archive of authentic Ashlagian and Lurianic Kabbalah in multiple languages.",
+      "suppliedStrength": "Complete English and Hebrew texts of Yehuda Ashlag’s *Sulam* commentary on the Zohar and *Talmud Eser Sefirot* (The Study of the Ten Sefirot).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-015",
+      "suppliedNumber": 15,
+      "title": "HebrewBooks.org",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["hebrew", "kabbalah", "digitized-books"],
+      "suppliedUrls": ["https://hebrewbooks.org"],
+      "targets": [
+        {
+          "hostname": "hebrewbooks.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://hebrewbooks.org",
+          "referenceUrls": ["https://hebrewbooks.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Massive repository of over 65,000 digitized out-of-print Hebrew books covering Halakha, Kabbalah, and Hasidism.",
+      "suppliedStrength": "Unmatched primary Hebrew/Aramaic archive of rare 16th–19th century Kabbalistic prints (Abulafia, Vital, Gikatilla).",
+      "suppliedAccessModel": "Fully free (Hebrew OCR searchable).",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-016",
+      "suppliedNumber": 16,
+      "title": "National Library of Israel — Scholem Collection",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["kabbalah", "scholem", "manuscripts"],
+      "suppliedUrls": [
+        "https://www.nli.org.il/en/discover/humanities/kabbalah"
+      ],
+      "targets": [
+        {
+          "hostname": "nli.org.il",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/en/discover/humanities/kabbalah",
+          "seedUrl": "https://www.nli.org.il/en/discover/humanities/kabbalah",
+          "referenceUrls": [
+            "https://www.nli.org.il/en/discover/humanities/kabbalah"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["institutional-collection"],
+      "suppliedDescription": "Digital holdings of the Gershom Scholem Library for Kabbalah and Jewish Mysticism in Jerusalem.",
+      "suppliedStrength": "Digitized Sabbatean manuscripts, practical Kabbalah amulets (*Segulot*), and Scholem’s personal annotated collection.",
+      "suppliedAccessModel": "Free open access.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-017",
+      "suppliedNumber": 17,
+      "title": "Work of the Chariot",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["kabbalah", "sufism", "comparative-mysticism"],
+      "suppliedUrls": [
+        "https://www.workofthechariot.com",
+        "https://www.workofthechariot.com/TextFiles/Texts-Index.html"
+      ],
+      "targets": [
+        {
+          "hostname": "workofthechariot.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.workofthechariot.com",
+          "referenceUrls": [
+            "https://www.workofthechariot.com",
+            "https://www.workofthechariot.com/TextFiles/Texts-Index.html"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Syncretic mystical research archive offering original English translations of primary Kabbalistic and Sufi texts.",
+      "suppliedStrength": "Rare complete English translations of Chaim Vital’s *Sha'ar ha-Gilgulim* (Gate of Reincarnations) and *Etz Chaim* (Tree of Life) excerpts.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-018",
+      "suppliedNumber": 18,
+      "title": "Chabad.org Kabbalah & Classics Library",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["hasidism", "chabad", "kabbalah"],
+      "suppliedUrls": [
+        "https://www.chabad.org/kabbalah",
+        "https://www.chabad.org/library/tanya/"
+      ],
+      "targets": [
+        {
+          "hostname": "chabad.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/kabbalah",
+          "seedUrl": "https://www.chabad.org/kabbalah",
+          "referenceUrls": [
+            "https://www.chabad.org/kabbalah",
+            "https://www.chabad.org/library/tanya/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Deep repository of Chabad-Lubavitch Hasidic metaphysics, translating esoteric Lurianic concepts into psychological and cosmological frameworks.",
+      "suppliedStrength": "Bilingual editions of the *Tanya*, *Torah Or*, and discourses of the Tzemach Tzedek and Rashab on *Tzimtzum* (divine contraction).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-019",
+      "suppliedNumber": 19,
+      "title": "Grimoires.org (Digital Magic & Kabbalah)",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["grimoires", "practical-kabbalah", "angelology"],
+      "suppliedUrls": ["https://www.grimoires.org"],
+      "targets": [
+        {
+          "hostname": "grimoires.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.grimoires.org",
+          "referenceUrls": ["https://www.grimoires.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Curated bibliographic and textual portal bridging Jewish practical Kabbalah (*Kabbalah Ma'asit*) with Solomonic traditions.",
+      "suppliedStrength": "Cross-cultural analysis of *Sefer Raziel HaMalakh*, *Harba de-Moshe* (Sword of Moses), and medieval angelology.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-020",
+      "suppliedNumber": 20,
+      "title": "Ktiv (International Collection of Digitized Hebrew Manuscripts)",
+      "groupIds": ["kabbalah-jewish-mysticism"],
+      "tags": ["hebrew", "manuscripts", "kabbalah"],
+      "suppliedUrls": ["https://web.nli.org.il/sites/nlis/en/manuscript"],
+      "targets": [
+        {
+          "hostname": "web.nli.org.il",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/sites/nlis/en/manuscript",
+          "seedUrl": "https://web.nli.org.il/sites/nlis/en/manuscript",
+          "referenceUrls": ["https://web.nli.org.il/sites/nlis/en/manuscript"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["manuscript-catalogue"],
+      "suppliedDescription": "Global collaborative project providing high-resolution access to over 90,000 Hebrew manuscripts worldwide.",
+      "suppliedStrength": "Primary manuscript access to unpublished prophetic Kabbalah works by Abraham Abulafia and early Gerona school texts.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-021",
+      "suppliedNumber": 21,
+      "title": "The Prometheus Trust",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["platonism", "neoplatonism", "thomas-taylor"],
+      "suppliedUrls": ["https://www.prometheustrust.co.uk"],
+      "targets": [
+        {
+          "hostname": "prometheustrust.co.uk",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.prometheustrust.co.uk",
+          "referenceUrls": ["https://www.prometheustrust.co.uk"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Philosophical trust dedicated to republishing Thomas Taylor’s monumental translations of the Platonic and Neoplatonic tradition.",
+      "suppliedStrength": "Free philosophical papers, glossaries, and extensive excerpts from Proclus, Plotinus, Damascius, and Iamblichus.",
+      "suppliedAccessModel": "Free introductory archives and papers; full 33-volume set available via digital catalogs.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-022",
+      "suppliedNumber": 22,
+      "title": "Perseus Digital Library (Tufts University)",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["greek", "latin", "classics", "platonism"],
+      "suppliedUrls": ["https://www.perseus.tufts.edu"],
+      "targets": [
+        {
+          "hostname": "perseus.tufts.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.perseus.tufts.edu",
+          "referenceUrls": ["https://www.perseus.tufts.edu"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Flagship academic digital library of classical Greek and Latin primary sources with morphological word-study tools.",
+      "suppliedStrength": "Bilingual editions of Plato’s *Timaeus*, Plutarch’s *Isis and Osiris*, and classical cosmological treatises with direct Greek lexicon links.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-023",
+      "suppliedNumber": 23,
+      "title": "ToposText",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["classics", "ancient-geography", "neoplatonism"],
+      "suppliedUrls": ["https://topostext.org"],
+      "targets": [
+        {
+          "hostname": "topostext.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://topostext.org",
+          "referenceUrls": ["https://topostext.org"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Indexed corpus of 800+ ancient Greek and Latin texts linked to geographical locations across the ancient Mediterranean.",
+      "suppliedStrength": "Rapid keyword searching across Iamblichus (*Life of Pythagoras*), Porphyry, Proclus, and Orphic hymns.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-024",
+      "suppliedNumber": 24,
+      "title": "LacusCurtius (University of Chicago)",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["classics", "latin", "ancient-cosmology"],
+      "suppliedUrls": [
+        "https://penelope.uchicago.edu/Thayer/E/Roman/home.html"
+      ],
+      "targets": [
+        {
+          "hostname": "penelope.uchicago.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/Thayer/E/Roman/home.html",
+          "seedUrl": "https://penelope.uchicago.edu/Thayer/E/Roman/home.html",
+          "referenceUrls": [
+            "https://penelope.uchicago.edu/Thayer/E/Roman/home.html"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Bill Thayer’s exhaustive compilation of public-domain Greek and Roman primary texts, mathematics, and architectural cosmology.",
+      "suppliedStrength": "Complete Vitruvius (*De Architectura*), Macrobius, Censorinus, and Ptolemy’s *Tetrabiblos* and *Harmonics*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-025",
+      "suppliedNumber": 25,
+      "title": "The Stoa Consortium / Scaife Viewer",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["greek", "neoplatonism", "text-editions"],
+      "suppliedUrls": ["https://scaife.perseus.org"],
+      "targets": [
+        {
+          "hostname": "scaife.perseus.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://scaife.perseus.org",
+          "referenceUrls": ["https://scaife.perseus.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Next-generation open-source reading environment for the First1KGreek project, containing thousands of Greek philosophical and cosmological works.",
+      "suppliedStrength": "Original Greek texts of Proclus’s *Commentaries on the Timaeus* and *Elements of Theology*, plus Nicomachus of Gerasa’s *Introduction to Arithmetic*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-026",
+      "suppliedNumber": 26,
+      "title": "Theori.org / Pythagorean & Sacred Geometry Archive",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["geometry", "proportion", "sacred-architecture"],
+      "suppliedUrls": ["https://www.sacred-geometry.es"],
+      "targets": [
+        {
+          "hostname": "sacred-geometry.es",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.sacred-geometry.es",
+          "referenceUrls": ["https://www.sacred-geometry.es"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["interpretive-resource"],
+      "suppliedDescription": "Technical resource exploring geometric ratios, Platonic solids, harmonic proportions, and ancient temple architecture.",
+      "suppliedStrength": "Mathematical breakdowns of the Golden Ratio ($\\phi$), Vesica Piscis, and Pythagorean musical intervals in classical cosmology.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Supplied name mentions Theori.org but URL points to sacred-geometry.es; review identity mismatch."
+        ]
+      }
+    },
+    {
+      "id": "src-027",
+      "suppliedNumber": 27,
+      "title": "History of Philosophy Without Any Gaps (King’s College London)",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["history-of-philosophy", "neoplatonism", "islamic-philosophy"],
+      "suppliedUrls": [
+        "https://historyofphilosophy.net",
+        "https://historyofphilosophy.net/series/neoplatonism"
+      ],
+      "targets": [
+        {
+          "hostname": "historyofphilosophy.net",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://historyofphilosophy.net",
+          "referenceUrls": [
+            "https://historyofphilosophy.net",
+            "https://historyofphilosophy.net/series/neoplatonism"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["scholarly-commentary"],
+      "suppliedDescription": "Academic project led by Prof. Peter Adamson providing transcripts and primary bibliographies for late antique, Islamic, and Byzantine philosophy.",
+      "suppliedStrength": "Detailed synthesis of how Plotinian, Porphyrian, and Proclean metaphysics transmitted into Arabic and Renaissance esotericism.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-028",
+      "suppliedNumber": 28,
+      "title": "The Synergetics Collaborative / R.W. Gray’s Synergetics",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["buckminster-fuller", "synergetics", "geometry"],
+      "suppliedUrls": [
+        "http://www.rwgrayprojects.com/synergetics/synergetics.html"
+      ],
+      "targets": [
+        {
+          "hostname": "rwgrayprojects.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/synergetics/synergetics.html",
+          "seedUrl": "http://www.rwgrayprojects.com/synergetics/synergetics.html",
+          "referenceUrls": [
+            "http://www.rwgrayprojects.com/synergetics/synergetics.html"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Complete online hypertext edition of Buckminster Fuller’s *Synergetics: Explorations in the Geometry of Thinking* (Volumes 1 & 2).",
+      "suppliedStrength": "Comprehensive modern mathematical and cosmological synthesis of vector equilibrium, tensegrity, and polyhedral geometry.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Supplied HTTP URL: test HTTPS and record any reviewed replacement; do not silently rewrite."
+        ]
+      }
+    },
+    {
+      "id": "src-029",
+      "suppliedNumber": 29,
+      "title": "Bibliotheca Augustana",
+      "groupIds": ["classical-cosmology"],
+      "tags": ["latin", "greek", "classics", "primary-texts"],
+      "suppliedUrls": ["https://www.hs-augsburg.de/~harsch/augustana.html"],
+      "targets": [
+        {
+          "hostname": "hs-augsburg.de",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/~harsch/augustana.html",
+          "seedUrl": "https://www.hs-augsburg.de/~harsch/augustana.html",
+          "referenceUrls": ["https://www.hs-augsburg.de/~harsch/augustana.html"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Multi-lingual electronic library hosted by Augsburg University of Applied Sciences spanning classical antiquity to the modern era.",
+      "suppliedStrength": "Original Latin and Greek editions of Boethius (*De Institutione Musica*), Johannes Kepler (*Harmonices Mundi*), and Nicholas of Cusa.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-030",
+      "suppliedNumber": 30,
+      "title": "The Muhyiddin Ibn Arabi Society (MIAS)",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["sufism", "ibn-arabi", "islamic-metaphysics"],
+      "suppliedUrls": [
+        "https://ibnarabisociety.org",
+        "https://ibnarabisociety.org/article-index/"
+      ],
+      "targets": [
+        {
+          "hostname": "ibnarabisociety.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://ibnarabisociety.org",
+          "referenceUrls": [
+            "https://ibnarabisociety.org",
+            "https://ibnarabisociety.org/article-index/"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Academic and contemplative society preserving the works of Ibn 'Arabi (the \"Greatest Master\" of Islamic metaphysics) and his school.",
+      "suppliedStrength": "Over 200 peer-reviewed scholarly articles and primary translations from the *Futuhat al-Makkiyya* and *Fusus al-Hikam*.",
+      "suppliedAccessModel": "Free article archive and manuscript catalog.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-031",
+      "suppliedNumber": 31,
+      "title": "Al-Islam.org (AhlulBayt Digital Islamic Library Project)",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["islamic-philosophy", "irfan", "illuminationism"],
+      "suppliedUrls": [
+        "https://www.al-islam.org",
+        "https://www.al-islam.org/tags/irfan"
+      ],
+      "targets": [
+        {
+          "hostname": "al-islam.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.al-islam.org",
+          "referenceUrls": [
+            "https://www.al-islam.org",
+            "https://www.al-islam.org/tags/irfan"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Comprehensive digital library with deep holdings in Islamic philosophy (*Hikmah*), Illuminationism (*Ishraq*), and gnosis (*'Irfan*).",
+      "suppliedStrength": "Complete books by Mulla Sadra (*Transcendent Philosophy*), Suhrawardi studies, Allamah Tabataba'i, and Haydar Amuli.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-032",
+      "suppliedNumber": 32,
+      "title": "Lotsawa House",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["tibetan-buddhism", "dzogchen", "mahamudra"],
+      "suppliedUrls": [
+        "https://www.lotsawahouse.org",
+        "https://www.lotsawahouse.org/topics/dzogchen/"
+      ],
+      "targets": [
+        {
+          "hostname": "lotsawahouse.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.lotsawahouse.org",
+          "referenceUrls": [
+            "https://www.lotsawahouse.org",
+            "https://www.lotsawahouse.org/topics/dzogchen/"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Digital library of over 1,500 high-precision translations of Tibetan Buddhist texts across Nyingma, Kagyu, Sakya, and Gelug lineages.",
+      "suppliedStrength": "Primary Dzogchen (Great Perfection) and Mahamudra pointing-out instructions by Longchenpa, Jigme Lingpa, and Mipham Rinpoche.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-033",
+      "suppliedNumber": 33,
+      "title": "84000: Translating the Words of the Buddha",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["tibetan-buddhism", "sutras", "translations"],
+      "suppliedUrls": ["https://84000.co", "https://read.84000.co"],
+      "targets": [
+        {
+          "hostname": "84000.co",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://84000.co",
+          "referenceUrls": ["https://84000.co"]
+        },
+        {
+          "hostname": "read.84000.co",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://read.84000.co",
+          "referenceUrls": ["https://read.84000.co"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Global scholarly initiative translating the entire Tibetan Buddhist Canon (Kangyur and Tengyur) into English with interactive glossaries.",
+      "suppliedStrength": "Authoritative open-access translations of the *Prajnaparamita* sutras, *Avatamsaka* cosmology, and Buddhist tantras.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-034",
+      "suppliedNumber": 34,
+      "title": "Access to Insight / DhammaTalks",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["theravada", "pali", "meditation"],
+      "suppliedUrls": [
+        "https://www.accesstoinsight.org",
+        "https://www.dhammatalks.org"
+      ],
+      "targets": [
+        {
+          "hostname": "accesstoinsight.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.accesstoinsight.org",
+          "referenceUrls": ["https://www.accesstoinsight.org"]
+        },
+        {
+          "hostname": "dhammatalks.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.dhammatalks.org",
+          "referenceUrls": ["https://www.dhammatalks.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Foundational digital libraries of the Pali Canon (Theravada Buddhism) and the Thai Forest contemplative tradition.",
+      "suppliedStrength": "Exhaustively indexed Sutta Pitaka translations detailing the mechanics of *Jhana* (meditative absorption) and dependent origination.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-035",
+      "suppliedNumber": 35,
+      "title": "Wisdom Library (WisdomLib)",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["sanskrit", "vedanta", "shaivism", "buddhism"],
+      "suppliedUrls": ["https://www.wisdomlib.org"],
+      "targets": [
+        {
+          "hostname": "wisdomlib.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.wisdomlib.org",
+          "referenceUrls": ["https://www.wisdomlib.org"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Massive cross-indexed database of Sanskrit, Pali, and Prakrit texts, dictionaries, and English translations.",
+      "suppliedStrength": "Searchable primary editions of the *Upanishads*, *Yoga Vasistha*, *Brahma Sutras* with Shankara’s Advaita commentary, and Kashmir Shaiva Tantras (*Vijnana Bhairava*).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-036",
+      "suppliedNumber": 36,
+      "title": "Advaita Vedanta Library (ShiningWorld / Advaita.org.uk)",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["advaita", "ramana-maharshi", "vedanta"],
+      "suppliedUrls": [
+        "https://www.advaita.org.uk",
+        "https://www.ramanamaharshi.org"
+      ],
+      "targets": [
+        {
+          "hostname": "advaita.org.uk",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.advaita.org.uk",
+          "referenceUrls": ["https://www.advaita.org.uk"]
+        },
+        {
+          "hostname": "ramanamaharshi.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.ramanamaharshi.org",
+          "referenceUrls": ["https://www.ramanamaharshi.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Repositories of classical non-dual Vedanta (Adi Shankara, Gaudapada) and modern direct-path jnana (Ramana Maharshi, Nisargadatta Maharaj).",
+      "suppliedStrength": "Free downloadable PDFs of *Who Am I?*, *Talks with Sri Ramana Maharshi*, and *Ashtavakra Gita* commentaries.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Supplied name mentions ShiningWorld but no ShiningWorld URL was supplied; no inferred domain added."
+        ]
+      }
+    },
+    {
+      "id": "src-037",
+      "suppliedNumber": 37,
+      "title": "Orthodox Christian Info / Hesychasm & Philokalia Resources",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["orthodox-christianity", "hesychasm", "philokalia"],
+      "suppliedUrls": [
+        "http://orthodoxinfo.com",
+        "http://orthodoxinfo.com/phronema/"
+      ],
+      "targets": [
+        {
+          "hostname": "orthodoxinfo.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "http://orthodoxinfo.com",
+          "referenceUrls": [
+            "http://orthodoxinfo.com",
+            "http://orthodoxinfo.com/phronema/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Traditional Eastern Orthodox text repository documenting patristic theology, monastic asceticism, and the Prayer of the Heart.",
+      "suppliedStrength": "Primary treatises by Gregory Palamas (Uncreated Light), Symeon the New Theologian, Isaac the Syrian, and selections from the *Philokalia*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Supplied HTTP URL: test HTTPS and record any reviewed replacement; do not silently rewrite."
+        ]
+      }
+    },
+    {
+      "id": "src-038",
+      "suppliedNumber": 38,
+      "title": "Dar-al-Masnavi",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["sufism", "rumi", "persian", "masnavi"],
+      "suppliedUrls": ["https://www.dar-al-masnavi.org"],
+      "targets": [
+        {
+          "hostname": "dar-al-masnavi.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.dar-al-masnavi.org",
+          "referenceUrls": ["https://www.dar-al-masnavi.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Scholarly site maintained by Ibrahim Gamard dedicated to Jalal al-Din Rumi’s Persian mystical masterpiece, the *Masnavi*.",
+      "suppliedStrength": "Line-by-line literal translations, Nicholson edition cross-references, and corrections to popular mistranslations of Rumi.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-039",
+      "suppliedNumber": 39,
+      "title": "Chinese Text Project (CText)",
+      "groupIds": ["contemplative-traditions"],
+      "tags": ["daoism", "chinese", "primary-texts"],
+      "suppliedUrls": ["https://ctext.org", "https://ctext.org/daoism"],
+      "targets": [
+        {
+          "hostname": "ctext.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://ctext.org",
+          "referenceUrls": ["https://ctext.org", "https://ctext.org/daoism"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Open-access digital library of pre-modern Chinese texts with integrated classical Chinese dictionaries and parallel English translations.",
+      "suppliedStrength": "Complete *Daozang* (Taoist Canon) excerpts, including the *Dao De Jing*, *Zhuangzi*, *Liezi*, *Cantong Qi* (Internal Alchemy / Neidan), and *I Ching*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-040",
+      "suppliedNumber": 40,
+      "title": "Internet Sacred Text Archive (ISTA)",
+      "groupIds": ["comparative-texts"],
+      "tags": ["comparative-religion", "scripture", "mythology"],
+      "suppliedUrls": ["https://www.sacred-texts.com"],
+      "targets": [
+        {
+          "hostname": "sacred-texts.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.sacred-texts.com",
+          "referenceUrls": ["https://www.sacred-texts.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "John Bruno Hare’s legendary archive of over 1,700 complete public-domain books covering religion, mythology, folklore, and the esoteric.",
+      "suppliedStrength": "Single largest plain-text collection of comparative mysticism on the web—essential for broad `site:sacred-texts.com` queries.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-041",
+      "suppliedNumber": 41,
+      "title": "Internet Archive",
+      "groupIds": ["comparative-texts"],
+      "tags": ["digital-libraries", "books", "scans"],
+      "suppliedUrls": [
+        "https://archive.org",
+        "https://archive.org/details/texts"
+      ],
+      "targets": [
+        {
+          "hostname": "archive.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://archive.org",
+          "referenceUrls": [
+            "https://archive.org",
+            "https://archive.org/details/texts"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["mixed-digital-library"],
+      "suppliedDescription": "Non-profit digital library offering millions of scanned out-of-print books, microfilms, and archival collections.",
+      "suppliedStrength": "Full-text searchable scans of rare 19th- and early 20th-century occult journals, Masonic proceedings, and Orientalist translations.",
+      "suppliedAccessModel": "Mostly free download; controlled digital lending (free registration) for in-copyright works.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-042",
+      "suppliedNumber": 42,
+      "title": "HathiTrust Digital Library",
+      "groupIds": ["comparative-texts"],
+      "tags": ["digital-libraries", "books", "catalogues"],
+      "suppliedUrls": ["https://www.hathitrust.org"],
+      "targets": [
+        {
+          "hostname": "hathitrust.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.hathitrust.org",
+          "referenceUrls": ["https://www.hathitrust.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["mixed-digital-library"],
+      "suppliedDescription": "Partnership of major academic and research institutions preserving 18+ million digitized volumes from university libraries worldwide.",
+      "suppliedStrength": "Unmatched for locating obscure 18th–19th century academic translations of comparative religion, philology, and secret society histories.",
+      "suppliedAccessModel": "Full view for public-domain works; full-text search across all volumes.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-043",
+      "suppliedNumber": 43,
+      "title": "Project Gutenberg",
+      "groupIds": ["comparative-texts"],
+      "tags": ["ebooks", "public-domain", "text-editions"],
+      "suppliedUrls": ["https://www.gutenberg.org"],
+      "targets": [
+        {
+          "hostname": "gutenberg.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.gutenberg.org",
+          "referenceUrls": ["https://www.gutenberg.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "The oldest digital library of over 70,000 free eBooks with clean, proofread plain-text and HTML editions.",
+      "suppliedStrength": "Clean text editions of Max Müller’s 50-volume *Sacred Books of the East*, William James’s *Varieties of Religious Experience*, and Evelyn Underhill’s *Mysticism*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-044",
+      "suppliedNumber": 44,
+      "title": "Gallica (Bibliothèque nationale de France)",
+      "groupIds": ["comparative-texts"],
+      "tags": ["french", "manuscripts", "digital-libraries"],
+      "suppliedUrls": ["https://gallica.bnf.fr"],
+      "targets": [
+        {
+          "hostname": "gallica.bnf.fr",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://gallica.bnf.fr",
+          "referenceUrls": ["https://gallica.bnf.fr"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["institutional-collection"],
+      "suppliedDescription": "Digital library of the National Library of France hosting millions of manuscripts, books, and periodicals.",
+      "suppliedStrength": "World’s premier repository for French Martinism (Saint-Martin, Papus, Éliphas Lévi), European Freemasonry, and medieval illuminated alchemical manuscripts.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-045",
+      "suppliedNumber": 45,
+      "title": "Universal Theosophy",
+      "groupIds": ["comparative-texts"],
+      "tags": ["theosophy", "comparative-religion"],
+      "suppliedUrls": ["https://www.universaltheosophy.com"],
+      "targets": [
+        {
+          "hostname": "universaltheosophy.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.universaltheosophy.com",
+          "referenceUrls": ["https://www.universaltheosophy.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Comparative philosophical library juxtaposing Eastern scriptures, Neoplatonism, Hermeticism, and Theosophical literature.",
+      "suppliedStrength": "Curated side-by-side comparative tables and full texts of Proclus, Shankaracharya, Laozi, and Blavatsky.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-046",
+      "suppliedNumber": 46,
+      "title": "The Nazarene Way / Comparative Essene & Mystical Archive",
+      "groupIds": ["comparative-texts"],
+      "tags": ["essene-traditions", "comparative-mysticism"],
+      "suppliedUrls": ["https://www.thenazareneway.com"],
+      "targets": [
+        {
+          "hostname": "thenazareneway.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.thenazareneway.com",
+          "referenceUrls": ["https://www.thenazareneway.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Independent digital archive preserving Dead Sea Scrolls translations, Apocrypha, and Eastern-Christian comparative texts.",
+      "suppliedStrength": "Direct access to Dead Sea Scrolls fragments, Enochic literature, and Gospel of Thomas parallels.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-047",
+      "suppliedNumber": 47,
+      "title": "Center for Sacred Sciences",
+      "groupIds": ["comparative-texts"],
+      "tags": ["comparative-mysticism", "contemplation"],
+      "suppliedUrls": ["https://www.centerforsacredsciences.org"],
+      "targets": [
+        {
+          "hostname": "centerforsacredsciences.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.centerforsacredsciences.org",
+          "referenceUrls": ["https://www.centerforsacredsciences.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["contemplative-organization"],
+      "suppliedDescription": "Research library investigating the shared epistemological core of the world’s major mystical traditions in relation to modern mathematical physics.",
+      "suppliedStrength": "Comparative essays analyzing non-dual epistemology across Dzogchen, Advaita, Christian mysticism, and quantum mechanics.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-048",
+      "suppliedNumber": 48,
+      "title": "Online Library of Liberty (Liberty Fund)",
+      "groupIds": ["comparative-texts"],
+      "tags": ["political-philosophy", "economic-history", "books"],
+      "suppliedUrls": ["https://oll.libertyfund.org"],
+      "targets": [
+        {
+          "hostname": "oll.libertyfund.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://oll.libertyfund.org",
+          "referenceUrls": ["https://oll.libertyfund.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Curated collection of classic texts in philosophy, natural law, political theory, and religious history.",
+      "suppliedStrength": "High-quality searchable editions of Spinoza, Leibniz, Shaftesbury, and Cambridge Platonists (Ralph Cudworth, Henry More).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-049",
+      "suppliedNumber": 49,
+      "title": "Rudolf Steiner Archive",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["anthroposophy", "rudolf-steiner", "lectures"],
+      "suppliedUrls": ["https://rsarchive.org"],
+      "targets": [
+        {
+          "hostname": "rsarchive.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://rsarchive.org",
+          "referenceUrls": ["https://rsarchive.org"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Comprehensive English digital archive of Rudolf Steiner’s *Gesamtausgabe* (Collected Works), containing over 350 volumes and 6,000 lectures.",
+      "suppliedStrength": "Complete searchable Anthroposophical corpus covering spiritual science, Christology, karma, esoteric history, and biodynamics.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-050",
+      "suppliedNumber": 50,
+      "title": "Theosophical University Press (TUP Online)",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["theosophy", "blavatsky", "primary-texts"],
+      "suppliedUrls": [
+        "https://www.theosociety.org",
+        "https://www.theosociety.org/pasadena/tup-onl.htm"
+      ],
+      "targets": [
+        {
+          "hostname": "theosociety.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.theosociety.org",
+          "referenceUrls": [
+            "https://www.theosociety.org",
+            "https://www.theosociety.org/pasadena/tup-onl.htm"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Official publishing arm of the Pasadena Theosophical Society, offering verbatim online editions of foundational Theosophical works.",
+      "suppliedStrength": "Complete HTML editions of H.P. Blavatsky’s *The Secret Doctrine*, *Isis Unveiled*, *The Mahatma Letters*, and G. de Purucker’s *Occult Glossary*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-051",
+      "suppliedNumber": 51,
+      "title": "Katinka Hesselink / Blavatsky.net",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["theosophy", "blavatsky", "commentary"],
+      "suppliedUrls": [
+        "https://www.katinkahesselink.net",
+        "https://www.blavatsky.net"
+      ],
+      "targets": [
+        {
+          "hostname": "katinkahesselink.net",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.katinkahesselink.net",
+          "referenceUrls": ["https://www.katinkahesselink.net"]
+        },
+        {
+          "hostname": "blavatsky.net",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.blavatsky.net",
+          "referenceUrls": ["https://www.blavatsky.net"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Independent Theosophical research portals hosting rare articles, letters, and historical documentation on the 19th-century esoteric revival.",
+      "suppliedStrength": "Complete searchable *Blavatsky Collected Writings* (15 volumes) curated by Boris de Zirkoff.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-052",
+      "suppliedNumber": 52,
+      "title": "The Gurdjieff Legacy / Gurdjieff International Review",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["gurdjieff", "fourth-way", "commentary"],
+      "suppliedUrls": ["https://www.gurdjieff.org"],
+      "targets": [
+        {
+          "hostname": "gurdjieff.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.gurdjieff.org",
+          "referenceUrls": ["https://www.gurdjieff.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Curated resource dedicated to the Fourth Way teachings of G.I. Gurdjieff, P.D. Ouspensky, Maurice Nicoll, and J.G. Bennett.",
+      "suppliedStrength": "Primary essays, bibliographies, and excerpts on human mechanicalness, the Enneagram of process, and conscious evolution.",
+      "suppliedAccessModel": "Free article archives.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-053",
+      "suppliedNumber": 53,
+      "title": "Lucis Trust Online Books",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["alice-bailey", "modern-esotericism"],
+      "suppliedUrls": [
+        "https://www.lucistrust.org",
+        "https://www.lucistrust.org/online_books"
+      ],
+      "targets": [
+        {
+          "hostname": "lucistrust.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.lucistrust.org",
+          "referenceUrls": [
+            "https://www.lucistrust.org",
+            "https://www.lucistrust.org/online_books"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Digital library containing the complete 24-volume corpus of Alice A. Bailey and Djwhal Khul, plus Agni Yoga resources.",
+      "suppliedStrength": "Full-text searchable interface for *A Treatise on Cosmic Fire*, *Esoteric Psychology*, and *The Externalisation of the Hierarchy*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-054",
+      "suppliedNumber": 54,
+      "title": "Agni Yoga Society",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["agni-yoga", "roerich", "modern-esotericism"],
+      "suppliedUrls": ["https://agniyoga.org"],
+      "targets": [
+        {
+          "hostname": "agniyoga.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://agniyoga.org",
+          "referenceUrls": ["https://agniyoga.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Official repository of the Living Ethics (Agni Yoga) teachings transmitted through Helena and Nicholas Roerich between 1920 and 1938.",
+      "suppliedStrength": "Complete downloadable PDFs and searchable text of all 14 volumes of the Agni Yoga series and *Letters of Helena Roerich*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-055",
+      "suppliedNumber": 55,
+      "title": "Sri Aurobindo Ashram — Complete Works (CWSA)",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["sri-aurobindo", "integral-yoga", "primary-texts"],
+      "suppliedUrls": [
+        "https://www.sriaurobindoashram.org/ashram/sriauro/writings.php"
+      ],
+      "targets": [
+        {
+          "hostname": "sriaurobindoashram.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/ashram/sriauro/writings.php",
+          "seedUrl": "https://www.sriaurobindoashram.org/ashram/sriauro/writings.php",
+          "referenceUrls": [
+            "https://www.sriaurobindoashram.org/ashram/sriauro/writings.php"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Official digital archive of the 36-volume *Complete Works of Sri Aurobindo* and the 17-volume *Collected Works of the Mother*.",
+      "suppliedStrength": "Full PDFs of *The Life Divine*, *The Synthesis of Yoga*, *Savitri*, and *The Secret of the Veda* (Integral Yoga synthesis).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-056",
+      "suppliedNumber": 56,
+      "title": "The Rosicrucian Fellowship",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["rosicrucianism", "max-heindel"],
+      "suppliedUrls": ["https://www.rosicrucian.com"],
+      "targets": [
+        {
+          "hostname": "rosicrucian.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.rosicrucian.com",
+          "referenceUrls": ["https://www.rosicrucian.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Archive of Christian esotericism founded by Max Heindel in 1909, bridging Western mystery traditions with clairvoyant cosmology.",
+      "suppliedStrength": "Complete searchable text of *The Rosicrucian Cosmo-Conception*, esoteric astrology treatises, and spiritual anatomy diagrams.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-057",
+      "suppliedNumber": 57,
+      "title": "IAPSOP (International Association for the Preservation of Spiritualist and Occult Periodicals)",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["occult-periodicals", "spiritualism", "historical-magazines"],
+      "suppliedUrls": ["http://iapsop.com"],
+      "targets": [
+        {
+          "hostname": "iapsop.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "http://iapsop.com",
+          "referenceUrls": ["http://iapsop.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Extraordinary archival project digitizing hundreds of rare 19th- and early 20th-century occult, Theosophical, and spiritualist journals.",
+      "suppliedStrength": "Primary-source periodicals including *Lucifer*, *The Theosophist*, *The Equinox*, *Azoth*, and French Martinist reviews (*L'Initiation*).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Supplied HTTP URL: test HTTPS and record any reviewed replacement; do not silently rewrite."
+        ]
+      }
+    },
+    {
+      "id": "src-058",
+      "suppliedNumber": 58,
+      "title": "Philosophical Research Society (Manly P. Hall Archive)",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["manly-p-hall", "symbolism", "modern-esotericism"],
+      "suppliedUrls": [
+        "https://www.prs.org",
+        "https://www.sacred-texts.com/eso/sta/index.htm"
+      ],
+      "targets": [
+        {
+          "hostname": "prs.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.prs.org",
+          "referenceUrls": ["https://www.prs.org"]
+        },
+        {
+          "hostname": "sacred-texts.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/eso/sta/index.htm",
+          "seedUrl": "https://www.sacred-texts.com/eso/sta/index.htm",
+          "referenceUrls": ["https://www.sacred-texts.com/eso/sta/index.htm"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["organization-archive"],
+      "suppliedDescription": "Institution founded by Manly P. Hall in 1934 dedicated to comparative religion, mythology, and esoteric philosophy.",
+      "suppliedStrength": "Hall’s encyclopedic synthesis *The Secret Teachings of All Ages*, *Lectures on Ancient Philosophy*, and *The Secret Destiny of America*.",
+      "suppliedAccessModel": "Primary texts free on Sacred-Texts/Archive.org; PRS hosts supplementary digital exhibits.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "The sacred-texts.com edition is an additional target shared with another entry; preserve source membership and deduplicate fetched URLs."
+        ]
+      }
+    },
+    {
+      "id": "src-059",
+      "suppliedNumber": 59,
+      "title": "SteinerBooks / Goetheanum Digital Archive (German)",
+      "groupIds": ["modern-esoteric"],
+      "tags": ["anthroposophy", "rudolf-steiner", "german"],
+      "suppliedUrls": ["https://steiner.wiki"],
+      "targets": [
+        {
+          "hostname": "steiner.wiki",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://steiner.wiki",
+          "referenceUrls": ["https://steiner.wiki"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["text-archive"],
+      "suppliedDescription": "Complete German-language Wiki edition of Rudolf Steiner’s *Gesamtausgabe* (GA 1–354).",
+      "suppliedStrength": "Instant keyword cross-referencing across untranslated German Steiner lectures and notes.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-060",
+      "suppliedNumber": 60,
+      "title": "The Vigilant Citizen",
+      "groupIds": ["power-media-networks"],
+      "tags": ["media-symbolism", "interpretation"],
+      "suppliedUrls": ["https://vigilantcitizen.com"],
+      "targets": [
+        {
+          "hostname": "vigilantcitizen.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://vigilantcitizen.com",
+          "referenceUrls": ["https://vigilantcitizen.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["symbolic-interpretation"],
+      "suppliedDescription": "Long-running analytical portal decoding occult, Hermetic, Kabbalistic, and Monarch mind-control symbolism in mass media, pop culture, and public architecture.",
+      "suppliedStrength": "Detailed visual breakdowns of \"Sinister Sites\" (public monuments, airports, civic plazas) and ritualistic media imagery.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-061",
+      "suppliedNumber": 61,
+      "title": "Wikispooks",
+      "groupIds": ["power-media-networks"],
+      "tags": [
+        "political-networks",
+        "deep-politics",
+        "collaborative-reference"
+      ],
+      "suppliedUrls": ["https://wikispooks.com"],
+      "targets": [
+        {
+          "hostname": "wikispooks.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://wikispooks.com",
+          "referenceUrls": ["https://wikispooks.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["collaborative-reference"],
+      "suppliedDescription": "Collaborative encyclopedia documenting deep politics, intelligence agencies, covert operations, supranational think tanks, and elite networks.",
+      "suppliedStrength": "Structured relational mapping of Bilderberg, Trilateral Commission, Atlantic Council, and covert state-intelligence actors with primary source citations.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-062",
+      "suppliedNumber": 62,
+      "title": "Powerbase",
+      "groupIds": ["power-media-networks"],
+      "tags": [
+        "institutional-networks",
+        "influence",
+        "collaborative-reference"
+      ],
+      "suppliedUrls": ["https://powerbase.info"],
+      "targets": [
+        {
+          "hostname": "powerbase.info",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://powerbase.info",
+          "referenceUrls": ["https://powerbase.info"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["collaborative-reference"],
+      "suppliedDescription": "Public-interest wiki maintained by Spinwatch investigating corporate lobbying, neoconservative networks, intelligence fronts, and PR manipulation.",
+      "suppliedStrength": "Documented profiles of influence networks, think-tank funding streams, and state-corporate revolving doors.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-063",
+      "suppliedNumber": 63,
+      "title": "The Corbett Report",
+      "groupIds": ["power-media-networks"],
+      "tags": ["media-analysis", "political-commentary", "transcripts"],
+      "suppliedUrls": ["https://corbettreport.com"],
+      "targets": [
+        {
+          "hostname": "corbettreport.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://corbettreport.com",
+          "referenceUrls": ["https://corbettreport.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["independent-commentary"],
+      "suppliedDescription": "Open-source independent journalism archive by James Corbett exploring geopolitics, central banking history, eugenics, and technocracy.",
+      "suppliedStrength": "Full word-for-word transcripts with embedded hyperlinked primary source documents, white papers, and historical books.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-064",
+      "suppliedNumber": 64,
+      "title": "Unlimited Hangout",
+      "groupIds": ["power-media-networks"],
+      "tags": ["investigative-journalism", "technology", "financial-networks"],
+      "suppliedUrls": ["https://unlimitedhangout.com"],
+      "targets": [
+        {
+          "hostname": "unlimitedhangout.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://unlimitedhangout.com",
+          "referenceUrls": ["https://unlimitedhangout.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["investigative-journalism"],
+      "suppliedDescription": "Investigative journalism platform led by Whitney Webb focusing on intelligence-linked technology networks, biosecurity states, and elite financial syndicates.",
+      "suppliedStrength": "Deep forensic investigations with thousands of footnoted corporate filings, FOIA records, and DARPA/IARPA policy documents.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-065",
+      "suppliedNumber": 65,
+      "title": "LittleSis (Opposite of Big Brother)",
+      "groupIds": ["power-media-networks"],
+      "tags": ["institutional-networks", "relationship-data"],
+      "suppliedUrls": ["https://littlesis.org"],
+      "targets": [
+        {
+          "hostname": "littlesis.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://littlesis.org",
+          "referenceUrls": ["https://littlesis.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["relationship-database"],
+      "suppliedDescription": "Free watchdog database maintained by the Public Accountability Initiative tracking interlocking directorates among powerful individuals and organizations.",
+      "suppliedStrength": "Verifiable network graphs mapping board seats, foundation grants, political donations, and policy group memberships.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-066",
+      "suppliedNumber": 66,
+      "title": "Declassified UK",
+      "groupIds": ["power-media-networks"],
+      "tags": ["investigative-journalism", "uk-foreign-policy"],
+      "suppliedUrls": ["https://www.declassifieduk.org"],
+      "targets": [
+        {
+          "hostname": "declassifieduk.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.declassifieduk.org",
+          "referenceUrls": ["https://www.declassifieduk.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["investigative-journalism"],
+      "suppliedDescription": "Investigative journalism outlet uncovering Britain’s military, intelligence, and covert foreign policy activities using UK National Archives and FOIA releases.",
+      "suppliedStrength": "Primary-document-backed exposes of MI6, GCHQ, SAS, and historical British imperial strategy.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-067",
+      "suppliedNumber": 67,
+      "title": "The Grayzone",
+      "groupIds": ["power-media-networks"],
+      "tags": ["independent-journalism", "geopolitics"],
+      "suppliedUrls": ["https://thegrayzone.com"],
+      "targets": [
+        {
+          "hostname": "thegrayzone.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://thegrayzone.com",
+          "referenceUrls": ["https://thegrayzone.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["independent-journalism"],
+      "suppliedDescription": "Investigative portal analyzing regime-change networks, National Endowment for Democracy (NED) fronts, and information warfare operations.",
+      "suppliedStrength": "Leaked internal documents and grant disclosures exposing Western state-funded NGOs and media perception management.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-068",
+      "suppliedNumber": 68,
+      "title": "PropagandaBlitz / Media Lens",
+      "groupIds": ["power-media-networks"],
+      "tags": ["media-analysis", "media-criticism"],
+      "suppliedUrls": ["https://www.medialens.org"],
+      "targets": [
+        {
+          "hostname": "medialens.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.medialens.org",
+          "referenceUrls": ["https://www.medialens.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["media-criticism"],
+      "suppliedDescription": "UK-based media analysis project examining systemic corporate and state propaganda filters in mainstream broadcasting and print journalism.",
+      "suppliedStrength": "Twenty-five-year searchable archive dissecting linguistic framing, omission bias, and elite consensus manufacturing.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-069",
+      "suppliedNumber": 69,
+      "title": "SourceWatch (Center for Media and Democracy)",
+      "groupIds": ["power-media-networks"],
+      "tags": [
+        "institutional-networks",
+        "corporate-influence",
+        "collaborative-reference"
+      ],
+      "suppliedUrls": ["https://www.sourcewatch.org"],
+      "targets": [
+        {
+          "hostname": "sourcewatch.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.sourcewatch.org",
+          "referenceUrls": ["https://www.sourcewatch.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["collaborative-reference"],
+      "suppliedDescription": "Collaborative research directory tracking corporate front groups, PR firms, think tanks, and political foundations.",
+      "suppliedStrength": "Primary tax-filing (IRS Form 990) documentation of dark-money funding networks and astroturf organizations.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-070",
+      "suppliedNumber": 70,
+      "title": "Cryptome",
+      "groupIds": ["power-media-networks"],
+      "tags": ["document-publication", "archives"],
+      "suppliedUrls": ["https://cryptome.org"],
+      "targets": [
+        {
+          "hostname": "cryptome.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://cryptome.org",
+          "referenceUrls": ["https://cryptome.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["document-publisher"],
+      "suppliedDescription": "John Young’s legendary raw document repository (established 1996) hosting leaked government manuals, intelligence directives, and aerial photography of restricted facilities.",
+      "suppliedStrength": "Unfiltered primary documents on state surveillance, military psychological operations (PSYOP) manuals, and corporate security infrastructure.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-071",
+      "suppliedNumber": 71,
+      "title": "CIA Freedom of Information Act Electronic Reading Room (CREST)",
+      "groupIds": ["records-foia"],
+      "tags": [
+        "foia",
+        "declassified",
+        "intelligence-history",
+        "official-records"
+      ],
+      "suppliedUrls": ["https://www.cia.gov/readingroom"],
+      "targets": [
+        {
+          "hostname": "cia.gov",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/readingroom",
+          "seedUrl": "https://www.cia.gov/readingroom",
+          "referenceUrls": ["https://www.cia.gov/readingroom"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["official-records"],
+      "suppliedDescription": "Official repository containing over 13 million pages of declassified Central Intelligence Agency records.",
+      "suppliedStrength": "Primary documents on Project MKULTRA, Project ARTICHOKE, Project STAR GATE (remote viewing / Gateway Process), and Cold War covert operations.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-072",
+      "suppliedNumber": 72,
+      "title": "The National Security Archive (George Washington University)",
+      "groupIds": ["records-foia"],
+      "tags": ["foia", "declassified", "geopolitics"],
+      "suppliedUrls": ["https://nsarchive.gwu.edu"],
+      "targets": [
+        {
+          "hostname": "nsarchive.gwu.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://nsarchive.gwu.edu",
+          "referenceUrls": ["https://nsarchive.gwu.edu"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["curated-records-archive"],
+      "suppliedDescription": "Independent non-governmental research institute and library collecting and publishing declassified U.S. files obtained through FOIA.",
+      "suppliedStrength": "Curated \"Electronic Briefing Books\" containing raw high-level memos on Operation Condor, CIA behavior modification, nuclear command, and coups.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-073",
+      "suppliedNumber": 73,
+      "title": "FBI Vault (FOIA Library)",
+      "groupIds": ["records-foia"],
+      "tags": ["foia", "fbi", "official-records"],
+      "suppliedUrls": ["https://vault.fbi.gov"],
+      "targets": [
+        {
+          "hostname": "vault.fbi.gov",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://vault.fbi.gov",
+          "referenceUrls": ["https://vault.fbi.gov"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["official-records"],
+      "suppliedDescription": "The Federal Bureau of Investigation’s digital FOIA reading room containing thousands of scanned historical case files.",
+      "suppliedStrength": "Primary files on COINTELPRO, Nikola Tesla’s seized papers, Unidentified Aerial Phenomena, and investigations into esoteric/political groups.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-074",
+      "suppliedNumber": 74,
+      "title": "The Black Vault",
+      "groupIds": ["records-foia"],
+      "tags": ["foia", "uap", "intelligence-history"],
+      "suppliedUrls": ["https://www.theblackvault.com"],
+      "targets": [
+        {
+          "hostname": "theblackvault.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.theblackvault.com",
+          "referenceUrls": ["https://www.theblackvault.com"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["curated-records-archive"],
+      "suppliedDescription": "John Greenewald Jr.’s independent archive hosting over 3.2 million pages of government documents obtained via 10,000+ personal FOIA requests.",
+      "suppliedStrength": "Largest civilian archive of declassified intelligence on UAPs/UFOs, biological weapons testing, MKULTRA subprojects, and psychological warfare.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-075",
+      "suppliedNumber": 75,
+      "title": "MuckRock",
+      "groupIds": ["records-foia"],
+      "tags": ["foia", "public-records", "requests"],
+      "suppliedUrls": [
+        "https://www.muckrock.com",
+        "https://www.muckrock.com/foi/list/"
+      ],
+      "targets": [
+        {
+          "hostname": "muckrock.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.muckrock.com",
+          "referenceUrls": [
+            "https://www.muckrock.com",
+            "https://www.muckrock.com/foi/list/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["foia-platform"],
+      "suppliedDescription": "Collaborative non-profit platform tracking tens of thousands of federal, state, and local public records requests and hosting the returned PDFs.",
+      "suppliedStrength": "Real-time visibility into contemporary police surveillance tech (Palantir, Stingray), FBI files, and defense contractor communications.",
+      "suppliedAccessModel": "Free browsing and downloading of all released documents.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-076",
+      "suppliedNumber": 76,
+      "title": "GovernmentAttic.org",
+      "groupIds": ["records-foia"],
+      "tags": ["foia", "government-records"],
+      "suppliedUrls": ["https://www.governmentattic.org"],
+      "targets": [
+        {
+          "hostname": "governmentattic.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.governmentattic.org",
+          "referenceUrls": ["https://www.governmentattic.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["curated-records-archive"],
+      "suppliedDescription": "Independent repository publishing thousands of obscure federal agency histories, internal manuals, and IG reports obtained via FOIA.",
+      "suppliedStrength": "Rare internal administrative histories of the NSA, DIA, NRO, DARPA, and Department of Energy.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-077",
+      "suppliedNumber": 77,
+      "title": "WikiLeaks",
+      "groupIds": ["records-foia"],
+      "tags": ["document-publication", "leaked-records"],
+      "suppliedUrls": ["https://wikileaks.org", "https://search.wikileaks.org"],
+      "targets": [
+        {
+          "hostname": "wikileaks.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://wikileaks.org",
+          "referenceUrls": ["https://wikileaks.org"]
+        },
+        {
+          "hostname": "search.wikileaks.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://search.wikileaks.org",
+          "referenceUrls": ["https://search.wikileaks.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["document-publisher"],
+      "suppliedDescription": "Multi-national archive of millions of leaked diplomatic cables, intelligence contractor emails, and classified military records.",
+      "suppliedStrength": "Complete searchable databases of PlusD (Public Library of US Diplomacy), Stratfor Global Intelligence files, and Vault 7 (CIA cyber tools).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-078",
+      "suppliedNumber": 78,
+      "title": "Distributed Denial of Secrets (DDoSecrets)",
+      "groupIds": ["records-foia"],
+      "tags": ["document-publication", "data-archives"],
+      "suppliedUrls": ["https://ddosecrets.com"],
+      "targets": [
+        {
+          "hostname": "ddosecrets.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://ddosecrets.com",
+          "referenceUrls": ["https://ddosecrets.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["document-publisher"],
+      "suppliedDescription": "Non-profit journalism collective archiving and indexing massive contemporary data leaks from governments, intelligence agencies, and offshore banks.",
+      "suppliedStrength": "Terabytes of searchable primary records from corporate registries, oligarch networks, law enforcement, and state ministries.",
+      "suppliedAccessModel": "Free open access for public datasets; researcher access for sensitive sets.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-079",
+      "suppliedNumber": 79,
+      "title": "Wilson Center Digital Archive",
+      "groupIds": ["records-foia"],
+      "tags": ["cold-war", "history", "primary-documents"],
+      "suppliedUrls": ["https://digitalarchive.wilsoncenter.org"],
+      "targets": [
+        {
+          "hostname": "digitalarchive.wilsoncenter.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://digitalarchive.wilsoncenter.org",
+          "referenceUrls": ["https://digitalarchive.wilsoncenter.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["institutional-collection"],
+      "suppliedDescription": "Declassified international history repository featuring translated documents from former Soviet, Chinese, Eastern Bloc, and European archives.",
+      "suppliedStrength": "Non-U.S. intelligence and Politburo records offering the \"other side\" of Cold War covert diplomacy and ideological operations.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-080",
+      "suppliedNumber": 80,
+      "title": "Foreign Relations of the United States (FRUS)",
+      "groupIds": ["records-foia"],
+      "tags": ["diplomatic-history", "official-records", "primary-documents"],
+      "suppliedUrls": ["https://history.state.gov/historicaldocuments"],
+      "targets": [
+        {
+          "hostname": "history.state.gov",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/historicaldocuments",
+          "seedUrl": "https://history.state.gov/historicaldocuments",
+          "referenceUrls": ["https://history.state.gov/historicaldocuments"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["official-records"],
+      "suppliedDescription": "Official documentary historical record of major U.S. foreign policy decisions and covert action approvals from 1861 to the late 20th century.",
+      "suppliedStrength": "Unredacted National Security Council (NSC) directives, 303 Committee / 40 Committee covert action authorizations, and presidential briefings.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-081",
+      "suppliedNumber": 81,
+      "title": "Mary Ferrell Foundation",
+      "groupIds": ["records-foia"],
+      "tags": ["us-history", "assassination-records", "archives"],
+      "suppliedUrls": ["https://www.maryferrell.org"],
+      "targets": [
+        {
+          "hostname": "maryferrell.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.maryferrell.org",
+          "referenceUrls": ["https://www.maryferrell.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["curated-records-archive"],
+      "suppliedDescription": "Premier archival database of 1.5+ million pages of declassified documents relating to the JFK, RFK, and MLK assassinations, Watergate, and the Church Committee.",
+      "suppliedStrength": "Complete searchable Church Committee and Pike Committee hearings on CIA/FBI domestic and foreign abuses, plus Operation CHAOS files.",
+      "suppliedAccessModel": "Free reading and search; optional membership for bulk tools.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-082",
+      "suppliedNumber": 82,
+      "title": "UK National Archives Discovery Portal",
+      "groupIds": ["records-foia"],
+      "tags": ["uk-history", "official-catalogues", "archives"],
+      "suppliedUrls": ["https://discovery.nationalarchives.gov.uk"],
+      "targets": [
+        {
+          "hostname": "discovery.nationalarchives.gov.uk",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://discovery.nationalarchives.gov.uk",
+          "referenceUrls": ["https://discovery.nationalarchives.gov.uk"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["official-catalogue"],
+      "suppliedDescription": "Official catalog and digital repository of the UK government, including declassified Cabinet Office (CAB), Foreign Office (FO), and MI5 (KV) files.",
+      "suppliedStrength": "Declassified British intelligence records on occultists (e.g., Aleister Crowley’s intelligence files), colonial counter-insurgency, and Cold War propaganda (IRD).",
+      "suppliedAccessModel": "Free download for digitized records.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-083",
+      "suppliedNumber": 83,
+      "title": "Graham Hancock Official Archive",
+      "groupIds": ["alternative-history"],
+      "tags": ["alternative-history", "archaeology", "hypotheses"],
+      "suppliedUrls": ["https://grahamhancock.com"],
+      "targets": [
+        {
+          "hostname": "grahamhancock.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://grahamhancock.com",
+          "referenceUrls": ["https://grahamhancock.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["alternative-hypothesis"],
+      "suppliedDescription": "Extensive article database and research forum investigating lost Pleistocene civilizations, Younger Dryas cataclysms, and archaeoastronomy.",
+      "suppliedStrength": "Over two decades of contributed essays on megalithic architecture, precession of the equinoxes in ancient myth, and anomalous archaeology.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-084",
+      "suppliedNumber": 84,
+      "title": "Sacred Geometry International / Randall Carlson Resources",
+      "groupIds": ["alternative-history"],
+      "tags": ["geometry", "catastrophism", "hypotheses"],
+      "suppliedUrls": [
+        "https://sacredgeometryinternational.com",
+        "https://randallcarlson.com"
+      ],
+      "targets": [
+        {
+          "hostname": "sacredgeometryinternational.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://sacredgeometryinternational.com",
+          "referenceUrls": ["https://sacredgeometryinternational.com"]
+        },
+        {
+          "hostname": "randallcarlson.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://randallcarlson.com",
+          "referenceUrls": ["https://randallcarlson.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["alternative-hypothesis"],
+      "suppliedDescription": "Research portals bridging cataclysmic geology, cosmic impact cycles, Masonic symbolism, and ancient metrological systems.",
+      "suppliedStrength": "Technical synthesis of ancient sacred measurement units (cubits, stadia, furlongs) with Earth’s geodetic dimensions and orbital cycles.",
+      "suppliedAccessModel": "Free article archives.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-085",
+      "suppliedNumber": 85,
+      "title": "The Thunderbolts Project",
+      "groupIds": ["alternative-history"],
+      "tags": ["alternative-cosmology", "electric-universe", "hypotheses"],
+      "suppliedUrls": ["https://www.thunderbolts.info"],
+      "targets": [
+        {
+          "hostname": "thunderbolts.info",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.thunderbolts.info",
+          "referenceUrls": ["https://www.thunderbolts.info"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["alternative-hypothesis"],
+      "suppliedDescription": "Interdisciplinary research group (David Talbott, Wallace Thornhill) exploring the Electric Universe paradigm and comparative planetary catastrophism.",
+      "suppliedStrength": "Comparative mytho-historical analysis (following Immanuel Velikovsky and Giorgio de Santillana’s *Hamlet's Mill*) linking ancient sky mythology to plasma physics.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-086",
+      "suppliedNumber": 86,
+      "title": "Pietre-Stones Review of Freemasonry",
+      "groupIds": ["alternative-history"],
+      "tags": ["freemasonry", "historical-symbolism"],
+      "suppliedUrls": ["https://www.freemasons-freemasonry.com"],
+      "targets": [
+        {
+          "hostname": "freemasons-freemasonry.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.freemasons-freemasonry.com",
+          "referenceUrls": ["https://www.freemasons-freemasonry.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["historical-interpretation"],
+      "suppliedDescription": "Scholarly international online magazine and library hosting hundreds of historical papers on the origins, symbolism, and political history of Freemasonry.",
+      "suppliedStrength": "Primary Masonic constitutions (Regius Poem, Anderson’s 1723 Constitutions), Scottish Rite history, and Knights Templar historiography.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-087",
+      "suppliedNumber": 87,
+      "title": "1911 Encyclopædia Britannica (via Wikisource)",
+      "groupIds": ["alternative-history"],
+      "tags": ["historical-reference", "encyclopedias"],
+      "suppliedUrls": [
+        "https://en.wikisource.org/wiki/1911_Encyclop%C3%A6dia_Britannica"
+      ],
+      "targets": [
+        {
+          "hostname": "en.wikisource.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/wiki/1911_Encyclop%C3%A6dia_Britannica",
+          "seedUrl": "https://en.wikisource.org/wiki/1911_Encyclop%C3%A6dia_Britannica",
+          "referenceUrls": [
+            "https://en.wikisource.org/wiki/1911_Encyclop%C3%A6dia_Britannica"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["historical-reference"],
+      "suppliedDescription": "Complete 11th Edition of the *Encyclopædia Britannica*, widely considered the pinnacle of pre-WWI classical, historical, and philological scholarship.",
+      "suppliedStrength": "Unfiltered pre-20th-century historiography on ancient mystery religions, secret societies, banking families, and comparative mythology before modern editorial compression.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-088",
+      "suppliedNumber": 88,
+      "title": "Forbidden Archeology / Michael Cremo Archive",
+      "groupIds": ["alternative-history"],
+      "tags": ["alternative-archaeology", "hypotheses"],
+      "suppliedUrls": ["https://www.mcremo.com"],
+      "targets": [
+        {
+          "hostname": "mcremo.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.mcremo.com",
+          "referenceUrls": ["https://www.mcremo.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["alternative-hypothesis"],
+      "suppliedDescription": "Research portal of Vedic scholar Michael Cremo documenting anomalous archaeological discoveries from 19th- and 20th-century scientific journals.",
+      "suppliedStrength": "Bibliographic citations of suppressed or ignored paleoanthropological artifacts challenging linear evolutionary chronology.",
+      "suppliedAccessModel": "Free papers and summaries.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-089",
+      "suppliedNumber": 89,
+      "title": "Gegensatz Press / Savitri Devi Archive",
+      "groupIds": ["alternative-history"],
+      "tags": ["historical-ideology", "primary-documents"],
+      "suppliedUrls": ["https://www.savitridevi.org"],
+      "targets": [
+        {
+          "hostname": "savitridevi.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.savitridevi.org",
+          "referenceUrls": ["https://www.savitridevi.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["historical-ideological-source"],
+      "suppliedDescription": "Archival repository preserving primary historical texts intersecting cyclic Hindu cosmology (*Yuga* theory), revisionist history, and 20th-century political esotericism.",
+      "suppliedStrength": "Complete primary texts examining how ancient Indo-European solar myths and cyclic time concepts were adapted by 20th-century ideological movements.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Historical ideological material; contextualize author and claims accurately. Membership is not endorsement."
+        ]
+      }
+    },
+    {
+      "id": "src-090",
+      "suppliedNumber": 90,
+      "title": "Lacunae / Fortean & Anomalous History (Resologist / Charles Fort)",
+      "groupIds": ["alternative-history"],
+      "tags": ["forteana", "charles-fort", "anomalies"],
+      "suppliedUrls": ["https://www.resologist.net"],
+      "targets": [
+        {
+          "hostname": "resologist.net",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.resologist.net",
+          "referenceUrls": ["https://www.resologist.net"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["anomalies-archive"],
+      "suppliedDescription": "Hypertext edition of all four of Charles Fort’s classic works (*The Book of the Damned*, *New Lands*, *Lo!*, *Wild Talents*).",
+      "suppliedStrength": "Thousands of cited 19th-century scientific journal and newspaper accounts of anomalous historical, astronomical, and physical phenomena excluded by orthodox science.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-091",
+      "suppliedNumber": 91,
+      "title": "Halexandria",
+      "groupIds": ["alternative-history"],
+      "tags": ["comparative-symbolism", "interpretation"],
+      "suppliedUrls": ["https://www.halexandria.org"],
+      "targets": [
+        {
+          "hostname": "halexandria.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.halexandria.org",
+          "referenceUrls": ["https://www.halexandria.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["interpretive-resource"],
+      "suppliedDescription": "Expansive independent hypertext encyclopedia synthesizing revisionist ancient history, Sumerian/Babylonian mythology, sacred geometry, and suppressed science.",
+      "suppliedStrength": "High-density cross-linking between Mesopotamian cuneiform narratives, biblical revisionism, and hyperdimensional physics.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-092",
+      "suppliedNumber": 92,
+      "title": "Bibliotecapleyades",
+      "groupIds": ["alternative-history"],
+      "tags": ["mixed-archives", "alternative-history", "commentary"],
+      "suppliedUrls": ["https://www.bibliotecapleyades.net"],
+      "targets": [
+        {
+          "hostname": "bibliotecapleyades.net",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.bibliotecapleyades.net",
+          "referenceUrls": ["https://www.bibliotecapleyades.net"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["mixed-aggregator"],
+      "suppliedDescription": "Massive bilingual (English/Spanish) alternative research mega-archive compiling thousands of out-of-print books, articles, and essays on ancient history, secret societies, and geopolitics.",
+      "suppliedStrength": "Unrivaled breadth of archived essays on the Knights Templar, Jesuits, Black Nobility, Vatican finances, and Sumerian cosmology (requires strict source verification by the researcher).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-093",
+      "suppliedNumber": 93,
+      "title": "Institute of Noetic Sciences (IONS)",
+      "groupIds": ["consciousness"],
+      "tags": ["consciousness", "psychical-research"],
+      "suppliedUrls": [
+        "https://noetic.org",
+        "https://noetic.org/publications/publication-library/"
+      ],
+      "targets": [
+        {
+          "hostname": "noetic.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://noetic.org",
+          "referenceUrls": [
+            "https://noetic.org",
+            "https://noetic.org/publications/publication-library/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["research-organization"],
+      "suppliedDescription": "Research institute founded by Apollo 14 astronaut Edgar Mitchell conducting peer-reviewed experimental research on consciousness, psi phenomena, and mind-matter interaction.",
+      "suppliedStrength": "Open-access empirical papers by Dean Radin, Arnaud Delorme, and Helané Wahbeh on quantum wave-function collapse, telepathy, and non-local consciousness.",
+      "suppliedAccessModel": "Free publication library.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-094",
+      "suppliedNumber": 94,
+      "title": "University of Virginia — Division of Perceptual Studies (DOPS)",
+      "groupIds": ["consciousness"],
+      "tags": ["perceptual-studies", "consciousness", "research-papers"],
+      "suppliedUrls": [
+        "https://med.virginia.edu/perceptual-studies",
+        "https://med.virginia.edu/perceptual-studies/publications/academic-publications/"
+      ],
+      "targets": [
+        {
+          "hostname": "med.virginia.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/perceptual-studies",
+          "seedUrl": "https://med.virginia.edu/perceptual-studies",
+          "referenceUrls": [
+            "https://med.virginia.edu/perceptual-studies",
+            "https://med.virginia.edu/perceptual-studies/publications/academic-publications/"
+          ]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["academic-research"],
+      "suppliedDescription": "Academic medical school unit founded by Dr. Ian Stevenson investigating empirical evidence for consciousness surviving bodily death.",
+      "suppliedStrength": "Over 600 downloadable peer-reviewed academic papers on verified childhood past-life memories, near-death experiences (Bruce Greyson), and irreducible mind theory (Edward Kelly).",
+      "suppliedAccessModel": "Fully free PDFs.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-095",
+      "suppliedNumber": 95,
+      "title": "Essentia Foundation",
+      "groupIds": ["consciousness"],
+      "tags": ["idealism", "philosophy-of-mind"],
+      "suppliedUrls": ["https://www.essentiafoundation.org"],
+      "targets": [
+        {
+          "hostname": "essentiafoundation.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.essentiafoundation.org",
+          "referenceUrls": ["https://www.essentiafoundation.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["philosophical-advocacy"],
+      "suppliedDescription": "Academic and philosophical think tank founded by Bernardo Kastrup exploring analytic idealism—the metaphysical framework that consciousness is fundamental and matter is its extrinsic appearance.",
+      "suppliedStrength": "Rigorous philosophical and neuroscientific essays dismantling materialist physicalism through quantum foundations (Carlo Rovelli, Anton Zeilinger) and phenomenology.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-096",
+      "suppliedNumber": 96,
+      "title": "The Monroe Institute",
+      "groupIds": ["consciousness"],
+      "tags": ["consciousness", "altered-states", "research"],
+      "suppliedUrls": [
+        "https://www.monroeinstitute.org",
+        "https://www.monroeinstitute.org/blogs/research"
+      ],
+      "targets": [
+        {
+          "hostname": "monroeinstitute.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.monroeinstitute.org",
+          "referenceUrls": [
+            "https://www.monroeinstitute.org",
+            "https://www.monroeinstitute.org/blogs/research"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["organization-research"],
+      "suppliedDescription": "Research and educational organization founded by Robert Monroe pioneering binaural-beat hemispheric synchronization (Hemi-Sync) and out-of-body consciousness states.",
+      "suppliedStrength": "Primary documentation of Focus levels (Focus 10–27), EEG correlates of non-physical states, and the original source material for the CIA’s *Gateway Process* assessment.",
+      "suppliedAccessModel": "Free research archives.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-097",
+      "suppliedNumber": 97,
+      "title": "Society for Psychical Research (SPR) / Psi Encyclopedia",
+      "groupIds": ["consciousness"],
+      "tags": ["psychical-research", "specialist-reference"],
+      "suppliedUrls": ["https://psi-encyclopedia.spr.ac.uk"],
+      "targets": [
+        {
+          "hostname": "psi-encyclopedia.spr.ac.uk",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://psi-encyclopedia.spr.ac.uk",
+          "referenceUrls": ["https://psi-encyclopedia.spr.ac.uk"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["specialist-reference"],
+      "suppliedDescription": "Peer-reviewed encyclopedia maintained by the London-based Society for Psychical Research (founded 1882 by Cambridge scholars).",
+      "suppliedStrength": "Over 600 scholarly articles detailing 140 years of rigorous experimental research into telepathy, precognition, psychokinesis, and mediumship.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-098",
+      "suppliedNumber": 98,
+      "title": "Journal of Transpersonal Psychology (ATP Archive)",
+      "groupIds": ["consciousness"],
+      "tags": ["transpersonal-psychology", "journal-archive"],
+      "suppliedUrls": [
+        "https://www.atpweb.org",
+        "https://www.atpweb.org/jtparchive/"
+      ],
+      "targets": [
+        {
+          "hostname": "atpweb.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.atpweb.org",
+          "referenceUrls": [
+            "https://www.atpweb.org",
+            "https://www.atpweb.org/jtparchive/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["journal-archive"],
+      "suppliedDescription": "Official archive of the *Journal of Transpersonal Psychology*, founded in 1969 by Abraham Maslow, Stanislav Grof, and Anthony Sutich.",
+      "suppliedStrength": "Decades of open-access peer-reviewed papers on holotropic states, spiritual emergencies, psychedelic integration, and Ken Wilber’s perennial psychology.",
+      "suppliedAccessModel": "Free full-text PDFs for archival issues.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-099",
+      "suppliedNumber": 99,
+      "title": "Multidisciplinary Association for Psychedelic Studies (MAPS)",
+      "groupIds": ["consciousness"],
+      "tags": ["psychedelic-research", "research-papers"],
+      "suppliedUrls": ["https://maps.org", "https://maps.org/news/bulletin/"],
+      "targets": [
+        {
+          "hostname": "maps.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://maps.org",
+          "referenceUrls": [
+            "https://maps.org",
+            "https://maps.org/news/bulletin/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["research-organization"],
+      "suppliedDescription": "Leading research organization investigating the therapeutic, spiritual, and neurological mechanisms of psychedelics and entheogens.",
+      "suppliedStrength": "Thirty-five years of searchable *MAPS Bulletins*, clinical trial protocols, and Stanislav Grof / Ralph Metzner archival articles.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-100",
+      "suppliedNumber": 100,
+      "title": "Erowid",
+      "groupIds": ["consciousness"],
+      "tags": ["ethnobotany", "experience-reports", "psychoactive-reference"],
+      "suppliedUrls": [
+        "https://www.erowid.org",
+        "https://www.erowid.org/library/"
+      ],
+      "targets": [
+        {
+          "hostname": "erowid.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.erowid.org",
+          "referenceUrls": [
+            "https://www.erowid.org",
+            "https://www.erowid.org/library/"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["experience-and-reference-archive"],
+      "suppliedDescription": "Documenting the complex relationship between humans and psychoactive plants, chemicals, and endogenous visionary states.",
+      "suppliedStrength": "Archival Vaults containing complete writings and lectures of Terence McKenna, Alexander Shulgin, Albert Hofmann, R. Gordon Wasson (Eleusinian Mysteries), and John C. Lilly.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-101",
+      "suppliedNumber": 101,
+      "title": "ARAS (Archive for Research in Archetypal Symbolism)",
+      "groupIds": ["consciousness"],
+      "tags": ["archetypes", "symbolism", "jungian-studies"],
+      "suppliedUrls": ["https://aras.org"],
+      "targets": [
+        {
+          "hostname": "aras.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://aras.org",
+          "referenceUrls": ["https://aras.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["symbolic-interpretation"],
+      "suppliedDescription": "Pictorial and commentary archive grown out of the Eranos conferences (C.G. Jung, Mircea Eliade, Joseph Campbell, Henry Corbin) cataloging primordial symbols across human history.",
+      "suppliedStrength": "Jungian amplifications of cross-cultural motifs in alchemy, myth, ritual, and dream iconography.",
+      "suppliedAccessModel": "Free newsletter essays and public symbol portals; institutional/member login for full 18,000-image database.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-102",
+      "suppliedNumber": 102,
+      "title": "Center for Consciousness Studies (University of Arizona)",
+      "groupIds": ["consciousness"],
+      "tags": ["consciousness", "philosophy-of-mind", "academic-conferences"],
+      "suppliedUrls": ["https://consciousness.arizona.edu"],
+      "targets": [
+        {
+          "hostname": "consciousness.arizona.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://consciousness.arizona.edu",
+          "referenceUrls": ["https://consciousness.arizona.edu"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["academic-resource"],
+      "suppliedDescription": "Academic center directed by Stuart Hameroff hosting the biennial *Science of Consciousness* conferences.",
+      "suppliedStrength": "Primary abstracts and papers on Orch OR (Orchestrated Objective Reduction—quantum computations in brain microtubules developed with Roger Penrose) and panpsychism.",
+      "suppliedAccessModel": "Free abstract books and research papers.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-103",
+      "suppliedNumber": 103,
+      "title": "David Bohm & J. Krishnamurti Archives (KFA / KFT)",
+      "groupIds": ["consciousness"],
+      "tags": ["krishnamurti", "david-bohm", "dialogues"],
+      "suppliedUrls": ["https://jkrishnamurti.org"],
+      "targets": [
+        {
+          "hostname": "jkrishnamurti.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://jkrishnamurti.org",
+          "referenceUrls": ["https://jkrishnamurti.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["dialogue-archive"],
+      "suppliedDescription": "Complete text, audio, and video archive of Jiddu Krishnamurti’s dialogues, including his famous multi-year inquiries with quantum physicist David Bohm.",
+      "suppliedStrength": "Verbatim transcripts of the Bohm-Krishnamurti dialogues on *The Ending of Time*, the Implicate Order, psychological conditioning, and the nature of the observer.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-104",
+      "suppliedNumber": 104,
+      "title": "Rupert Sheldrake Official Research Archive",
+      "groupIds": ["consciousness"],
+      "tags": ["morphic-resonance", "author-research", "contested-hypotheses"],
+      "suppliedUrls": [
+        "https://www.sheldrake.org",
+        "https://www.sheldrake.org/research"
+      ],
+      "targets": [
+        {
+          "hostname": "sheldrake.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.sheldrake.org",
+          "referenceUrls": [
+            "https://www.sheldrake.org",
+            "https://www.sheldrake.org/research"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["author-research-archive"],
+      "suppliedDescription": "Cambridge biochemist Rupert Sheldrake’s repository of peer-reviewed papers, experimental data, and essays on morphic resonance and extended mind.",
+      "suppliedStrength": "Full-text scientific papers on morphogenetic fields, the sense of being stared at, telepathy in biological systems, and the variability of fundamental physical constants.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-105",
+      "suppliedNumber": 105,
+      "title": "Dean Radin / Consciousness Research Laboratory",
+      "groupIds": ["consciousness"],
+      "tags": ["parapsychology", "author-research", "contested-hypotheses"],
+      "suppliedUrls": ["https://www.deanradin.com"],
+      "targets": [
+        {
+          "hostname": "deanradin.com",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.deanradin.com",
+          "referenceUrls": ["https://www.deanradin.com"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["author-research-archive"],
+      "suppliedDescription": "Curated bibliography and full-text repository of parapsychological meta-analyses and double-slit consciousness experiments.",
+      "suppliedStrength": "Direct links to peer-reviewed physics and psychology journal articles demonstrating statistically significant mind-matter interaction.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Evaluate individual studies and replication; publication or institution alone does not establish the claimed phenomena."
+        ]
+      }
+    },
+    {
+      "id": "src-106",
+      "suppliedNumber": 106,
+      "title": "C.G. Jung Page / Jungian Studies Resources",
+      "groupIds": ["consciousness"],
+      "tags": ["jungian-studies", "synchronicity", "commentary"],
+      "suppliedUrls": ["https://cgjungpage.org"],
+      "targets": [
+        {
+          "hostname": "cgjungpage.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://cgjungpage.org",
+          "referenceUrls": ["https://cgjungpage.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["specialist-commentary"],
+      "suppliedDescription": "Long-standing independent portal hosting scholarly papers on analytical psychology, synchronicity, the *Red Book* (*Liber Novus*), and Gnostic-Jungian parallels.",
+      "suppliedStrength": "Deep commentary on Jung’s *Seven Sermons to the Dead*, *Answer to Job*, and *Mysterium Coniunctionis*.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-107",
+      "suppliedNumber": 107,
+      "title": "The Law of One (L/L Research)",
+      "groupIds": ["consciousness"],
+      "tags": ["law-of-one", "channelled-tradition", "cosmology"],
+      "suppliedUrls": [
+        "https://www.llresearch.org",
+        "https://www.lawofone.info"
+      ],
+      "targets": [
+        {
+          "hostname": "llresearch.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.llresearch.org",
+          "referenceUrls": ["https://www.llresearch.org"]
+        },
+        {
+          "hostname": "lawofone.info",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://www.lawofone.info",
+          "referenceUrls": ["https://www.lawofone.info"]
+        }
+      ],
+      "starterPriority": true,
+      "discoveryRoles": ["channelled-tradition-text"],
+      "suppliedDescription": "Complete, hyper-indexed database of the 106 sessions of the *Ra Contact* (1981–1984) conducted by physicist Don Elkins, Carla Rueckert, and Jim McCarty.",
+      "suppliedStrength": "Precision search engine (`lawofone.info`) indexing cosmology, density evolution, energy centers (chakras), Tarot archetypes, and polarity mechanics (Service-to-Others vs. Service-to-Self).",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": [
+          "Classify claims as attributed channelled/tradition material; do not recast them as empirical findings."
+        ]
+      }
+    },
+    {
+      "id": "src-108",
+      "suppliedNumber": 108,
+      "title": "Alexandria: Cosmology, Philosophy, Myth, and Culture",
+      "groupIds": ["consciousness"],
+      "tags": ["cosmology", "philosophy", "mythology"],
+      "suppliedUrls": ["https://alexandria.org"],
+      "targets": [
+        {
+          "hostname": "alexandria.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://alexandria.org",
+          "referenceUrls": ["https://alexandria.org"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["journal-and-essay-archive"],
+      "suppliedDescription": "Archive of the journal *Alexandria* edited by David Fideler, exploring the intersection of Neoplatonic cosmology, Hermeticism, and modern science.",
+      "suppliedStrength": "Scholarly essays by Kathleen Raine, Joscelyn Godwin, and Seyyed Hossein Nasr on the harmony of the spheres and sacred science.",
+      "suppliedAccessModel": "Free sample essays and archival indexes.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-109",
+      "suppliedNumber": 109,
+      "title": "PhilPapers (Philosophy of Mind & Metaphysics)",
+      "groupIds": ["consciousness"],
+      "tags": ["philosophy-of-mind", "bibliographies", "metaphysics"],
+      "suppliedUrls": [
+        "https://philpapers.org",
+        "https://philpapers.org/browse/philosophy-of-consciousness"
+      ],
+      "targets": [
+        {
+          "hostname": "philpapers.org",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://philpapers.org",
+          "referenceUrls": [
+            "https://philpapers.org",
+            "https://philpapers.org/browse/philosophy-of-consciousness"
+          ]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["bibliographic-index"],
+      "suppliedDescription": "Comprehensive index and open-access repository of academic philosophy maintained by the Center for Digital Philosophy.",
+      "suppliedStrength": "Exhaustive taxonomy of open-access preprints on panpsychism, cosmopsychism, dual-aspect monism (Pauli-Jung conjecture), and phenomenology.",
+      "suppliedAccessModel": "Free open-access archives.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    },
+    {
+      "id": "src-110",
+      "suppliedNumber": 110,
+      "title": "Stanford Encyclopedia of Philosophy (SEP)",
+      "groupIds": ["consciousness"],
+      "tags": ["philosophy", "scholarly-reference", "metaphysics"],
+      "suppliedUrls": ["https://plato.stanford.edu"],
+      "targets": [
+        {
+          "hostname": "plato.stanford.edu",
+          "includeWwwAlias": true,
+          "includeOtherSubdomains": false,
+          "pathPrefix": "/",
+          "seedUrl": "https://plato.stanford.edu",
+          "referenceUrls": ["https://plato.stanford.edu"]
+        }
+      ],
+      "starterPriority": false,
+      "discoveryRoles": ["scholarly-reference"],
+      "suppliedDescription": "Peer-reviewed dynamic reference work maintained by Stanford University covering every major figure and school in Western and Eastern metaphysics.",
+      "suppliedStrength": "Authoritative bibliographic syntheses and technical breakdowns of Plotinus, Proclus, Ibn 'Arabi, Suhrawardi, Spinoza, and Quantum Consciousness.",
+      "suppliedAccessModel": "Fully free.",
+      "curation": {
+        "status": "imported-unverified",
+        "checkedAt": null,
+        "claimsVerified": false,
+        "notes": []
+      }
+    }
+  ]
+}

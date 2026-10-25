@@ -44,8 +44,11 @@ const inFlight = new Map<string, Promise<CacheEntry>>()
 
 function providerTemplate(): string | null {
   const configured = process.env.FAVICON_PROVIDER_URL?.trim()
-  if (configured === undefined || configured === '') return DEFAULT_PROVIDER_URL
+  // Acuity.Search privacy default: third-party favicon fetching defaults to off
+  // unless explicitly opted in via a template URL or 'google'.
+  if (configured === undefined || configured === '') return null
   if (configured.toLowerCase() === 'off') return null
+  if (configured.toLowerCase() === 'google') return DEFAULT_PROVIDER_URL
   return configured
 }
 

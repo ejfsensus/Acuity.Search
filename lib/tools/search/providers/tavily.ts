@@ -3,10 +3,9 @@ import { sanitizeUrl } from '@/lib/utils'
 
 import { BaseSearchProvider } from './base'
 
-// Domains excluded system-wide in Morphic Cloud deployments. Tavily has
-// started surfacing low-value aggregator/social pages (notably Instagram)
-// that rarely help answer informational queries.
-const CLOUD_EXCLUDED_DOMAINS = ['instagram.com']
+// Acuity policy removes inherited opaque editorial exclusions (such as instagram.com)
+// so domain exclusions are controlled solely by explicit request or deployment policy.
+const CLOUD_EXCLUDED_DOMAINS: string[] = []
 // Tavily rejects the whole request when every entry of a domain list lacks a
 // valid suffix, so bare labels are dropped before the call. Entries are first
 // resolved to an ASCII hostname so internationalized domains survive.
@@ -119,9 +118,9 @@ export class TavilySearchProvider extends BaseSearchProvider {
         query: filledQuery,
         max_results: Math.max(maxResults, 5),
         search_depth: searchDepth,
-        include_images: true,
-        include_image_descriptions: includeImageDescriptions,
-        include_answers: true,
+        include_images: false,
+        include_image_descriptions: false,
+        include_answers: false,
         include_domains: validIncludeDomains,
         exclude_domains: validExcludeDomains
       })
@@ -149,32 +148,34 @@ export class TavilySearchProvider extends BaseSearchProvider {
       }
     }
 
-    const processedImages = includeImageDescriptions
-      ? (
-          data.images as Array<{
-            url: string
-            title?: string
-            description?: string
-          }>
-        )
-          .map(image => {
-            const sourceUrl = image.title
-              ? resultTitleToUrl.get(image.title)
-              : undefined
-            return {
-              url: sanitizeUrl(image.url),
-              description: image.description ?? '',
-              ...(image.title ? { title: image.title } : {}),
-              ...(sourceUrl ? { sourceUrl } : {})
-            }
-          })
-          .filter(
-            (image): image is { url: string; description: string } =>
-              typeof image === 'object' &&
-              image.description !== undefined &&
-              image.description !== ''
+    const processedImages = Array.isArray(data.images)
+      ? includeImageDescriptions
+        ? (
+            data.images as Array<{
+              url: string
+              title?: string
+              description?: string
+            }>
           )
-      : data.images.map((url: string) => sanitizeUrl(url))
+            .map(image => {
+              const sourceUrl = image.title
+                ? resultTitleToUrl.get(image.title)
+                : undefined
+              return {
+                url: sanitizeUrl(image.url),
+                description: image.description ?? '',
+                ...(image.title ? { title: image.title } : {}),
+                ...(sourceUrl ? { sourceUrl } : {})
+              }
+            })
+            .filter(
+              (image): image is { url: string; description: string } =>
+                typeof image === 'object' &&
+                image.description !== undefined &&
+                image.description !== ''
+            )
+        : data.images.map((url: string) => sanitizeUrl(url))
+      : []
 
     const results: SearchResultItem[] = (
       (data.results ?? []) as Array<{

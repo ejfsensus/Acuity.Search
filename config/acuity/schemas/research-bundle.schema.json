@@ -1,0 +1,363 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "acuity.research-bundle.v1"
+    },
+    "exampleOnly": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": ["general", "literature", "collections"]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policy": {
+          "enum": ["strict", "open", "collection-and-web-lanes"]
+        },
+        "registryVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "groupIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "targetHosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "policy",
+        "registryVersion",
+        "groupIds",
+        "sourceIds",
+        "targetHosts"
+      ]
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kind": {
+          "const": "ai-generated-research-synthesis"
+        },
+        "markdown": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "type": ["string", "null"]
+            },
+            "id": {
+              "type": ["string", "null"]
+            },
+            "promptVersion": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["provider", "id", "promptVersion"]
+        },
+        "citationMap": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": ["version", "kind", "markdown", "model", "citationMap"]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "resolvedUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retrievedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "contentState": {
+            "enum": [
+              "snippet",
+              "fulltext-excerpt",
+              "catalogue-metadata",
+              "scan-no-text",
+              "unavailable"
+            ]
+          },
+          "bibliography": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "workTitle": {
+                "type": ["string", "null"]
+              },
+              "author": {
+                "type": ["string", "null"]
+              },
+              "translator": {
+                "type": ["string", "null"]
+              },
+              "edition": {
+                "type": ["string", "null"]
+              },
+              "language": {
+                "type": ["string", "null"]
+              },
+              "publishedAt": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "workTitle",
+              "author",
+              "translator",
+              "edition",
+              "language",
+              "publishedAt"
+            ]
+          },
+          "rights": {
+            "type": ["string", "null"]
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "provider": {
+                  "enum": ["searxng", "brave", "tavily", "exa"]
+                },
+                "engines": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": ["provider", "engines"]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "resolvedUrl",
+          "title",
+          "retrievedAt",
+          "contentState",
+          "bibliography",
+          "rights",
+          "provenance"
+        ]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "locator": {
+            "type": ["string", "null"]
+          },
+          "contentState": {
+            "enum": ["snippet", "fulltext-excerpt", "catalogue-metadata"]
+          }
+        },
+        "required": [
+          "id",
+          "sourceId",
+          "text",
+          "sha256",
+          "locator",
+          "contentState"
+        ]
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "searchedTargetHosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "unsearchedTargetHosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "providerStatuses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "provider": {
+                "enum": ["searxng", "brave", "tavily", "exa"]
+              },
+              "status": {
+                "enum": [
+                  "succeeded",
+                  "partial",
+                  "failed",
+                  "not-selected",
+                  "not-configured",
+                  "not-attempted"
+                ]
+              }
+            },
+            "required": ["provider", "status"]
+          }
+        }
+      },
+      "required": [
+        "limitations",
+        "searchedTargetHosts",
+        "unsearchedTargetHosts",
+        "providerStatuses"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "product": {
+          "const": "Acuity.Search"
+        },
+        "generatedContentIsPrimarySource": {
+          "const": false
+        },
+        "upstreamRunId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "product",
+        "generatedContentIsPrimarySource",
+        "upstreamRunId"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "exampleOnly",
+    "id",
+    "title",
+    "createdAt",
+    "query",
+    "mode",
+    "scope",
+    "answer",
+    "sources",
+    "evidence",
+    "coverage",
+    "provenance"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:acuity:research-bundle:v1",
+  "title": "Proposed portable research bundle; no automatic Codex endpoint implied"
+}

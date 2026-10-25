@@ -535,3 +535,4 @@ export type AdditionalUsageInterest = InferSelectModel<
 // canonical schema module — and drizzle-kit generation anchored on it —
 // covers every table in the database.
 export * from '../auth/better-auth/schema'
+export * from './acuity-schema'

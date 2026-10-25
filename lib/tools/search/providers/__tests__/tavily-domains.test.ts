@@ -44,7 +44,7 @@ describe('TavilySearchProvider domains', () => {
     expect(body.include_domains).toEqual(['mit.edu'])
   })
 
-  it('filters exclude_domains including the cloud-injected domain', async () => {
+  it('filters exclude_domains without injecting opaque cloud editorial exclusions', async () => {
     vi.stubEnv('MORPHIC_CLOUD_DEPLOYMENT', 'true')
 
     const body = await searchAndReadBody(
@@ -52,7 +52,7 @@ describe('TavilySearchProvider domains', () => {
       ['com', 'example.net']
     )
 
-    expect(body.exclude_domains).toEqual(['example.net', 'instagram.com'])
+    expect(body.exclude_domains).toEqual(['example.net'])
   })
 
   it('converts internationalized domains to their ascii form', async () => {
