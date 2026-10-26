@@ -12,6 +12,10 @@ export interface DepthBudgetSpec {
   initialLatencyBudgetMs: number
   totalLatencyBudgetMs: number
   maxSynthesisTokens: number
+  /** Stop waiting for slower providers once any have returned (ms from start). */
+  providerPhaseDeadlineMs: number
+  /** Stop waiting for page extraction (ms after extraction starts). */
+  extractionPhaseDeadlineMs: number
 }
 
 export const DEPTH_BUDGETS: Record<ResearchDepth, DepthBudgetSpec> = {
@@ -22,7 +26,9 @@ export const DEPTH_BUDGETS: Record<ResearchDepth, DepthBudgetSpec> = {
     maxExtractions: 4,
     initialLatencyBudgetMs: 12000,
     totalLatencyBudgetMs: 60000,
-    maxSynthesisTokens: 2000
+    maxSynthesisTokens: 2000,
+    providerPhaseDeadlineMs: 5000,
+    extractionPhaseDeadlineMs: 4000
   },
   research: {
     depth: 'research',
@@ -31,7 +37,9 @@ export const DEPTH_BUDGETS: Record<ResearchDepth, DepthBudgetSpec> = {
     maxExtractions: 12,
     initialLatencyBudgetMs: 35000,
     totalLatencyBudgetMs: 150000,
-    maxSynthesisTokens: 6000
+    maxSynthesisTokens: 6000,
+    providerPhaseDeadlineMs: 15000,
+    extractionPhaseDeadlineMs: 12000
   }
 }
 

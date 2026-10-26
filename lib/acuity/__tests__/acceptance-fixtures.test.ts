@@ -10,6 +10,7 @@ import {
 import { ACUITY_SYSTEM_PROMPT } from '@/lib/acuity/prompts'
 import { compileScopeFromSelection } from '@/lib/acuity/registry'
 import { searchRequestSchema } from '@/lib/acuity/search/contracts'
+import { resetProviderCircuits } from '@/lib/acuity/search/provider-health'
 import {
   computeVerbatimSha256,
   createSnippetEvidenceRecord,
@@ -60,6 +61,7 @@ const acceptanceSpec = JSON.parse(fs.readFileSync(fixturesPath, 'utf-8')) as {
 
 describe('Acuity.Search Acceptance Fixtures (config/acuity/acceptance-fixtures.json)', () => {
   beforeEach(() => {
+    resetProviderCircuits()
     clearAcuityStoreForTests()
   })
 
