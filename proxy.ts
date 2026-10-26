@@ -76,8 +76,11 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - api/favicon (source favicon images, which need no session)
+     * - fonts/, robots.txt, sitemap.xml and static font/text/xml assets,
+     *   which must never bounce to /auth/login (fonts fell back to system
+     *   faces and crawlers received the login page)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|api/favicon|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'
+    '/((?!_next/static|_next/image|favicon.ico|api/favicon|fonts/|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf|txt|xml)$).*)'
   ]
 }
