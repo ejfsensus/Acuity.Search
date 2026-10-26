@@ -1,9 +1,7 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
-
-import { math } from '@streamdown/math'
-import { defaultRehypePlugins, Streamdown } from 'streamdown'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import type { ProviderConfigStatus } from '@/lib/acuity/config'
 import type {
@@ -22,6 +20,12 @@ import type {
   SearchRunState,
   SortOrder
 } from '@/lib/acuity/search/contracts'
+import {
+  initialProgress,
+  parseSseChunk,
+  reduceProgress,
+  type RunProgress
+} from '@/lib/acuity/search/progress'
 import { sortSourceResults } from '@/lib/acuity/search/rank'
 
 import {
@@ -35,13 +39,46 @@ import {
   MODE_DESCRIPTIONS,
   SORT_ORDER_LABELS
 } from './acuity-types'
-import { EvidenceDrawer } from './evidence-drawer'
 import { CitedSourceRibbon, ResultCardsList } from './result-cards'
-import { ShareExportModal } from './share-export-modal'
+import { SearchProgress } from './search-progress'
 
-import 'katex/dist/katex.min.css'
+// Heavy, below-the-fold or on-demand UI is split out of the first-load bundle.
+const AnswerMarkdown = dynamic(() => import('./answer-markdown'), {
+  ssr: false,
+  loading: () => (
+    <div aria-hidden="true" className="flex flex-col gap-2.5">
+      <div className="acuity-shimmer h-3.5 w-11/12 rounded" />
+      <div className="acuity-shimmer h-3.5 w-full rounded" />
+    </div>
+  )
+})
+const EvidenceDrawer = dynamic(
+  () => import('./evidence-drawer').then(m => m.EvidenceDrawer),
+  { ssr: false }
+)
+const ShareExportModal = dynamic(
+  () => import('./share-export-modal').then(m => m.ShareExportModal),
+  { ssr: false }
+)
 
-const rehypePlugins = Object.values(defaultRehypePlugins)
+/** Mode-accurate description of what an enquiry actually searches. */
+function scopeTagline(
+  mode: DiscoveryMode,
+  selectedGroupCount: number,
+  repositoryCount: number
+): string {
+  if (mode === 'collections') {
+    return selectedGroupCount > 0
+      ? `Searching curated repositories in ${selectedGroupCount} topic${selectedGroupCount === 1 ? '' : 's'}`
+      : `Searching ${repositoryCount} curated repositories`
+  }
+  if (mode === 'literature') {
+    return 'Searching the open web for texts, translations & editions'
+  }
+  return selectedGroupCount > 0
+    ? 'Open web, with your chosen topics weighted first'
+    : 'Open web search · curated & scholarly sources ranked first'
+}
 const LOCAL_STORAGE_HISTORY_KEY = 'acuity.search.history.v1'
 
 export interface AcuityWorkspaceInitialProps {
@@ -103,6 +140,37 @@ export function AcuitySearchWorkspace({
   const [isSearching, setIsSearching] = useState(false)
   const [isContinuing, setIsContinuing] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [progress, setProgress] = useState<RunProgress | null>(null)
+  const [showWeakerSources, setShowWeakerSources] = useState(false)
+  const abortRef = useRef<AbortController | null>(null)
+  const historyToggleRef = useRef<HTMLButtonElement | null>(null)
+  const historyPanelRef = useRef<HTMLElement | null>(null)
+
+  // History drawer behaves as a modal dialog on small screens: Esc closes it,
+  // focus moves into it, and returns to the toggle when it closes.
+  useEffect(() => {
+    if (!historyOpen) return
+    const panel = historyPanelRef.current
+    panel?.querySelector<HTMLElement>('button, [tabindex="0"]')?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setHistoryOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    const toggle = historyToggleRef.current
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      toggle?.focus()
+    }
+  }, [historyOpen])
+
+  useEffect(() => {
+    if (!ledgerOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLedgerOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [ledgerOpen])
 
   // Load persisted search history on mount (from localStorage + server disk store)
   useEffect(() => {
@@ -224,13 +292,23 @@ export function AcuitySearchWorkspace({
           ? 'collection-and-web-lanes'
           : 'open'
 
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
     setIsSearching(true)
     setErrorMessage(null)
+    setShowWeakerSources(false)
+    setCurrentRun(null)
+    setProgress(initialProgress())
 
     try {
       const response = await fetch('/api/acuity-search/runs', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'text/event-stream'
+        },
         body: JSON.stringify({
           query: activeQuery,
           mode: activeMode,
@@ -252,12 +330,37 @@ export function AcuitySearchWorkspace({
         })
       })
 
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || 'Search execution failed')
+      let run: SearchRunState | null = null
+      const contentType = response.headers.get('content-type') || ''
+      if (!response.ok || !contentType.includes('text/event-stream')) {
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data.error || 'Search execution failed')
+        }
+        run = data.run as SearchRunState
+      } else if (response.body) {
+        // Consume the server's progress stream (run.Accepted → run.Completed)
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
+        let local = initialProgress()
+        for (;;) {
+          const { value, done } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+          const parsed = parseSseChunk(buffer)
+          buffer = parsed.rest
+          if (parsed.events.length === 0) continue
+          for (const ev of parsed.events) local = reduceProgress(local, ev)
+          setProgress(local)
+          if (local.error) throw new Error(local.error)
+        }
+        run = local.completedRun
+      }
+      if (!run) {
+        throw new Error('The enquiry ended before any results arrived.')
       }
 
-      const run: SearchRunState = data.run
       setCurrentRun(run)
       const nextHistory = [
         run,
@@ -266,11 +369,27 @@ export function AcuitySearchWorkspace({
       persistHistoryList(nextHistory)
       setSelectedSourceId(run.results[0]?.id ?? null)
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : 'Search request failed'
-      )
+      if (controller.signal.aborted) {
+        setErrorMessage('Enquiry cancelled.')
+      } else {
+        setErrorMessage(
+          error instanceof Error ? error.message : 'Search request failed'
+        )
+      }
     } finally {
+      if (abortRef.current === controller) abortRef.current = null
       setIsSearching(false)
+      setProgress(null)
+    }
+  }
+
+  const handleCancelEnquiry = () => {
+    const runId = progress?.runId
+    abortRef.current?.abort()
+    if (runId) {
+      void fetch(`/api/acuity-search/runs/${runId}/cancel`, {
+        method: 'POST'
+      }).catch(() => {})
     }
   }
 
@@ -308,6 +427,18 @@ export function AcuitySearchWorkspace({
     if (!currentRun) return []
     return sortSourceResults(currentRun.results, sortOrder)
   }, [currentRun, sortOrder])
+  const weakerResults = useMemo(
+    () => sortedResults.filter(r => r.qualityTier === 'low'),
+    [sortedResults]
+  )
+  const visibleResults = useMemo(
+    () =>
+      showWeakerSources
+        ? sortedResults
+        : sortedResults.filter(r => r.qualityTier !== 'low'),
+    [sortedResults, showWeakerSources]
+  )
+  const evidenceStrength = currentRun?.evidenceStrength ?? 'strong'
 
   const selectedSource = useMemo(() => {
     if (!currentRun || !selectedSourceId) return null
@@ -342,7 +473,7 @@ export function AcuitySearchWorkspace({
   }
 
   return (
-    <div className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-x-hidden bg-[#09090f] text-[#fafafa]">
+    <div className="acuity-workspace flex h-full min-h-0 w-full min-w-0 flex-col overflow-x-hidden bg-[#09090f] text-[#fafafa]">
       {/* Minimalist Top Bar */}
       <header className="z-20 shrink-0 border-b border-[#35313c]/40 bg-[#09090f]/85 px-3 py-2.5 backdrop-blur-md sm:px-4 md:px-6">
         <div className="mx-auto flex max-w-[1480px] flex-wrap items-center justify-between gap-2 sm:gap-3">
@@ -355,7 +486,8 @@ export function AcuitySearchWorkspace({
                 setErrorMessage(null)
                 setLedgerOpen(false)
               }}
-              className="flex min-h-[40px] items-center gap-1.5 rounded-full border border-[#35313c]/80 bg-[#111118] px-2.5 py-1 text-left transition-colors hover:border-[#d4a843] sm:px-3 sm:py-1.5"
+              aria-label="Acuity.Search — new enquiry"
+              className="flex min-h-11 items-center gap-1.5 rounded-full border border-[#35313c]/80 bg-[#111118] px-2.5 py-1 text-left transition-colors hover:border-[#d4a843] sm:px-3 sm:py-1.5"
             >
               <AcuityEmblem className="size-5 shrink-0" />
               <span className="font-serif text-sm font-medium tracking-tight text-[#fafafa] sm:text-base">
@@ -364,10 +496,12 @@ export function AcuitySearchWorkspace({
             </button>
 
             <button
+              ref={historyToggleRef}
               type="button"
               onClick={() => setHistoryOpen(prev => !prev)}
-              aria-pressed={historyOpen}
-              className={`inline-flex min-h-[40px] items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors sm:px-3 sm:py-1.5 ${
+              aria-expanded={historyOpen}
+              aria-controls="acuity-history-panel"
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[12px] transition-colors sm:px-3 sm:py-1.5 ${
                 historyOpen
                   ? 'border-[#d4a843] bg-[#d4a843]/15 text-[#e8c96a]'
                   : 'border-[#35313c] bg-[#111118] text-[#b3b0bd] hover:border-[#d4a843]/60 hover:text-[#fafafa]'
@@ -375,7 +509,7 @@ export function AcuitySearchWorkspace({
             >
               <span>History</span>
               {runHistory.length > 0 && (
-                <span className="rounded-full bg-[#d4a843]/20 px-1.5 py-0.2 font-mono text-[10px] text-[#e8c96a]">
+                <span className="rounded-full bg-[#d4a843]/20 px-1.5 py-0.5 font-mono text-[12px] text-[#e8c96a]">
                   {runHistory.length}
                 </span>
               )}
@@ -402,7 +536,7 @@ export function AcuitySearchWorkspace({
                     }
                   }}
                   aria-pressed={active}
-                  className={`flex-1 rounded-full px-2.5 py-1.5 font-mono text-[11px] transition-all sm:flex-initial sm:px-3.5 sm:py-1 sm:text-xs ${
+                  className={`min-h-11 flex-1 rounded-full px-3 py-1.5 font-mono text-[12px] transition-all sm:flex-initial sm:px-4 sm:text-xs ${
                     active
                       ? 'bg-[#d4a843] font-semibold text-[#09090f] shadow-xs'
                       : 'text-[#b3b0bd] hover:text-[#fafafa]'
@@ -424,7 +558,8 @@ export function AcuitySearchWorkspace({
                     prev === 'void' ? 'parchment' : 'void'
                   )
                 }
-                className="hidden rounded-full border border-[#35313c] bg-[#111118] px-3 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a] md:inline-flex"
+                aria-pressed={readingSurface === 'parchment'}
+                className="inline-flex min-h-11 items-center rounded-full border border-[#35313c] bg-[#111118] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
                 title="Toggle Void / Warm Parchment reading surface"
               >
                 {readingSurface === 'void' ? 'Parchment' : 'Void'}
@@ -434,8 +569,8 @@ export function AcuitySearchWorkspace({
             <button
               type="button"
               onClick={() => setLedgerOpen(prev => !prev)}
-              aria-pressed={ledgerOpen}
-              className={`inline-flex min-h-[40px] items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors sm:px-3 sm:py-1 ${
+              aria-expanded={ledgerOpen}
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[12px] transition-colors sm:px-3 sm:py-1 ${
                 ledgerOpen
                   ? 'border-[#d4a843] bg-[#d4a843]/15 text-[#e8c96a]'
                   : 'border-[#35313c] bg-[#111118] text-[#b3b0bd] hover:border-[#d4a843]/60 hover:text-[#fafafa]'
@@ -458,15 +593,19 @@ export function AcuitySearchWorkspace({
         {/* Left Collapsible Drawer: Persistent Search History */}
         {historyOpen && (
           <aside
-            aria-label="Search History"
-            className="absolute inset-y-0 left-0 z-30 flex w-72 shrink-0 flex-col border-r border-[#35313c] bg-[#111118]/95 shadow-2xl backdrop-blur-md md:static md:w-80 md:shadow-none"
+            id="acuity-history-panel"
+            ref={historyPanelRef}
+            aria-label="Research history"
+            role="dialog"
+            aria-modal="false"
+            className="fixed inset-y-0 left-0 z-50 flex w-[86vw] max-w-80 shrink-0 flex-col border-r border-[#35313c] bg-[#111118] shadow-2xl md:static md:z-auto md:w-80 md:shadow-none"
           >
             <div className="flex items-center justify-between border-b border-[#35313c]/70 px-4 py-3">
               <div>
-                <h3 className="font-serif text-base font-medium text-[#fafafa]">
+                <h2 className="font-serif text-lg font-medium text-[#fafafa]">
                   Research History
-                </h3>
-                <p className="font-mono text-[10px] text-[#8e899c]">
+                </h2>
+                <p className="font-mono text-[12px] text-[#a29db0]">
                   Persisted locally ({runHistory.length}{' '}
                   {runHistory.length === 1 ? 'enquiry' : 'enquiries'})
                 </p>
@@ -474,9 +613,10 @@ export function AcuitySearchWorkspace({
               <button
                 type="button"
                 onClick={() => setHistoryOpen(false)}
-                className="min-h-[32px] rounded-lg border border-[#35313c] bg-[#181820] px-2.5 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa]"
+                aria-label="Close history"
+                className="min-h-11 rounded-lg border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa]"
               >
-                Close ✕
+                Close <span aria-hidden="true">✕</span>
               </button>
             </div>
 
@@ -533,19 +673,20 @@ export function AcuitySearchWorkspace({
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <span className="line-clamp-2 text-xs font-medium leading-snug text-[#fafafa]">
+                        <span className="line-clamp-2 text-[13px] font-medium leading-snug text-[#fafafa]">
                           {item.request.query}
                         </span>
                         <button
                           type="button"
                           onClick={e => handleDeleteHistoryRun(item.runId, e)}
                           title="Delete from history"
-                          className="min-h-[28px] min-w-[28px] shrink-0 rounded px-1 font-mono text-[10px] text-[#8e899c] opacity-70 transition-opacity hover:opacity-100 hover:text-[#e58c8c] md:opacity-0 md:group-hover:opacity-100"
+                          aria-label={`Delete “${item.request.query}” from history`}
+                          className="-m-2 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded font-mono text-[12px] text-[#a29db0] opacity-80 transition-opacity hover:opacity-100 hover:text-[#e58c8c] focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100"
                         >
-                          ✕
+                          <span aria-hidden="true">✕</span>
                         </button>
                       </div>
-                      <div className="mt-1.5 flex items-center justify-between font-mono text-[10px] text-[#8e899c]">
+                      <div className="mt-1.5 flex items-center justify-between font-mono text-[12px] text-[#a29db0]">
                         <span>
                           {MODE_DESCRIPTIONS[item.request.mode].label} ·{' '}
                           {DEPTH_DESCRIPTIONS[item.request.depth].label}
@@ -566,7 +707,7 @@ export function AcuitySearchWorkspace({
         {historyOpen && (
           <div
             onClick={() => setHistoryOpen(false)}
-            className="fixed inset-0 z-20 bg-black/60 backdrop-blur-xs md:hidden"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden"
             aria-hidden="true"
           />
         )}
@@ -606,15 +747,20 @@ export function AcuitySearchWorkspace({
                 e.preventDefault()
                 void executeEnquiry()
               }}
-              className="relative w-full rounded-3xl border border-[#35313c]/90 bg-[#111118]/95 p-3.5 shadow-[0_12px_48px_rgba(0,0,0,0.55)] transition-colors focus-within:border-[#d4a843]/70"
+              role="search"
+              className="acuity-searchbox relative w-full rounded-3xl border border-[#35313c]/90 bg-[#111118]/95 p-3.5 shadow-[0_12px_48px_rgba(0,0,0,0.55)] transition-colors"
             >
+              <label htmlFor="acuity-enquiry" className="sr-only">
+                Ask Acuity
+              </label>
               <input
+                id="acuity-enquiry"
                 type="search"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder={MODE_DESCRIPTIONS[mode].placeholder}
-                aria-label="Research enquiry input"
-                className="w-full bg-transparent px-2.5 pt-1 pb-3 text-base text-[#fafafa] placeholder:text-[#8e899c] focus:outline-none"
+                enterKeyHint="search"
+                className="w-full rounded-xl bg-transparent px-2.5 pt-1 pb-3 text-base text-[#fafafa] placeholder:text-[#a29db0]"
               />
 
               {/* Seamless Bottom Pill Bar Inside Composer (Quick vs Deep + Submit Arrow) */}
@@ -635,10 +781,10 @@ export function AcuitySearchWorkspace({
                           onClick={() => setDepth(d)}
                           aria-pressed={active}
                           title={DEPTH_DESCRIPTIONS[d].detail}
-                          className={`rounded-full px-3 py-1 font-mono text-xs transition-all ${
+                          className={`min-h-11 min-w-16 rounded-full px-4 py-1 font-mono text-[13px] transition-all ${
                             active
                               ? 'bg-[#d4a843] font-semibold text-[#09090f]'
-                              : 'text-[#8e899c] hover:text-[#fafafa]'
+                              : 'text-[#b3b0bd] hover:text-[#fafafa]'
                           }`}
                         >
                           {DEPTH_DESCRIPTIONS[d].label}
@@ -648,9 +794,12 @@ export function AcuitySearchWorkspace({
                   </div>
 
                   {/* Subtle Active Scope / Provider Readiness Indicator (No LLM model names exposed) */}
-                  <span className="hidden font-mono text-[11px] text-[#8e899c] sm:inline">
-                    {DEPTH_DESCRIPTIONS[depth].badge} · Searching verified
-                    archives & web indexes
+                  <span className="font-mono text-[12px] text-[#a29db0]">
+                    {scopeTagline(
+                      mode,
+                      selectedGroupIds.length,
+                      entries.length
+                    )}
                   </span>
                 </div>
 
@@ -658,10 +807,9 @@ export function AcuitySearchWorkspace({
                 <button
                   type="submit"
                   disabled={isSearching}
-                  aria-label="Execute Enquiry"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#d4a843] bg-[#d4a843] px-4 py-1.5 font-mono text-xs font-semibold text-[#09090f] transition-all hover:bg-[#e8c96a] disabled:opacity-50"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[#d4a843] bg-[#d4a843] px-5 py-1.5 font-mono text-[13px] font-semibold text-[#09090f] transition-all hover:bg-[#e8c96a] disabled:opacity-50"
                 >
-                  <span>{isSearching ? 'Searching...' : 'Enquire'}</span>
+                  <span>{isSearching ? 'Enquiring…' : 'Enquire'}</span>
                   <span aria-hidden="true" className="text-sm leading-none">
                     ↑
                   </span>
@@ -686,7 +834,7 @@ export function AcuitySearchWorkspace({
             )}
 
             {/* Starter Exemplar Pills (Morphic-style below input when idle) */}
-            {!currentRun && (
+            {!currentRun && !isSearching && (
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 {CURATED_ENQUIRY_PROMPTS.map(item => (
                   <button
@@ -702,9 +850,9 @@ export function AcuitySearchWorkspace({
                         groupIds: item.groupIds
                       })
                     }}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#35313c]/80 bg-[#111118]/80 px-3.5 py-1.5 text-xs text-[#b3b0bd] transition-all hover:border-[#d4a843]/60 hover:bg-[#181820] hover:text-[#e8c96a]"
+                    className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[#35313c]/80 bg-[#111118]/80 px-4 py-1.5 text-[13px] text-[#b3b0bd] transition-all hover:border-[#d4a843]/60 hover:bg-[#181820] hover:text-[#e8c96a]"
                   >
-                    <span className="font-mono text-[10px] text-[#d4a843]">
+                    <span className="font-mono text-[12px] text-[#d4a843]">
                       {item.category}
                     </span>
                     <span>{item.label}</span>
@@ -724,6 +872,15 @@ export function AcuitySearchWorkspace({
             </div>
           )}
 
+          {/* Live progress while the enquiry streams */}
+          {isSearching && progress && (
+            <SearchProgress
+              progress={progress}
+              depth={depth}
+              onCancel={handleCancelEnquiry}
+            />
+          )}
+
           {/* Active Search Run Output */}
           {currentRun && (
             <div className="mx-auto mt-5 flex w-full max-w-3xl flex-col gap-5 pb-16">
@@ -732,7 +889,7 @@ export function AcuitySearchWorkspace({
                 currentRun.request.mode === 'general' && (
                   <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#7c5ce0]/40 bg-[#7c5ce0]/10 px-4 py-2.5 text-xs">
                     <div>
-                      <span className="font-mono text-[11px] text-[#c7b8f5]">
+                      <span className="font-mono text-[12px] text-[#c7b8f5]">
                         Relevant Topic Domain:{' '}
                       </span>
                       <span className="text-[#fafafa]">
@@ -756,16 +913,51 @@ export function AcuitySearchWorkspace({
                           groupIds: ids
                         })
                       }}
-                      className="rounded-full border border-[#d4a843] bg-[#d4a843]/20 px-3 py-1 font-mono text-[11px] text-[#e8c96a] hover:bg-[#d4a843]/30"
+                      className="min-h-11 rounded-full border border-[#d4a843] bg-[#d4a843]/20 px-4 py-1 font-mono text-[12px] text-[#e8c96a] hover:bg-[#d4a843]/30"
                     >
                       Focus on this topic →
                     </button>
                   </div>
                 )}
 
+              {/* Weak / no strong sources state */}
+              {evidenceStrength !== 'strong' && (
+                <div
+                  role="status"
+                  className="rounded-2xl border border-[#d9a05b]/40 bg-[#d9a05b]/10 px-4 py-3.5"
+                >
+                  <p className="font-serif text-lg text-[#fafafa]">
+                    {evidenceStrength === 'none'
+                      ? 'The archives are quiet on this.'
+                      : 'Only a few strong sources answered this.'}
+                  </p>
+                  <p className="mt-1 text-[14px] leading-relaxed text-[#d8d4e2]">
+                    {evidenceStrength === 'none'
+                      ? 'No reliable source matched closely enough to compose a narrative. Try rephrasing, adding a tradition or text name, or searching the curated repositories.'
+                      : 'Treat this overview as a starting point. Searching the curated repositories may surface deeper material.'}
+                  </p>
+                  {currentRun.request.mode !== 'collections' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('collections')
+                        setScopePolicy('strict')
+                        void executeEnquiry({
+                          query: currentRun.request.query,
+                          mode: 'collections'
+                        })
+                      }}
+                      className="mt-3 inline-flex min-h-11 items-center rounded-full border border-[#d4a843] bg-[#d4a843]/15 px-4 font-mono text-[12px] text-[#e8c96a] hover:bg-[#d4a843]/25"
+                    >
+                      Search the curated repositories →
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Show / Hide Key Sources Toggle Directly Above the LLM Synthesis Output */}
               <CitedSourceRibbon
-                results={sortedResults}
+                results={visibleResults}
                 citedLabels={latestAnswer?.citations.citedLabels ?? []}
                 selectedSourceId={selectedSourceId}
                 onSelectSource={id => {
@@ -790,7 +982,7 @@ export function AcuitySearchWorkspace({
                           ? 'Research Synthesis'
                           : 'Evidence Overview'}
                       </span>
-                      <span className="rounded-full border border-[#d4a843]/50 bg-[#d4a843]/15 px-2.5 py-0.5 font-mono text-[10px] text-[#e8c96a]">
+                      <span className="rounded-full border border-[#d4a843]/50 bg-[#d4a843]/15 px-2.5 py-0.5 font-mono text-[12px] text-[#e8c96a]">
                         {currentRun.request.depth === 'research'
                           ? 'Deep Retrieval'
                           : 'Quick Pass'}{' '}
@@ -802,14 +994,14 @@ export function AcuitySearchWorkspace({
                       <button
                         type="button"
                         onClick={() => setLedgerOpen(prev => !prev)}
-                        className="rounded-full border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
+                        className="min-h-11 rounded-full border border-[#35313c] bg-[#181820] px-4 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
                       >
                         {ledgerOpen ? 'Hide Ledger' : 'Inspect Ledger'}
                       </button>
                       <button
                         type="button"
                         onClick={() => setShareModalOpen(true)}
-                        className="rounded-full border border-[#d4a843]/80 bg-[#d4a843]/15 px-3 py-1 font-mono text-[11px] text-[#e8c96a] hover:bg-[#d4a843]/25"
+                        className="min-h-11 rounded-full border border-[#d4a843]/80 bg-[#d4a843]/15 px-4 py-1 font-mono text-[12px] text-[#e8c96a] hover:bg-[#d4a843]/25"
                       >
                         Share / Export
                       </button>
@@ -818,51 +1010,26 @@ export function AcuitySearchWorkspace({
 
                   {/* Rich Typography Markdown Renderer with Interactive [S1] Citation Badges */}
                   <div
-                    className={`prose max-w-none text-sm leading-relaxed ${
+                    data-surface={readingSurface}
+                    className={`prose max-w-none leading-relaxed ${
                       readingSurface === 'parchment'
-                        ? 'prose-stone text-[#27241c]'
-                        : 'prose-invert prose-neutral text-[#e6e4ed]'
+                        ? 'prose-stone max-w-[68ch] font-serif text-[19px] leading-[1.7] text-[#2a2218]'
+                        : 'prose-invert prose-neutral text-[15px] text-[#e6e4ed]'
                     }`}
                   >
-                    <Streamdown
-                      mode="static"
-                      plugins={{ math }}
-                      rehypePlugins={rehypePlugins}
-                      components={{
-                        a: ({ href, children, ...props }) => {
-                          if (href && href.startsWith('#cite-')) {
-                            const label = href.replace('#cite-', '')
-                            return (
-                              <button
-                                type="button"
-                                onClick={() => handleCitationBadgeClick(label)}
-                                title={`View excerpt for ${label}`}
-                                className="mx-0.5 inline-flex items-center rounded border border-[#d4a843]/60 bg-[#d4a843]/15 px-1.5 py-0.2 font-mono text-[11px] font-semibold text-[#e8c96a] transition-colors hover:bg-[#d4a843] hover:text-[#09090f]"
-                              >
-                                {children}
-                              </button>
-                            )
-                          }
-                          return (
-                            <a
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#e8c96a] underline underline-offset-4 hover:text-[#d4a843]"
-                              {...props}
-                            >
-                              {children}
-                            </a>
-                          )
-                        }
-                      }}
-                    >
-                      {formattedAnswerMarkdown}
-                    </Streamdown>
+                    {latestAnswer.disclosureNote && (
+                      <p className="not-prose mb-4 rounded-xl border border-[#35313c]/60 px-3.5 py-2 font-mono text-[12px] opacity-80">
+                        {latestAnswer.disclosureNote}
+                      </p>
+                    )}
+                    <AnswerMarkdown
+                      markdown={formattedAnswerMarkdown}
+                      onCitation={handleCitationBadgeClick}
+                    />
                   </div>
 
                   {latestAnswer.citations.unbackedClaimsWarning && (
-                    <div className="mt-4 rounded-xl border border-[#d4a843]/60 bg-[#d4a843]/10 px-3.5 py-2 font-mono text-[11px] text-[#e8c96a]">
+                    <div className="mt-4 rounded-xl border border-[#d4a843]/60 bg-[#d4a843]/10 px-3.5 py-2 font-mono text-[12px] text-[#e8c96a]">
                       Verification notice:{' '}
                       {latestAnswer.citations.unbackedClaimsWarning}
                     </div>
@@ -877,7 +1044,7 @@ export function AcuitySearchWorkspace({
                     <h2 className="font-serif text-xl font-medium text-[#fafafa]">
                       Supporting Evidence & Sources
                     </h2>
-                    <p className="font-mono text-[11px] text-[#8e899c]">
+                    <p className="font-mono text-[12px] text-[#a29db0]">
                       {currentRun.evidence.length} verified excerpts · Select
                       any source to view original text in the Ledger
                     </p>
@@ -892,7 +1059,7 @@ export function AcuitySearchWorkspace({
                         onChange={e =>
                           setSortOrder(e.target.value as SortOrder)
                         }
-                        className="rounded-full border border-[#35313c] bg-[#111118] px-3 py-1 font-mono text-xs text-[#fafafa]"
+                        className="min-h-11 rounded-full border border-[#35313c] bg-[#111118] px-3 py-1 font-mono text-[13px] text-[#fafafa]"
                       >
                         {(
                           [
@@ -911,7 +1078,7 @@ export function AcuitySearchWorkspace({
                 </div>
 
                 <ResultCardsList
-                  results={sortedResults}
+                  results={visibleResults}
                   citedLabels={latestAnswer?.citations.citedLabels ?? []}
                   mode={currentRun.request.mode}
                   selectedSourceId={selectedSourceId}
@@ -921,6 +1088,18 @@ export function AcuitySearchWorkspace({
                   }}
                   readingSurface={readingSurface}
                 />
+                {weakerResults.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowWeakerSources(v => !v)}
+                    aria-expanded={showWeakerSources}
+                    className="mt-3 inline-flex min-h-11 items-center rounded-full border border-[#35313c] bg-[#111118] px-4 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
+                  >
+                    {showWeakerSources
+                      ? 'Hide weaker sources'
+                      : `Show ${weakerResults.length} weaker source${weakerResults.length === 1 ? '' : 's'}`}
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -939,15 +1118,16 @@ export function AcuitySearchWorkspace({
               className="fixed inset-y-0 right-0 z-40 flex w-full max-w-[92vw] shrink-0 flex-col border-l border-[#35313c] bg-[#111118]/98 shadow-2xl sm:max-w-md lg:static lg:z-auto lg:w-96 lg:shadow-none xl:w-[420px]"
             >
               <div className="flex items-center justify-between border-b border-[#35313c]/70 px-4 py-2.5">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-[#d4a843]">
+                <h2 className="font-mono text-[12px] uppercase tracking-wider text-[#d4a843]">
                   Evidence & Provenance Ledger
-                </span>
+                </h2>
                 <button
                   type="button"
                   onClick={() => setLedgerOpen(false)}
-                  className="min-h-[32px] rounded-lg border border-[#35313c] bg-[#181820] px-2.5 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa]"
+                  aria-label="Close ledger"
+                  className="min-h-11 rounded-lg border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa]"
                 >
-                  Close ✕
+                  Close <span aria-hidden="true">✕</span>
                 </button>
               </div>
               <div className="min-h-0 flex-1 overflow-hidden">

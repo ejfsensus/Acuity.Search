@@ -108,7 +108,7 @@ export function AcuityPortalHero({ compact = false }: AcuityPortalHeroProps) {
         </div>
       </div>
 
-      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4a843]/90">
+      <p className="font-mono text-[12px] uppercase tracking-[0.28em] text-[#d4a843]/90">
         Acuity Institute · Research & Archival Enquiry
       </p>
       <h1 className="mt-2 font-serif text-4xl font-normal tracking-tight text-[#fafafa] sm:text-5xl">
@@ -184,7 +184,7 @@ export function TopicDomainScopePanel({
           <span className="font-serif text-base font-medium text-[#fafafa]">
             Topic Collections
           </span>
-          <span className="rounded-full border border-[#d4a843]/40 bg-[#d4a843]/10 px-2.5 py-0.5 font-mono text-[11px] text-[#e8c96a]">
+          <span className="rounded-full border border-[#d4a843]/40 bg-[#d4a843]/10 px-2.5 py-0.5 font-mono text-[12px] text-[#e8c96a]">
             {selectedGroupIds.length === 0
               ? `All 10 topics (${activeDomainCount} repositories)`
               : `${selectedGroupIds.length} topic${selectedGroupIds.length === 1 ? '' : 's'} (${activeDomainCount} repositories)`}
@@ -197,7 +197,7 @@ export function TopicDomainScopePanel({
             type="button"
             onClick={onToggleStarterPriority}
             aria-pressed={starterPriorityOnly}
-            className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[11px] transition-colors sm:min-h-0 ${
+            className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[12px] transition-colors ${
               starterPriorityOnly
                 ? 'border-[#d4a843] bg-[#d4a843]/20 text-[#e8c96a]'
                 : 'border-[#35313c] bg-[#09090f] text-[#b3b0bd] hover:border-[#d4a843]/50'
@@ -215,7 +215,7 @@ export function TopicDomainScopePanel({
             <button
               type="button"
               onClick={onClearScope}
-              className="min-h-[36px] rounded-full border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa] sm:min-h-0 sm:px-2.5"
+              className="min-h-11 rounded-full border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa] sm:px-2.5"
             >
               All Topics
             </button>
@@ -223,7 +223,7 @@ export function TopicDomainScopePanel({
             <button
               type="button"
               onClick={onSelectAllGroups}
-              className="min-h-[36px] rounded-full border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa] sm:min-h-0 sm:px-2.5"
+              className="min-h-11 rounded-full border border-[#35313c] bg-[#181820] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#fafafa] sm:px-2.5"
             >
               Select All
             </button>
@@ -252,10 +252,10 @@ export function TopicDomainScopePanel({
               }`}
             >
               <div className="flex w-full items-center justify-between gap-1">
-                <span className="font-mono text-[10px] font-semibold text-[#d4a843]">
+                <span className="font-mono text-[12px] font-semibold text-[#d4a843]">
                   {String(group.number).padStart(2, '0')}
                 </span>
-                <span className="font-mono text-[10px] text-[#8e899c]">
+                <span className="font-mono text-[12px] text-[#8e899c]">
                   {group.entryCount} domains
                 </span>
               </div>
@@ -269,13 +269,13 @@ export function TopicDomainScopePanel({
 
       {/* Collapsible Transparent Domain List Preview */}
       <div className="mt-3 flex flex-col gap-1 pt-2 border-t border-[#35313c]/40 sm:flex-row sm:items-center sm:justify-between">
-        <span className="text-[11px] text-[#8e899c]">
+        <span className="text-[12px] text-[#8e899c]">
           Select topics to focus your search on specific collections.
         </span>
         <button
           type="button"
           onClick={() => setInspectSources(prev => !prev)}
-          className="self-start font-mono text-[11px] text-[#d4a843] hover:underline sm:self-auto"
+          className="inline-flex min-h-11 items-center self-start font-mono text-[12px] text-[#d4a843] hover:underline sm:self-auto"
         >
           {inspectSources
             ? 'Hide archive list ↑'
@@ -300,7 +300,7 @@ export function TopicDomainScopePanel({
                   </span>
                 )}
               </div>
-              <span className="truncate font-mono text-[10px] text-[#d4a843]/90">
+              <span className="truncate font-mono text-[12px] text-[#d4a843]/90">
                 {entry.targets.map(t => t.hostname).join(', ')}
               </span>
             </div>

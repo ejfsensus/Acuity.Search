@@ -80,14 +80,14 @@ export function CollectionDrawer({
           <h3 className="font-serif text-base font-medium text-[#fafafa]">
             Topic Collections & Archives
           </h3>
-          <p className="font-mono text-[11px] text-[#8e899c]">
+          <p className="font-mono text-[12px] text-[#8e899c]">
             110 specialist repositories across 10 collections
           </p>
         </div>
         <button
           type="button"
           onClick={onClearAllScope}
-          className="rounded-lg border border-[#35313c] bg-[#181820] px-2 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
+          className="rounded-lg border border-[#35313c] bg-[#181820] px-2 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
         >
           Reset Filters
         </button>
@@ -99,7 +99,7 @@ export function CollectionDrawer({
           <div className="font-medium text-[#e8c96a]">
             Core Research Archives (20)
           </div>
-          <div className="text-[11px] text-[#8e899c]">
+          <div className="text-[12px] text-[#8e899c]">
             High-priority open archives & primary text collections
           </div>
         </div>
@@ -114,7 +114,7 @@ export function CollectionDrawer({
 
       {/* Cross-cutting tags */}
       <div>
-        <div className="mb-1.5 font-mono text-[11px] uppercase tracking-wider text-[#8e899c]">
+        <div className="mb-1.5 font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
           Tradition & Evidence Tags
         </div>
         <div className="flex flex-wrap gap-1">
@@ -126,7 +126,7 @@ export function CollectionDrawer({
                 type="button"
                 onClick={() => onToggleTag(tag)}
                 aria-pressed={active}
-                className={`rounded-full border px-2 py-0.5 text-[11px] transition-colors ${
+                className={`rounded-full border px-2 py-0.5 text-[12px] transition-colors ${
                   active
                     ? 'border-[#d4a843] bg-[#d4a843]/20 text-[#e8c96a]'
                     : 'border-[#35313c] bg-[#111118] text-[#b3b0bd] hover:border-[#d4a843]/50'
@@ -142,7 +142,7 @@ export function CollectionDrawer({
       {/* Custom Domain Include / Exclude Controls */}
       <div className="grid grid-cols-1 gap-2 rounded-xl border border-[#35313c] bg-[#181820]/70 p-2.5">
         <label className="flex flex-col gap-1">
-          <span className="font-mono text-[11px] text-[#b3b0bd]">
+          <span className="font-mono text-[12px] text-[#b3b0bd]">
             Include Domains / Paths (comma-separated)
           </span>
           <input
@@ -154,7 +154,7 @@ export function CollectionDrawer({
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="font-mono text-[11px] text-[#b3b0bd]">
+          <span className="font-mono text-[12px] text-[#b3b0bd]">
             Exclude Domains / Paths (overrides inclusions)
           </span>
           <input
@@ -169,7 +169,7 @@ export function CollectionDrawer({
 
       {/* Topic Group Filter Chips */}
       <div>
-        <div className="mb-1.5 font-mono text-[11px] uppercase tracking-wider text-[#8e899c]">
+        <div className="mb-1.5 font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
           10 Thematic Groups
         </div>
         <div className="flex flex-col gap-1">
@@ -188,12 +188,12 @@ export function CollectionDrawer({
                 }`}
               >
                 <span className="truncate pr-2">
-                  <span className="mr-1.5 font-mono text-[10px] text-[#d4a843]">
+                  <span className="mr-1.5 font-mono text-[12px] text-[#d4a843]">
                     {String(group.number).padStart(2, '0')}
                   </span>
                   {group.suppliedTitle}
                 </span>
-                <span className="shrink-0 font-mono text-[10px] text-[#8e899c]">
+                <span className="shrink-0 font-mono text-[12px] text-[#8e899c]">
                   {group.entryCount}
                 </span>
               </button>
@@ -205,11 +205,11 @@ export function CollectionDrawer({
       {/* Search & Select Individual Registry Entries */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-wider text-[#8e899c]">
+          <span className="font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
             Sources ({filteredEntries.length} of {entries.length})
           </span>
           {selectedEntryIds.length > 0 && (
-            <span className="font-mono text-[11px] text-[#e8c96a]">
+            <span className="font-mono text-[12px] text-[#e8c96a]">
               {selectedEntryIds.length} pinned
             </span>
           )}
@@ -261,10 +261,10 @@ export function CollectionDrawer({
                     </span>
                   </div>
                 </div>
-                <div className="mt-1 font-mono text-[10px] text-[#d4a843]">
+                <div className="mt-1 font-mono text-[12px] text-[#d4a843]">
                   {hosts}
                 </div>
-                <p className="mt-1 line-clamp-2 text-[11px] text-[#b3b0bd]">
+                <p className="mt-1 line-clamp-2 text-[12px] text-[#b3b0bd]">
                   {entry.suppliedFocus}
                 </p>
               </div>
