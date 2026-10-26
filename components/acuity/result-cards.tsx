@@ -192,14 +192,6 @@ function SingleResultCard({
   return (
     <article
       onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onSelect()
-        }
-      }}
       className={`group flex flex-col justify-between rounded-2xl border p-3.5 transition-all focus-visible:outline-2 focus-visible:outline-[#d4a843] ${
         isParchment
           ? isSelected
@@ -297,9 +289,17 @@ function SingleResultCard({
             {ACCESS_STATUS_LABELS[result.accessStatus]}
           </span>
         </div>
-        <span className="shrink-0 text-[#d4a843] group-hover:underline">
+        <button
+          type="button"
+          onClick={e => {
+            e.stopPropagation()
+            onSelect()
+          }}
+          aria-label={`View excerpt for ${result.citationLabel}: ${result.title}`}
+          className="inline-flex min-h-11 shrink-0 items-center text-[#d4a843] group-hover:underline"
+        >
           View excerpt →
-        </span>
+        </button>
       </div>
     </article>
   )

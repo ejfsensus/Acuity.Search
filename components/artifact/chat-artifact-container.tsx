@@ -139,7 +139,7 @@ export function ChatArtifactContainer({
     <div className="flex-1 min-h-0 min-w-0 h-full flex">
       <div className="absolute z-50 p-4 transition-opacity duration-[180ms] ease-[var(--motion-ease-out)]">
         {hasUser && (!open || isMobileSidebar) && (
-          <SidebarTrigger className="animate-fade-in" />
+          <SidebarTrigger className="animate-fade-in size-11" />
         )}
       </div>
 

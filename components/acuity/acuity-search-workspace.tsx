@@ -645,56 +645,47 @@ export function AcuitySearchWorkspace({
                   return (
                     <div
                       key={item.runId}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        setCurrentRun(item)
-                        setQuery(item.request.query)
-                        setMode(item.request.mode)
-                        setDepth(item.request.depth)
-                        setSelectedSourceId(item.results[0]?.id ?? null)
-                        setHistoryOpen(false)
-                      }}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
+                      className={`group relative flex min-h-[52px] flex-col justify-between rounded-xl border text-left transition-all ${
+                        isCurrent
+                          ? 'border-[#d4a843] bg-[#d4a843]/15 text-[#fafafa]'
+                          : 'border-[#35313c]/70 bg-[#09090f]/75 text-[#b3b0bd] hover:border-[#d4a843]/50 hover:text-[#fafafa]'
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        aria-current={isCurrent ? 'true' : undefined}
+                        onClick={() => {
                           setCurrentRun(item)
                           setQuery(item.request.query)
                           setMode(item.request.mode)
                           setDepth(item.request.depth)
                           setSelectedSourceId(item.results[0]?.id ?? null)
                           setHistoryOpen(false)
-                        }
-                      }}
-                      className={`group flex min-h-[52px] flex-col justify-between rounded-xl border p-2.5 text-left transition-all ${
-                        isCurrent
-                          ? 'border-[#d4a843] bg-[#d4a843]/15 text-[#fafafa]'
-                          : 'border-[#35313c]/70 bg-[#09090f]/75 text-[#b3b0bd] hover:border-[#d4a843]/50 hover:text-[#fafafa]'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
+                        }}
+                        className="flex w-full flex-col rounded-xl p-2.5 pr-12 text-left"
+                      >
                         <span className="line-clamp-2 text-[13px] font-medium leading-snug text-[#fafafa]">
                           {item.request.query}
                         </span>
-                        <button
-                          type="button"
-                          onClick={e => handleDeleteHistoryRun(item.runId, e)}
-                          title="Delete from history"
-                          aria-label={`Delete “${item.request.query}” from history`}
-                          className="-m-2 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded font-mono text-[12px] text-[#a29db0] opacity-80 transition-opacity hover:opacity-100 hover:text-[#e58c8c] focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100"
-                        >
-                          <span aria-hidden="true">✕</span>
-                        </button>
-                      </div>
-                      <div className="mt-1.5 flex items-center justify-between font-mono text-[12px] text-[#a29db0]">
-                        <span>
-                          {MODE_DESCRIPTIONS[item.request.mode].label} ·{' '}
-                          {DEPTH_DESCRIPTIONS[item.request.depth].label}
+                        <span className="mt-1.5 flex w-full items-center justify-between font-mono text-[12px] text-[#a29db0]">
+                          <span>
+                            {MODE_DESCRIPTIONS[item.request.mode].label} ·{' '}
+                            {DEPTH_DESCRIPTIONS[item.request.depth].label}
+                          </span>
+                          <span className="text-[#d4a843]">
+                            {item.results.length} sources
+                          </span>
                         </span>
-                        <span className="text-[#d4a843]">
-                          {item.results.length} sources
-                        </span>
-                      </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={e => handleDeleteHistoryRun(item.runId, e)}
+                        title="Delete from history"
+                        aria-label={`Delete “${item.request.query}” from history`}
+                        className="absolute top-0 right-0 inline-flex min-h-11 min-w-11 items-center justify-center rounded font-mono text-[12px] text-[#a29db0] opacity-80 transition-opacity hover:opacity-100 hover:text-[#e58c8c] focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                      >
+                        <span aria-hidden="true">✕</span>
+                      </button>
                     </div>
                   )
                 })
@@ -760,7 +751,7 @@ export function AcuitySearchWorkspace({
                 onChange={e => setQuery(e.target.value)}
                 placeholder={MODE_DESCRIPTIONS[mode].placeholder}
                 enterKeyHint="search"
-                className="w-full rounded-xl bg-transparent px-2.5 pt-1 pb-3 text-base text-[#fafafa] placeholder:text-[#a29db0]"
+                className="min-h-11 w-full rounded-xl bg-transparent px-2.5 pt-1 pb-3 text-base text-[#fafafa] placeholder:text-[#a29db0]"
               />
 
               {/* Seamless Bottom Pill Bar Inside Composer (Quick vs Deep + Submit Arrow) */}
