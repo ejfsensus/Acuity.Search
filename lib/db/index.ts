@@ -34,13 +34,16 @@ const createDatabase = (url: string) => {
     )
   }
 
-  // SSL configuration: Use environment variable to control SSL
-  // DATABASE_SSL_DISABLED=true disables SSL completely (for local/Docker PostgreSQL)
-  // Default is to enable SSL with certificate verification (for cloud databases like Neon, Supabase)
+  // DATABASE_SSL_DISABLED=true turns SSL off for local Docker PostgreSQL.
+  // Production matches migrate.ts: Railway's postgres-ssl image and other
+  // hosted Postgres providers present a certificate outside the public trust
+  // store, so verification is relaxed there. Development keeps strict checks.
   const sslConfig =
     process.env.DATABASE_SSL_DISABLED === 'true'
-      ? false // Disable SSL entirely for local PostgreSQL
-      : { rejectUnauthorized: true } // Enable SSL with verification for cloud DBs
+      ? false
+      : process.env.NODE_ENV === 'production'
+        ? { rejectUnauthorized: false }
+        : { rejectUnauthorized: true }
 
   const client = postgres(url, {
     ssl: sslConfig,
