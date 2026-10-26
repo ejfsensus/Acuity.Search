@@ -1,4 +1,8 @@
-import { getAcuityConfig, validateSearxngUrl } from '@/lib/acuity/config'
+import {
+  getAcuityConfig,
+  resolveSearxngUrlEnv,
+  validateSearxngUrl
+} from '@/lib/acuity/config'
 import type {
   CompiledScope,
   DateRangeFilter,
@@ -6,7 +10,14 @@ import type {
   SearchRequest
 } from '@/lib/acuity/search/contracts'
 import type { RawProviderCandidate } from '@/lib/acuity/search/rank'
+import {
+  isCircuitOpen,
+  recordProviderFailure,
+  recordProviderSuccess
+} from '@/lib/acuity/search/provider-health'
 import { evaluateUrlScope } from '@/lib/acuity/search/scope'
+
+import { parseSearxngHtmlResults } from './searxng-html'
 
 export interface ProviderExecutionInput {
   attemptId: string
@@ -111,7 +122,7 @@ export async function executeSearxngSearch(
   const startedAtDate = new Date()
   const startPerf = performance.now()
   const config = getAcuityConfig()
-  const urlValidation = validateSearxngUrl(process.env.SEARXNG_API_URL)
+  const urlValidation = validateSearxngUrl(resolveSearxngUrlEnv())
 
   const executedQuery = buildSearxngScopedQuery(
     input.query,
@@ -120,7 +131,7 @@ export async function executeSearxngSearch(
   )
 
   if (!urlValidation.valid || !urlValidation.normalizedUrl) {
-    const isInvalid = Boolean(process.env.SEARXNG_API_URL?.trim())
+    const isInvalid = Boolean(resolveSearxngUrlEnv())
     return {
       attempt: {
         attemptId: input.attemptId,
@@ -135,6 +146,29 @@ export async function executeSearxngSearch(
         filteredOutCount: 0,
         errorCode: isInvalid ? 'SEARXNG_INVALID_URL' : 'SEARXNG_UNCONFIGURED',
         errorMessage: urlValidation.reason,
+        startedAt: startedAtDate.toISOString(),
+        completedAt: new Date().toISOString()
+      },
+      candidates: []
+    }
+  }
+
+  if (isCircuitOpen('searxng')) {
+    return {
+      attempt: {
+        attemptId: input.attemptId,
+        provider: 'searxng',
+        variantId: input.variantId,
+        executedQuery,
+        targetId: input.targetId,
+        status: 'skipped-disabled',
+        latencyMs: 0,
+        rawResultCount: 0,
+        acceptedResultCount: 0,
+        filteredOutCount: 0,
+        errorCode: 'SEARXNG_CIRCUIT_OPEN',
+        errorMessage:
+          'SearXNG is temporarily skipped after repeated failures (circuit open). It will be retried automatically.',
         startedAt: startedAtDate.toISOString(),
         completedAt: new Date().toISOString()
       },
@@ -180,6 +214,90 @@ export async function executeSearxngSearch(
     ? AbortSignal.any([input.signal, timeoutSignal])
     : timeoutSignal
 
+  /**
+   * HTML fallback: when the instance forbids `format=json`, request the
+   * normal HTML results page (POST, as the SearXNG search form does) and
+   * parse it. Returns null if nothing usable came back.
+   */
+  const tryHtmlFallback = async (
+    reasonCode: string,
+    httpStatus: number
+  ): Promise<ProviderExecutionOutput | null> => {
+    try {
+      const form = new URLSearchParams()
+      endpoint.searchParams.forEach((value, key) => {
+        if (key !== 'format') form.set(key, value)
+      })
+      const htmlResponse = await fetchFn(
+        `${urlValidation.normalizedUrl}/search`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            Accept: 'text/html',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: form.toString(),
+          signal: combinedSignal
+        }
+      )
+      if (!htmlResponse.ok) return null
+      const parsed = parseSearxngHtmlResults(
+        await htmlResponse.text(),
+        input.maxResults ?? 20
+      )
+      if (parsed.length === 0) return null
+      const candidates: RawProviderCandidate[] = []
+      let filteredOutCount = 0
+      const enginesReportingSet = new Set<string>()
+      for (const raw of parsed) {
+        const scopeEval = evaluateUrlScope(raw.url, input.scope)
+        if (!scopeEval.allowed) {
+          filteredOutCount += 1
+          continue
+        }
+        for (const eng of raw.engines) enginesReportingSet.add(eng)
+        candidates.push({
+          provider: 'searxng',
+          providerRank: candidates.length + 1,
+          variantId: input.variantId,
+          executedQuery,
+          url: raw.url,
+          title: raw.title,
+          snippet: raw.content,
+          engines: raw.engines,
+          lane: scopeEval.lane,
+          matchedEntryId: scopeEval.matchedTarget?.entryId,
+          matchedGroupId: scopeEval.matchedTarget?.groupId,
+          holdingLabel: scopeEval.matchedTarget?.label
+        })
+      }
+      recordProviderSuccess('searxng')
+      return {
+        attempt: {
+          attemptId: input.attemptId,
+          provider: 'searxng',
+          variantId: input.variantId,
+          executedQuery,
+          targetId: input.targetId,
+          status: 'succeeded',
+          httpStatus,
+          latencyMs: Math.round(performance.now() - startPerf),
+          rawResultCount: parsed.length,
+          acceptedResultCount: candidates.length,
+          filteredOutCount,
+          enginesReporting: Array.from(enginesReportingSet),
+          errorCode: `SEARXNG_HTML_FALLBACK_AFTER_${reasonCode}`,
+          startedAt: startedAtDate.toISOString(),
+          completedAt: new Date().toISOString()
+        },
+        candidates
+      }
+    } catch {
+      return null
+    }
+  }
+
   try {
     const response = await fetchFn(endpoint.toString(), {
       method: 'GET',
@@ -192,6 +310,12 @@ export async function executeSearxngSearch(
     ).toLowerCase()
 
     if (response.status === 401 || response.status === 403) {
+      const fallback = await tryHtmlFallback(
+        'JSON_FORBIDDEN',
+        response.status
+      )
+      if (fallback) return fallback
+      recordProviderFailure('searxng', 'SEARXNG_JSON_DISABLED_OR_FORBIDDEN')
       return {
         attempt: {
           attemptId: input.attemptId,
@@ -215,6 +339,7 @@ export async function executeSearxngSearch(
     }
 
     if (!response.ok) {
+      recordProviderFailure('searxng', `SEARXNG_HTTP_${response.status}`)
       return {
         attempt: {
           attemptId: input.attemptId,
@@ -243,6 +368,9 @@ export async function executeSearxngSearch(
       bodyText.trimStart().startsWith('<!DOCTYPE') ||
       bodyText.trimStart().startsWith('<html')
     ) {
+      const fallback = await tryHtmlFallback('NON_JSON', response.status)
+      if (fallback) return fallback
+      recordProviderFailure('searxng', 'SEARXNG_NON_JSON_CHALLENGE')
       return {
         attempt: {
           attemptId: input.attemptId,
@@ -342,6 +470,7 @@ export async function executeSearxngSearch(
     // If SearXNG returned 0 results while upstream engines reported unresponsive,
     // surface this honestly rather than pretending the search succeeded with 0 matches.
     const allEnginesFailed = rawResults.length === 0 && unresponsive.length > 0
+    if (!allEnginesFailed) recordProviderSuccess('searxng')
 
     return {
       attempt: {
