@@ -38,6 +38,9 @@ COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/lib/db ./lib/db
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
+# The domain registry is read from disk on each search, not bundled into the client.
+COPY --from=builder /app/config ./config
+
 # Copy entrypoint script for database migration
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
