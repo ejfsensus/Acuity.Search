@@ -43,6 +43,9 @@ _local/
 # claude code local state (settings, launch config, worktrees)
 .claude/
 
+# Railway local link state
+.railway/
+
 # Acuity specification pack and generated backup archives
 /Acuity-Search-Agent-Pack/
 /*.zip

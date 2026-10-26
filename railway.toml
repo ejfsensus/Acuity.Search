@@ -1,0 +1,13 @@
+# Acuity.Search on Railway.
+# The image builds with the repo Dockerfile. docker-entrypoint.sh runs
+# database migrations when DATABASE_URL is set, then starts Next.js.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
