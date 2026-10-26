@@ -125,11 +125,16 @@ export function queryTerms(query: string): string[] {
 }
 
 /** Share of meaningful query terms that appear in the title or snippet (0..1). */
-export function lexicalRelevance(query: string, source: Pick<SourceResult, 'title' | 'snippet' | 'url'>): number {
+export function lexicalRelevance(
+  query: string,
+  source: Pick<SourceResult, 'title' | 'snippet' | 'url'>
+): number {
   const terms = queryTerms(query)
   if (terms.length === 0) return 1
   const hay = `${source.title} ${source.snippet} ${source.url}`.toLowerCase()
-  const hits = terms.filter(t => hay.includes(t) || (t.length > 5 && hay.includes(t.slice(0, -2)))).length
+  const hits = terms.filter(
+    t => hay.includes(t) || (t.length > 5 && hay.includes(t.slice(0, -2)))
+  ).length
   return hits / terms.length
 }
 
@@ -158,7 +163,11 @@ export function assessSourceQuality(options: {
     const tier = classifySourceTier(r.hostname, curated)
     const relevance = lexicalRelevance(options.query, r)
     const weighted = r.rrfScore * TIER_WEIGHT[tier] * (0.4 + 0.6 * relevance)
-    return { r: { ...r, qualityTier: tier, relevance: Number(relevance.toFixed(2)) }, weighted, idx }
+    return {
+      r: { ...r, qualityTier: tier, relevance: Number(relevance.toFixed(2)) },
+      weighted,
+      idx
+    }
   })
 
   scored.sort((a, b) => {

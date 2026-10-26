@@ -10,7 +10,6 @@ import {
 import { ACUITY_SYSTEM_PROMPT } from '@/lib/acuity/prompts'
 import { compileScopeFromSelection } from '@/lib/acuity/registry'
 import { searchRequestSchema } from '@/lib/acuity/search/contracts'
-import { resetProviderCircuits } from '@/lib/acuity/search/provider-health'
 import {
   computeVerbatimSha256,
   createSnippetEvidenceRecord,
@@ -23,6 +22,7 @@ import {
   StrictScopeValidationError
 } from '@/lib/acuity/search/federate'
 import { buildQueryPlan, suggestTopicGroups } from '@/lib/acuity/search/planner'
+import { resetProviderCircuits } from '@/lib/acuity/search/provider-health'
 import { executeSearxngSearch } from '@/lib/acuity/search/providers/searxng'
 import {
   inferLiteratureMetadata,

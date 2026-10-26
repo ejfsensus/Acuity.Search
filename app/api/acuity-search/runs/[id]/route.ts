@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { resolveRequestActor } from '@/lib/acuity/auth'
+import { toPublicRun } from '@/lib/acuity/search/public-view'
 import {
   deleteSearchRunForActor,
   getSearchRunForActor
@@ -25,7 +26,7 @@ export async function GET(
   if (actor.setCookieHeader) {
     headers.set('Set-Cookie', actor.setCookieHeader)
   }
-  return NextResponse.json({ run }, { headers })
+  return NextResponse.json({ run: toPublicRun(run) }, { headers })
 }
 
 export async function DELETE(

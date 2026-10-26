@@ -67,11 +67,15 @@ describe('SearXNG HTML fallback parser', () => {
   })
 
   it('returns nothing for a results page with no articles', () => {
-    expect(parseSearxngHtmlResults('<html><body>no results</body></html>')).toEqual([])
+    expect(
+      parseSearxngHtmlResults('<html><body>no results</body></html>')
+    ).toEqual([])
   })
 
   it('decodes numeric and named entities', () => {
-    expect(decodeEntities('a &amp; b &#x27;c&#39; &lt;d&gt;')).toBe("a & b 'c' <d>")
+    expect(decodeEntities('a &amp; b &#x27;c&#39; &lt;d&gt;')).toBe(
+      "a & b 'c' <d>"
+    )
   })
 })
 
@@ -109,29 +113,36 @@ describe('executeSearxngSearch resilience', () => {
   })
 
   it('accepts SEARXNG_URL as an alias and falls back to HTML on 403', async () => {
-    const fetchImpl = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
-      if (init?.method === 'POST') {
-        return new Response(HTML_PAGE, {
-          status: 200,
-          headers: { 'content-type': 'text/html' }
-        })
+    const fetchImpl = vi.fn(
+      async (_url: string | URL | Request, init?: RequestInit) => {
+        if (init?.method === 'POST') {
+          return new Response(HTML_PAGE, {
+            status: 200,
+            headers: { 'content-type': 'text/html' }
+          })
+        }
+        return new Response('Forbidden', { status: 403 })
       }
-      return new Response('Forbidden', { status: 403 })
-    }) as unknown as typeof fetch
+    ) as unknown as typeof fetch
 
     const out = await executeSearxngSearch(buildInput(fetchImpl))
     expect(out.attempt.status).toBe('succeeded')
-    expect(out.attempt.errorCode).toBe('SEARXNG_HTML_FALLBACK_AFTER_JSON_FORBIDDEN')
+    expect(out.attempt.errorCode).toBe(
+      'SEARXNG_HTML_FALLBACK_AFTER_JSON_FORBIDDEN'
+    )
     expect(out.candidates.map(c => c.url)).toContain(
       'https://www.sacred-texts.com/chr/gno/index.htm'
     )
   })
 
   it('reports a typed error and opens the circuit when JSON and HTML both fail', async () => {
-    const fetchImpl = vi.fn(async (_u: string | URL | Request, init?: RequestInit) =>
-      init?.method === 'POST'
-        ? new Response('<html><body>no results</body></html>', { status: 200 })
-        : new Response('Forbidden', { status: 403 })
+    const fetchImpl = vi.fn(
+      async (_u: string | URL | Request, init?: RequestInit) =>
+        init?.method === 'POST'
+          ? new Response('<html><body>no results</body></html>', {
+              status: 200
+            })
+          : new Response('Forbidden', { status: 403 })
     ) as unknown as typeof fetch
 
     const first = await executeSearxngSearch(buildInput(fetchImpl))
@@ -139,10 +150,13 @@ describe('executeSearxngSearch resilience', () => {
     expect(first.attempt.errorCode).toBe('SEARXNG_JSON_DISABLED_OR_FORBIDDEN')
     await executeSearxngSearch(buildInput(fetchImpl))
 
-    const calls = (fetchImpl as unknown as { mock: { calls: unknown[] } }).mock.calls.length
+    const calls = (fetchImpl as unknown as { mock: { calls: unknown[] } }).mock
+      .calls.length
     const third = await executeSearxngSearch(buildInput(fetchImpl))
     expect(third.attempt.status).toBe('skipped-disabled')
     expect(third.attempt.errorCode).toBe('SEARXNG_CIRCUIT_OPEN')
-    expect((fetchImpl as unknown as { mock: { calls: unknown[] } }).mock.calls.length).toBe(calls)
+    expect(
+      (fetchImpl as unknown as { mock: { calls: unknown[] } }).mock.calls.length
+    ).toBe(calls)
   })
 })

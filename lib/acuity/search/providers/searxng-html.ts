@@ -34,19 +34,22 @@ const ENTITY_MAP: Record<string, string> = {
 }
 
 export function decodeEntities(input: string): string {
-  return input.replace(/&(#x[0-9a-f]+|#[0-9]+|[a-z]+);/gi, (m, code: string) => {
-    const lower = code.toLowerCase()
-    if (ENTITY_MAP[lower] !== undefined) return ENTITY_MAP[lower]
-    if (lower.startsWith('#x')) {
-      const n = parseInt(lower.slice(2), 16)
-      return Number.isFinite(n) ? String.fromCodePoint(n) : m
+  return input.replace(
+    /&(#x[0-9a-f]+|#[0-9]+|[a-z]+);/gi,
+    (m, code: string) => {
+      const lower = code.toLowerCase()
+      if (ENTITY_MAP[lower] !== undefined) return ENTITY_MAP[lower]
+      if (lower.startsWith('#x')) {
+        const n = parseInt(lower.slice(2), 16)
+        return Number.isFinite(n) ? String.fromCodePoint(n) : m
+      }
+      if (lower.startsWith('#')) {
+        const n = parseInt(lower.slice(1), 10)
+        return Number.isFinite(n) ? String.fromCodePoint(n) : m
+      }
+      return m
     }
-    if (lower.startsWith('#')) {
-      const n = parseInt(lower.slice(1), 10)
-      return Number.isFinite(n) ? String.fromCodePoint(n) : m
-    }
-    return m
-  })
+  )
 }
 
 function stripTags(html: string): string {
@@ -74,12 +77,12 @@ export function parseSearxngHtmlResults(
     if (!/^https?:\/\//i.test(rawUrl)) continue
     if (seen.has(rawUrl)) continue
     const title = stripTags(h3?.[2] || '') || rawUrl
-    const contentMatch = /<p\b[^>]*class="[^"]*\bcontent\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i.exec(
-      body
-    )
-    const enginesBlock = /<div\b[^>]*class="[^"]*\bengines\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i.exec(
-      body
-    )
+    const contentMatch =
+      /<p\b[^>]*class="[^"]*\bcontent\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i.exec(body)
+    const enginesBlock =
+      /<div\b[^>]*class="[^"]*\bengines\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i.exec(
+        body
+      )
     const engines = enginesBlock
       ? Array.from(enginesBlock[1].matchAll(/<span[^>]*>([^<]+)<\/span>/gi))
           .map(m => stripTags(m[1]))

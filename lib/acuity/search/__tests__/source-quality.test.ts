@@ -8,7 +8,12 @@ import {
   lexicalRelevance
 } from '@/lib/acuity/search/source-quality'
 
-function src(i: number, hostname: string, title: string, snippet = ''): SourceResult {
+function src(
+  i: number,
+  hostname: string,
+  title: string,
+  snippet = ''
+): SourceResult {
   return {
     id: `s${i}`,
     citationLabel: `S${i}`,
@@ -30,7 +35,13 @@ function src(i: number, hostname: string, title: string, snippet = ''): SourceRe
 
 describe('classifySourceTier', () => {
   it('flags social, dictionary and entertainment hosts as low', () => {
-    for (const h of ['www.imdb.com', 'pinterest.co.uk', 'www.instagram.com', 'www.urbandictionary.com', 'www.merriam-webster.com']) {
+    for (const h of [
+      'www.imdb.com',
+      'pinterest.co.uk',
+      'www.instagram.com',
+      'www.urbandictionary.com',
+      'www.merriam-webster.com'
+    ]) {
       expect(classifySourceTier(h)).toBe('low')
     }
   })
@@ -40,7 +51,9 @@ describe('classifySourceTier', () => {
     expect(classifySourceTier('divinity.uchicago.edu')).toBe('scholarly')
   })
   it('prefers the curated registry over heuristics', () => {
-    expect(classifySourceTier('www.gnosis.org', new Set(['gnosis.org']))).toBe('curated')
+    expect(classifySourceTier('www.gnosis.org', new Set(['gnosis.org']))).toBe(
+      'curated'
+    )
   })
   it('defaults to general', () => {
     expect(classifySourceTier('example.org')).toBe('general')
@@ -49,8 +62,20 @@ describe('classifySourceTier', () => {
 
 describe('lexicalRelevance', () => {
   it('scores term overlap and ignores stopwords', () => {
-    expect(lexicalRelevance('what is the Pleroma in gnosticism', { title: 'The Pleroma', snippet: 'Gnosticism teaches', url: '' })).toBe(1)
-    expect(lexicalRelevance('xqzv florp', { title: 'Instagram', snippet: '', url: '' })).toBe(0)
+    expect(
+      lexicalRelevance('what is the Pleroma in gnosticism', {
+        title: 'The Pleroma',
+        snippet: 'Gnosticism teaches',
+        url: ''
+      })
+    ).toBe(1)
+    expect(
+      lexicalRelevance('xqzv florp', {
+        title: 'Instagram',
+        snippet: '',
+        url: ''
+      })
+    ).toBe(0)
   })
 })
 
@@ -69,7 +94,13 @@ describe('assessSourceQuality', () => {
     })
     expect(out.results.slice(-2).every(r => r.qualityTier === 'low')).toBe(true)
     expect(out.results[0].hostname).toBe('plato.stanford.edu')
-    expect(out.results.map(r => r.citationLabel)).toEqual(['S1', 'S2', 'S3', 'S4', 'S5'])
+    expect(out.results.map(r => r.citationLabel)).toEqual([
+      'S1',
+      'S2',
+      'S3',
+      'S4',
+      'S5'
+    ])
     expect(out.evidenceStrength).toBe('strong')
     expect(out.lowCount).toBe(2)
   })
@@ -77,7 +108,10 @@ describe('assessSourceQuality', () => {
   it("reports 'none' when only off-topic or low sources exist", () => {
     const out = assessSourceQuality({
       query: 'xqzv florp',
-      results: [src(1, 'www.instagram.com', 'Instagram'), src(2, 'example.org', 'Unrelated')]
+      results: [
+        src(1, 'www.instagram.com', 'Instagram'),
+        src(2, 'example.org', 'Unrelated')
+      ]
     })
     expect(out.evidenceStrength).toBe('none')
   })
@@ -85,17 +119,29 @@ describe('assessSourceQuality', () => {
 
 describe('awaitWithDeadline', () => {
   it('returns false when work finishes first', async () => {
-    expect(await awaitWithDeadline(Promise.resolve(), 50, 100, () => true)).toBe(false)
+    expect(
+      await awaitWithDeadline(Promise.resolve(), 50, 100, () => true)
+    ).toBe(false)
   })
   it('stops at the soft deadline when enough has arrived', async () => {
     const t0 = Date.now()
-    const hit = await awaitWithDeadline(new Promise(r => setTimeout(r, 1000)), 30, 500, () => true)
+    const hit = await awaitWithDeadline(
+      new Promise(r => setTimeout(r, 1000)),
+      30,
+      500,
+      () => true
+    )
     expect(hit).toBe(true)
     expect(Date.now() - t0).toBeLessThan(300)
   })
   it('keeps waiting to the hard deadline when nothing has arrived', async () => {
     const t0 = Date.now()
-    const hit = await awaitWithDeadline(new Promise(r => setTimeout(r, 1000)), 20, 120, () => false)
+    const hit = await awaitWithDeadline(
+      new Promise(r => setTimeout(r, 1000)),
+      20,
+      120,
+      () => false
+    )
     expect(hit).toBe(true)
     expect(Date.now() - t0).toBeGreaterThanOrEqual(110)
   })

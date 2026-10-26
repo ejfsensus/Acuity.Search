@@ -31,8 +31,8 @@ curl -s -o /dev/null -w "%{http_code}\n" "$SEARXNG_API_URL/search?q=test&format=
    ```yaml
    use_default_settings: true
    server:
-     secret_key: "<random>"      # or set SEARXNG_SECRET
-     limiter: false               # or keep it on and whitelist the app (below)
+     secret_key: '<random>' # or set SEARXNG_SECRET
+     limiter: false # or keep it on and whitelist the app (below)
      public_instance: false
    search:
      formats:
@@ -55,7 +55,7 @@ curl -s -o /dev/null -w "%{http_code}\n" "$SEARXNG_API_URL/search?q=test&format=
 
 > Note: at the time of writing the upstream engines on the Railway instance
 > also reported errors on the HTML page (brave, duckduckgo…), so even the HTML
-> page returned no results. Check *Preferences → Engines* / the
+> page returned no results. Check _Preferences → Engines_ / the
 > "Messages from the search engines" box after enabling JSON.
 
 ## What the app does when JSON is forbidden

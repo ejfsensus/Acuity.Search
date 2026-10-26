@@ -25,7 +25,10 @@ async function probeSearxngJson(): Promise<{
   try {
     const res = await fetch(
       `${v.normalizedUrl}/search?q=acuity&format=json&categories=general`,
-      { signal: AbortSignal.timeout(6000), headers: { Accept: 'application/json' } }
+      {
+        signal: AbortSignal.timeout(6000),
+        headers: { Accept: 'application/json' }
+      }
     )
     const contentType = res.headers.get('content-type') || ''
     const ok = res.ok && contentType.includes('json')

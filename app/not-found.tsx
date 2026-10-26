@@ -23,8 +23,8 @@ export default function NotFound() {
         This passage is not in the archive
       </h1>
       <p className="max-w-md text-base leading-relaxed text-[var(--acuity-ink-muted)]">
-        The page you were looking for has moved, or never existed. The search
-        is still open.
+        The page you were looking for has moved, or never existed. The search is
+        still open.
       </p>
       <Link
         href="/"

@@ -9,12 +9,12 @@ import type {
   ProviderAttempt,
   SearchRequest
 } from '@/lib/acuity/search/contracts'
-import type { RawProviderCandidate } from '@/lib/acuity/search/rank'
 import {
   isCircuitOpen,
   recordProviderFailure,
   recordProviderSuccess
 } from '@/lib/acuity/search/provider-health'
+import type { RawProviderCandidate } from '@/lib/acuity/search/rank'
 import { evaluateUrlScope } from '@/lib/acuity/search/scope'
 
 import { parseSearxngHtmlResults } from './searxng-html'
@@ -310,10 +310,7 @@ export async function executeSearxngSearch(
     ).toLowerCase()
 
     if (response.status === 401 || response.status === 403) {
-      const fallback = await tryHtmlFallback(
-        'JSON_FORBIDDEN',
-        response.status
-      )
+      const fallback = await tryHtmlFallback('JSON_FORBIDDEN', response.status)
       if (fallback) return fallback
       recordProviderFailure('searxng', 'SEARXNG_JSON_DISABLED_OR_FORBIDDEN')
       return {

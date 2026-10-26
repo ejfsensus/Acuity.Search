@@ -46,7 +46,8 @@ function getCuratedHosts(): Set<string> {
   try {
     for (const entry of loadDomainRegistry().entries) {
       for (const t of entry.targets) {
-        if (t.hostname) hosts.add(t.hostname.toLowerCase().replace(/^www\./, ''))
+        if (t.hostname)
+          hosts.add(t.hostname.toLowerCase().replace(/^www\./, ''))
       }
     }
   } catch {
