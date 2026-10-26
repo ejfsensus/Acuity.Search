@@ -31,9 +31,15 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://acuity.institute'),
   title,
   description,
+  alternates: {
+    canonical: '/'
+  },
   openGraph: {
     title,
-    description
+    description,
+    url: '/',
+    siteName: 'Acuity.Institute',
+    type: 'website'
   },
   twitter: {
     title,

@@ -1,7 +1,11 @@
-import { getProviderStatuses } from '@/lib/acuity/config'
+import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
 import { generateAcuityAnswerVersion } from '@/lib/acuity/prompts'
-import { compileScopeFromSelection } from '@/lib/acuity/registry'
 import {
+  compileScopeFromSelection,
+  loadDomainRegistry
+} from '@/lib/acuity/registry'
+import {
+  DEPTH_BUDGETS,
   FederationConcurrencyPool,
   RunBudgetTracker
 } from '@/lib/acuity/search/budget'
@@ -33,6 +37,59 @@ import {
   type RawProviderCandidate
 } from '@/lib/acuity/search/rank'
 import { validateStrictScopeReadiness } from '@/lib/acuity/search/scope'
+import { assessSourceQuality } from '@/lib/acuity/search/source-quality'
+
+let curatedHostCache: Set<string> | null = null
+function getCuratedHosts(): Set<string> {
+  if (curatedHostCache) return curatedHostCache
+  const hosts = new Set<string>()
+  try {
+    for (const entry of loadDomainRegistry().entries) {
+      for (const t of entry.targets) {
+        if (t.hostname)
+          hosts.add(t.hostname.toLowerCase().replace(/^www\./, ''))
+      }
+    }
+  } catch {
+    // registry unavailable: quality tiers fall back to heuristics only
+  }
+  curatedHostCache = hosts
+  return hosts
+}
+
+const sleep = (ms: number) =>
+  new Promise<'timeout'>(resolve => setTimeout(() => resolve('timeout'), ms))
+
+/**
+ * Wait for `work` to settle, but stop waiting once `softDeadlineMs` has
+ * passed *and* `enough()` is true, or once `hardDeadlineMs` has passed.
+ * Returns true if the deadline (not completion) ended the wait.
+ */
+export async function awaitWithDeadline(
+  work: Promise<unknown>,
+  softDeadlineMs: number,
+  hardDeadlineMs: number,
+  enough: () => boolean
+): Promise<boolean> {
+  const settled = work.then(() => 'done' as const)
+  const first = await Promise.race([settled, sleep(softDeadlineMs)])
+  if (first === 'done') return false
+  if (enough()) return true
+  const second = await Promise.race([
+    settled,
+    sleep(Math.max(0, hardDeadlineMs - softDeadlineMs))
+  ])
+  return second !== 'done'
+}
+
+function linkedController(parent?: AbortSignal): AbortController {
+  const c = new AbortController()
+  if (parent) {
+    if (parent.aborted) c.abort()
+    else parent.addEventListener('abort', () => c.abort(), { once: true })
+  }
+  return c
+}
 
 export interface FederationExecutionOptions {
   runId?: string
@@ -138,6 +195,10 @@ export async function executeFederatedSearchRun(
 
   const budget = new RunBudgetTracker(request.depth)
   budget.recordVariantUsed(plan.variants.length)
+  const depthSpec = DEPTH_BUDGETS[request.depth]
+  const runStartedAt = Date.now()
+  const timings: Record<string, number> = {}
+  const providerPhase = linkedController(options.signal)
 
   const pool = new FederationConcurrencyPool()
   const providerAttempts: ProviderAttempt[] = []
@@ -171,7 +232,7 @@ export async function executeFederatedSearchRun(
         : undefined
 
       tasks.push(async () => {
-        if (options.signal?.aborted) {
+        if (providerPhase.signal.aborted) {
           providerAttempts.push({
             attemptId,
             provider,
@@ -229,7 +290,7 @@ export async function executeFederatedSearchRun(
                 targetHostname: variant.targetHostname,
                 request,
                 scope,
-                signal: options.signal,
+                signal: providerPhase.signal,
                 fetchImpl: options.fetchImpl
               })
           : () =>
@@ -241,14 +302,14 @@ export async function executeFederatedSearchRun(
                 targetHostname: variant.targetHostname,
                 request,
                 scope,
-                signal: options.signal,
+                signal: providerPhase.signal,
                 fetchImpl: options.fetchImpl
               })
 
         const output = await pool.runProviderCall(
           provider,
           execFn,
-          options.signal
+          providerPhase.signal
         )
         providerAttempts.push(output.attempt)
         allCandidates.push(...output.candidates)
@@ -262,14 +323,38 @@ export async function executeFederatedSearchRun(
     }
   }
 
-  await Promise.allSettled(tasks.map(t => t()))
+  const providerWork = Promise.allSettled(tasks.map(t => t()))
+  // Quick-depth deadline: once any provider has returned candidates and the
+  // phase deadline has passed, stop waiting for slower providers.
+  const providerDeadlineHit = await awaitWithDeadline(
+    providerWork,
+    depthSpec.providerPhaseDeadlineMs,
+    Math.round(depthSpec.totalLatencyBudgetMs * 0.4),
+    () => allCandidates.length > 0
+  )
+  if (providerDeadlineHit) {
+    providerPhase.abort()
+    await Promise.race([providerWork, sleep(250)])
+    warnings.push(
+      'Some slower search engines were not awaited to keep this enquiry within its time budget.'
+    )
+  }
+  timings.providersMs = Date.now() - runStartedAt
+  const candidatesSnapshot = [...allCandidates]
 
-  // Merge and rank candidates
-  const results: SourceResult[] = mergeAndRankCandidates({
-    candidates: allCandidates,
+  // Merge and rank candidates, then weight by source quality × relevance
+  const fused: SourceResult[] = mergeAndRankCandidates({
+    candidates: candidatesSnapshot,
     sortOrder: request.sortOrder,
     includeLiteratureMetadata: request.mode === 'literature'
   })
+  const quality = assessSourceQuality({
+    query: request.query,
+    results: fused,
+    curatedHosts: getCuratedHosts(),
+    relabel: request.sortOrder === 'combined-relevance'
+  })
+  const results: SourceResult[] = quality.results
 
   options.onEvent?.({
     type: 'results.Updated',
@@ -351,9 +436,14 @@ export async function executeFederatedSearchRun(
       request.depth === 'research'
         ? Math.min(12, results.length)
         : Math.min(4, results.length)
-    const candidatesForExtraction = results.slice(0, maxToExtract)
+    const extractable = results.filter(r => r.qualityTier !== 'low')
+    const candidatesForExtraction = (
+      extractable.length > 0 ? extractable : results
+    ).slice(0, maxToExtract)
+    const extractionPhase = linkedController(options.signal)
+    const extractionStartedAt = Date.now()
 
-    await Promise.allSettled(
+    const extractionWork = Promise.allSettled(
       candidatesForExtraction.map(async src => {
         if (!budget.trySpendExtraction()) return
         let origin = src.hostname
@@ -369,9 +459,10 @@ export async function executeFederatedSearchRun(
               scope,
               fallbackTitle: src.title,
               fallbackSnippet: src.snippet,
-              signal: options.signal,
+              signal: extractionPhase.signal,
               fetchImpl: options.fetchImpl
             })
+            if (extractionPhase.signal.aborted) return
 
             evidenceSeq += 1
             const evId = `${runId}-ev-${evidenceSeq}`
@@ -408,10 +499,21 @@ export async function executeFederatedSearchRun(
               evidence: record
             })
           },
-          options.signal
+          extractionPhase.signal
         )
       })
     )
+    const extractionDeadlineHit = await awaitWithDeadline(
+      extractionWork,
+      depthSpec.extractionPhaseDeadlineMs,
+      depthSpec.extractionPhaseDeadlineMs,
+      () => true
+    )
+    if (extractionDeadlineHit) {
+      extractionPhase.abort()
+      await Promise.race([extractionWork, sleep(200)])
+    }
+    timings.extractionMs = Date.now() - extractionStartedAt
   }
 
   // Ensure every result has at least a snippet-backed evidence entry if not extracted
@@ -429,14 +531,32 @@ export async function executeFederatedSearchRun(
   }
 
   // Synthesize answer or produce results-only overview
+  const synthesisStartedAt = Date.now()
+  const synthesisSources = results.filter(r => r.qualityTier !== 'low')
+  const noStrongSources = quality.evidenceStrength === 'none'
+  // Only skip synthesis when a model would otherwise write an essay.
+  const suppressSynthesis = noStrongSources && getAcuityConfig().llm.configured
   const answer = await generateAcuityAnswerVersion({
     versionNumber: 1,
-    request,
+    request: suppressSynthesis
+      ? { ...request, answerPreference: 'results-only' }
+      : request,
     scope,
-    sources: results,
+    sources: synthesisSources.length > 0 ? synthesisSources : results,
     evidence,
-    signal: options.signal
+    signal: options.signal,
+    onDelta:
+      options.onEvent && !suppressSynthesis
+        ? textDelta =>
+            options.onEvent?.({ type: 'answer.Delta', runId, textDelta })
+        : undefined
   })
+  if (suppressSynthesis) {
+    answer.disclosureNote =
+      'No strong sources matched this enquiry, so no narrative was composed. The closest results are listed for reference.'
+  }
+  timings.synthesisMs = Date.now() - synthesisStartedAt
+  timings.totalMs = Date.now() - runStartedAt
 
   options.onEvent?.({
     type: 'answer.Completed',
@@ -444,10 +564,21 @@ export async function executeFederatedSearchRun(
     answer
   })
 
+  // Attempts cut short by the phase deadline are not user cancellations.
+  if (!options.signal?.aborted) {
+    for (const a of providerAttempts) {
+      if (a.status === 'cancelled') {
+        a.errorCode = 'DEADLINE_SKIPPED'
+        a.errorMessage = 'Not awaited: phase deadline reached'
+      }
+    }
+  }
+
   const anySucceeded = providerAttempts.some(
     a => a.status === 'succeeded' || a.status === 'partial'
   )
   const allCancelled =
+    Boolean(options.signal?.aborted) &&
     providerAttempts.length > 0 &&
     providerAttempts.every(a => a.status === 'cancelled')
 
@@ -481,7 +612,9 @@ export async function executeFederatedSearchRun(
     answers: [answer],
     coverage,
     nextContinuationCursor,
-    warnings
+    warnings,
+    evidenceStrength: quality.evidenceStrength,
+    timings
   }
 
   options.onEvent?.({

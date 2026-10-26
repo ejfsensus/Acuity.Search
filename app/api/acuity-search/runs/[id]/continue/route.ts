@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { resolveRequestActor } from '@/lib/acuity/auth'
 import { continueFederatedSearchRun } from '@/lib/acuity/search/federate'
+import { toPublicRun } from '@/lib/acuity/search/public-view'
 import { getSearchRunForActor, saveSearchRun } from '@/lib/acuity/store'
 
 export async function POST(
@@ -30,5 +31,5 @@ export async function POST(
   if (actor.setCookieHeader) {
     headers.set('Set-Cookie', actor.setCookieHeader)
   }
-  return NextResponse.json({ run: updatedRun }, { headers })
+  return NextResponse.json({ run: toPublicRun(updatedRun) }, { headers })
 }

@@ -8,6 +8,7 @@ import {
   executeFederatedSearchRun,
   StrictScopeValidationError
 } from '@/lib/acuity/search/federate'
+import { toPublicEvent, toPublicRun } from '@/lib/acuity/search/public-view'
 import {
   listSearchRunsForActor,
   registerRunAbortController,
@@ -23,7 +24,7 @@ export async function GET(req: Request) {
     if (actor.setCookieHeader) {
       headers.set('Set-Cookie', actor.setCookieHeader)
     }
-    return NextResponse.json({ runs }, { headers })
+    return NextResponse.json({ runs: runs.map(toPublicRun) }, { headers })
   } catch (error) {
     return NextResponse.json(
       {
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
         async start(controller) {
           const sendEvent = (event: SearchStreamEvent) => {
             try {
-              const payload = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`
+              const payload = `event: ${event.type}\ndata: ${JSON.stringify(toPublicEvent(event))}\n\n`
               controller.enqueue(encoder.encode(payload))
             } catch {}
           }
@@ -76,8 +77,12 @@ export async function POST(req: Request) {
             })
             saveSearchRun(completedRun)
           } catch (err) {
+            // Scope errors are reader-actionable; anything else stays in logs.
+            console.error('[acuity-search] run failed', err)
             const message =
-              err instanceof Error ? err.message : 'Search execution failed'
+              err instanceof StrictScopeValidationError
+                ? err.message
+                : 'The enquiry could not be completed. Please try again.'
             sendEvent({
               type: 'run.Error',
               runId,
@@ -116,7 +121,10 @@ export async function POST(req: Request) {
       if (actor.setCookieHeader) {
         headers.set('Set-Cookie', actor.setCookieHeader)
       }
-      return NextResponse.json({ run: runState }, { status: 200, headers })
+      return NextResponse.json(
+        { run: toPublicRun(runState) },
+        { status: 200, headers }
+      )
     } finally {
       unregisterRunAbortController(runId)
     }
@@ -140,11 +148,9 @@ export async function POST(req: Request) {
         { status: 400 }
       )
     }
+    console.error('[acuity-search] run failed', error)
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : 'Failed to execute search'
-      },
+      { error: 'The enquiry could not be completed. Please try again.' },
       { status: 500 }
     )
   }

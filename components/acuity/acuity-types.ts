@@ -82,3 +82,25 @@ export const PROVIDER_DISPLAY_NAMES: Record<ProviderId, string> = {
   tavily: 'Tavily',
   exa: 'Exa'
 }
+
+/**
+ * Minimal registry entry shape sent to the browser. The full entry (targets,
+ * curation, reference URLs) stays on the server — sending all 110 entries
+ * inflated the home page HTML by ~200 KB.
+ */
+export type ClientRegistryEntry = Pick<
+  import('@/lib/acuity/registry').DomainRegistryEntry,
+  'id' | 'topicGroupId' | 'starterPriority' | 'suppliedName'
+> & { hostnames: string[] }
+
+export function toClientRegistryEntries(
+  entries: import('@/lib/acuity/registry').DomainRegistryEntry[]
+): ClientRegistryEntry[] {
+  return entries.map(e => ({
+    id: e.id,
+    topicGroupId: e.topicGroupId,
+    starterPriority: e.starterPriority,
+    suppliedName: e.suppliedName,
+    hostnames: e.targets.map(t => t.hostname)
+  }))
+}

@@ -1,4 +1,4 @@
-import { generateText } from 'ai'
+import { generateText, streamText } from 'ai'
 
 import { getAcuityConfig } from '@/lib/acuity/config'
 import type {
@@ -124,6 +124,8 @@ export async function generateAcuityAnswerVersion(options: {
   sources: SourceResult[]
   evidence: EvidenceRecord[]
   signal?: AbortSignal
+  /** When set, synthesis is streamed and each text delta is reported. */
+  onDelta?: (textDelta: string) => void
 }): Promise<AnswerVersion> {
   const config = getAcuityConfig()
   const nowIso = new Date().toISOString()
@@ -235,16 +237,34 @@ Compose an insightful, contemplative research narrative that examines the user's
 - Weave the read into a compelling narrative of discovery that satisfies the inquisitive mind and beckons toward further exploration.`
 
     const lm = getModel(modelKey)
-    const generated = await generateText({
-      model: lm,
-      system: fullSystem,
-      prompt,
-      temperature: config.llm.temperature,
-      maxOutputTokens: config.llm.maxOutputTokens,
-      abortSignal: options.signal
-    })
-
-    const rawText = generated.text.trim()
+    let rawText: string
+    if (options.onDelta) {
+      const streamed = streamText({
+        model: lm,
+        system: fullSystem,
+        prompt,
+        temperature: config.llm.temperature,
+        maxOutputTokens: config.llm.maxOutputTokens,
+        abortSignal: options.signal
+      })
+      let acc = ''
+      for await (const delta of streamed.textStream) {
+        acc += delta
+        options.onDelta(delta)
+      }
+      rawText = acc.trim()
+      if (!rawText) throw new Error('empty model response')
+    } else {
+      const generated = await generateText({
+        model: lm,
+        system: fullSystem,
+        prompt,
+        temperature: config.llm.temperature,
+        maxOutputTokens: config.llm.maxOutputTokens,
+        abortSignal: options.signal
+      })
+      rawText = generated.text.trim()
+    }
     const verification = verifyAnswerCitations(
       rawText,
       options.sources,

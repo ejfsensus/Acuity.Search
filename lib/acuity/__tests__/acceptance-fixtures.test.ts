@@ -22,6 +22,7 @@ import {
   StrictScopeValidationError
 } from '@/lib/acuity/search/federate'
 import { buildQueryPlan, suggestTopicGroups } from '@/lib/acuity/search/planner'
+import { resetProviderCircuits } from '@/lib/acuity/search/provider-health'
 import { executeSearxngSearch } from '@/lib/acuity/search/providers/searxng'
 import {
   inferLiteratureMetadata,
@@ -60,6 +61,7 @@ const acceptanceSpec = JSON.parse(fs.readFileSync(fixturesPath, 'utf-8')) as {
 
 describe('Acuity.Search Acceptance Fixtures (config/acuity/acceptance-fixtures.json)', () => {
   beforeEach(() => {
+    resetProviderCircuits()
     clearAcuityStoreForTests()
   })
 

@@ -147,7 +147,7 @@ SearXNG can be used as an alternative search backend with advanced search capabi
 
 ```bash
 SEARCH_API=searxng
-SEARXNG_API_URL=http://localhost:8080
+SEARXNG_API_URL=https://searxng-production-3588.up.railway.app  # alias: SEARXNG_URL; JSON must be enabled, see docs/SEARXNG.md
 SEARXNG_SECRET=""  # generate with: openssl rand -base64 32
 ```
 

@@ -139,14 +139,17 @@ export function ChatArtifactContainer({
     <div className="flex-1 min-h-0 min-w-0 h-full flex">
       <div className="absolute z-50 p-4 transition-opacity duration-[180ms] ease-[var(--motion-ease-out)]">
         {hasUser && (!open || isMobileSidebar) && (
-          <SidebarTrigger className="animate-fade-in" />
+          <SidebarTrigger className="animate-fade-in size-11" />
         )}
       </div>
 
-      {/* Desktop: Independent panels like morphic-studio */}
+      {/* One render of the page for every breakpoint (previously the page was
+          rendered twice — a desktop copy and a hidden mobile copy — which
+          duplicated headings, inputs and landmarks). Side panels are
+          desktop-only; mobile uses the InspectorDrawer below. */}
       <div
         ref={setContainerRef}
-        className="hidden md:flex flex-1 min-w-0 overflow-hidden"
+        className="flex flex-1 min-w-0 overflow-hidden"
       >
         {/* Chat Panel - Independent container */}
         <div className="flex-1 min-w-0 flex flex-col">{children}</div>
@@ -155,7 +158,7 @@ export function ChatArtifactContainer({
         {panelOpen && (
           <div
             className={cn(
-              'w-1 mx-0.5 my-6 hover:bg-border transition-colors duration-200 cursor-col-resize select-none relative',
+              'hidden md:block w-1 mx-0.5 my-6 hover:bg-border transition-colors duration-200 cursor-col-resize select-none relative',
               isResizing && 'bg-border/50'
             )}
             onMouseDown={startResize}
@@ -167,7 +170,7 @@ export function ChatArtifactContainer({
         {/* Right Panel - Independent with own animation */}
         <div
           className={cn(
-            'bg-background overflow-hidden',
+            'hidden md:block bg-background overflow-hidden',
             panelOpen ? 'opacity-100' : 'w-0 opacity-0',
             !isResizing &&
               'transition-[opacity,width] duration-[260ms] ease-[var(--motion-ease-in-out)]'
@@ -194,11 +197,8 @@ export function ChatArtifactContainer({
         />
       )}
 
-      {/* Mobile: full-width chat + drawer */}
-      <div className="md:hidden flex-1 h-full min-w-0">
-        {children}
-        <InspectorDrawer />
-      </div>
+      {/* Mobile: inspector drawer (renders nothing above 767px) */}
+      <InspectorDrawer />
     </div>
   )
 }

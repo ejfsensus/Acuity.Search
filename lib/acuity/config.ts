@@ -4,6 +4,18 @@ import type {
   ResearchDepth
 } from '@/lib/acuity/search/contracts'
 
+/**
+ * `SEARXNG_API_URL` is canonical; `SEARXNG_URL` is accepted as an alias so the
+ * same variable name works across Acuity services.
+ */
+export function resolveSearxngUrlEnv(
+  env: Record<string, string | undefined> = process.env
+): string | undefined {
+  const primary = env.SEARXNG_API_URL?.trim()
+  if (primary) return primary
+  return env.SEARXNG_URL?.trim() || undefined
+}
+
 export type LlmMode =
   | 'unconfigured'
   | 'openai-compatible'
@@ -250,7 +262,7 @@ function resolveLlmConfig(
 export function getAcuityConfig(
   env: Record<string, string | undefined> = process.env
 ): AcuityRuntimeConfig {
-  const searxValidation = validateSearxngUrl(env.SEARXNG_API_URL)
+  const searxValidation = validateSearxngUrl(resolveSearxngUrlEnv(env))
   const rawSafeSearch = Number(env.SEARXNG_SAFESEARCH ?? 0)
   const safeSearch: 0 | 1 | 2 =
     rawSafeSearch === 1 || rawSafeSearch === 2 ? rawSafeSearch : 0
@@ -338,8 +350,8 @@ export function getAcuityConfig(
 export function getProviderStatuses(
   env: Record<string, string | undefined> = process.env
 ): Record<ProviderId, ProviderConfigStatus> {
-  const searxValidation = validateSearxngUrl(env.SEARXNG_API_URL)
-  const rawSearx = env.SEARXNG_API_URL?.trim()
+  const searxValidation = validateSearxngUrl(resolveSearxngUrlEnv(env))
+  const rawSearx = resolveSearxngUrlEnv(env)?.trim()
 
   const braveKey = env.BRAVE_SEARCH_API_KEY?.trim()
   const tavilyKey = env.TAVILY_API_KEY?.trim()

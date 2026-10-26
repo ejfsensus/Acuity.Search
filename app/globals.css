@@ -527,3 +527,99 @@
     cursor: pointer;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Acuity design tokens (Celestial Manuscript). Locked in
+ * .ulpi/design/DESIGN.md — bind new UI to these, not raw hex.
+ * ------------------------------------------------------------------ */
+:root {
+  --acuity-void: #09090f;
+  --acuity-surface: #111118;
+  --acuity-surface-2: #181820;
+  --acuity-line: #35313c;
+  --acuity-ink: #fafafa;
+  --acuity-ink-muted: #b3b0bd;
+  --acuity-ink-meta: #a29db0; /* ≥ 4.5:1 on surface-2 */
+  --acuity-gold: #d4a843;
+  --acuity-gold-hi: #e8c96a;
+  --acuity-warn: #d9a05b;
+  --acuity-danger: #e5735f;
+  --acuity-parchment: #f3ead7;
+  --acuity-parchment-ink: #2a2218;
+  --acuity-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --acuity-dur-micro: 150ms;
+  --acuity-dur-panel: 250ms;
+  --acuity-dur-reveal: 400ms;
+  --acuity-tap: 44px;
+}
+
+/* Visible, unobscured keyboard focus (WCAG 2.4.7 / 2.4.11) */
+.acuity-focus:focus-visible,
+.acuity-workspace :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--acuity-gold-hi);
+  outline-offset: 2px;
+  border-radius: 9999px;
+}
+.acuity-workspace textarea:focus-visible,
+.acuity-workspace input[type='search']:focus-visible {
+  border-radius: 12px;
+}
+.acuity-searchbox:focus-within {
+  border-color: var(--acuity-gold);
+  box-shadow:
+    0 0 0 1px var(--acuity-gold),
+    0 0 24px -6px rgb(212 168 67 / 0.45);
+}
+
+/* Progress arch: the signature gold hairline that fills by stage */
+.acuity-arch-track {
+  height: 2px;
+  background: var(--acuity-line);
+  overflow: hidden;
+  border-radius: 9999px;
+}
+.acuity-arch-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--acuity-gold), var(--acuity-gold-hi));
+  transition: width var(--acuity-dur-reveal) var(--acuity-ease);
+}
+.acuity-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--acuity-surface-2) 0%,
+    #22222c 50%,
+    var(--acuity-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: acuity-shimmer 1.6s linear infinite;
+}
+@keyframes acuity-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+.acuity-reveal {
+  animation: acuity-reveal var(--acuity-dur-reveal) var(--acuity-ease) both;
+}
+@keyframes acuity-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .acuity-shimmer,
+  .acuity-reveal {
+    animation: none;
+  }
+  .acuity-arch-fill {
+    transition: none;
+  }
+}

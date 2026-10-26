@@ -221,6 +221,10 @@ export interface SourceResult {
   provenance: SourceProvenanceEntry[]
   literature?: LiteratureMetadata
   evidenceIds: string[]
+  /** Source-quality tier (source-quality.ts); drives ranking weight + badge. */
+  qualityTier?: 'curated' | 'scholarly' | 'general' | 'low'
+  /** Lexical query relevance 0..1 of title/snippet. */
+  relevance?: number
 }
 
 export interface EvidenceLocator {
@@ -310,6 +314,10 @@ export interface SearchRunState {
   coverage: CoverageCell[]
   nextContinuationCursor: number
   warnings: string[]
+  /** 'none' / 'weak' → UI shows the "no strong sources" state. */
+  evidenceStrength?: 'strong' | 'weak' | 'none'
+  /** Server-measured stage timings in ms (diagnostics). */
+  timings?: Record<string, number>
 }
 
 export const createShareRequestSchema = z.object({

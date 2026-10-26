@@ -9,6 +9,7 @@ import {
   CONTENT_STATE_LABELS,
   PROVIDER_DISPLAY_NAMES
 } from './acuity-types'
+import { QualityBadge } from './quality-badge'
 
 interface ResultCardsProps {
   results: SourceResult[]
@@ -31,7 +32,7 @@ function ContentStateBadge({ state }: { state: SourceResult['contentState'] }) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] ${toneClasses}`}
+      className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[12px] ${toneClasses}`}
     >
       {spec.label}
     </span>
@@ -90,7 +91,7 @@ export function CitedSourceRibbon({
         </button>
 
         {open && (
-          <span className="font-mono text-[10px] text-[#8e899c]">
+          <span className="font-mono text-[12px] text-[#8e899c]">
             Click any source to view excerpt →
           </span>
         )}
@@ -125,7 +126,7 @@ export function CitedSourceRibbon({
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex items-center gap-1.5 truncate">
                     <span
-                      className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
+                      className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[12px] font-semibold ${
                         isCited
                           ? 'bg-[#d4a843] text-[#09090f]'
                           : 'border border-[#d4a843]/50 bg-[#d4a843]/10 text-[#e8c96a]'
@@ -133,7 +134,7 @@ export function CitedSourceRibbon({
                     >
                       {src.citationLabel}
                     </span>
-                    <span className="truncate font-mono text-[11px] text-[#d4a843]">
+                    <span className="truncate font-mono text-[12px] text-[#d4a843]">
                       {src.hostname}
                     </span>
                   </div>
@@ -143,7 +144,7 @@ export function CitedSourceRibbon({
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}
                     title="Open source in new tab"
-                    className="shrink-0 font-mono text-[11px] text-[#8e899c] hover:text-[#e8c96a]"
+                    className="shrink-0 font-mono text-[12px] text-[#8e899c] hover:text-[#e8c96a]"
                   >
                     ↗
                   </a>
@@ -153,7 +154,7 @@ export function CitedSourceRibbon({
                   {src.title}
                 </div>
 
-                <div className="mt-2 flex items-center justify-between gap-1 border-t border-[#35313c]/40 pt-1.5 font-mono text-[10px] text-[#8e899c]">
+                <div className="mt-2 flex items-center justify-between gap-1 border-t border-[#35313c]/40 pt-1.5 font-mono text-[12px] text-[#8e899c]">
                   <span className="truncate">
                     {providers.map(p => PROVIDER_DISPLAY_NAMES[p]).join(' · ')}
                   </span>
@@ -191,14 +192,6 @@ function SingleResultCard({
   return (
     <article
       onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onSelect()
-        }
-      }}
       className={`group flex flex-col justify-between rounded-2xl border p-3.5 transition-all focus-visible:outline-2 focus-visible:outline-[#d4a843] ${
         isParchment
           ? isSelected
@@ -213,7 +206,7 @@ function SingleResultCard({
         <div className="flex flex-wrap items-center justify-between gap-1.5">
           <div className="flex flex-wrap items-center gap-1.5">
             <span
-              className={`rounded-md px-1.5 py-0.5 font-mono text-[11px] font-semibold ${
+              className={`rounded-md px-1.5 py-0.5 font-mono text-[12px] font-semibold ${
                 isCited
                   ? 'bg-[#d4a843] text-[#09090f]'
                   : 'border border-[#d4a843]/50 bg-[#d4a843]/15 text-[#e8c96a]'
@@ -225,13 +218,14 @@ function SingleResultCard({
               {result.hostname}
             </span>
             {result.lane === 'collection' && (
-              <span className="rounded-full border border-[#7c5ce0]/50 bg-[#7c5ce0]/15 px-2 py-0.5 font-mono text-[10px] text-[#c7b8f5]">
+              <span className="rounded-full border border-[#7c5ce0]/50 bg-[#7c5ce0]/15 px-2 py-0.5 font-mono text-[12px] text-[#c7b8f5]">
                 Verified Archive
               </span>
             )}
           </div>
 
           <div className="flex items-center gap-1.5">
+            <QualityBadge tier={result.qualityTier} />
             <ContentStateBadge state={result.contentState} />
           </div>
         </div>
@@ -251,7 +245,7 @@ function SingleResultCard({
 
         {/* Literature Work / Edition Metadata Bar */}
         {(mode === 'literature' || result.literature) && result.literature && (
-          <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 rounded-lg border border-[#35313c]/60 bg-[#09090f]/60 px-2.5 py-1 font-mono text-[10px] text-[#b3b0bd]">
+          <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 rounded-lg border border-[#35313c]/60 bg-[#09090f]/60 px-2.5 py-1 font-mono text-[12px] text-[#b3b0bd]">
             <span>{result.literature.format}</span>
             {result.literature.translator && (
               <span>
@@ -281,12 +275,12 @@ function SingleResultCard({
       </div>
 
       {/* Provenance Footer */}
-      <div className="mt-3 flex items-center justify-between gap-2 border-t border-[#35313c]/40 pt-2 font-mono text-[10px] text-[#8e899c]">
+      <div className="mt-3 flex items-center justify-between gap-2 border-t border-[#35313c]/40 pt-2 font-mono text-[12px] text-[#8e899c]">
         <div className="flex flex-wrap items-center gap-1">
           {providers.map(prov => (
             <span
               key={prov}
-              className="rounded border border-[#35313c] bg-[#09090f]/80 px-1.5 py-0.5 text-[10px] text-[#b3b0bd]"
+              className="rounded border border-[#35313c] bg-[#09090f]/80 px-1.5 py-0.5 text-[12px] text-[#b3b0bd]"
             >
               {PROVIDER_DISPLAY_NAMES[prov]}
             </span>
@@ -295,9 +289,17 @@ function SingleResultCard({
             {ACCESS_STATUS_LABELS[result.accessStatus]}
           </span>
         </div>
-        <span className="shrink-0 text-[#d4a843] group-hover:underline">
+        <button
+          type="button"
+          onClick={e => {
+            e.stopPropagation()
+            onSelect()
+          }}
+          aria-label={`View excerpt for ${result.citationLabel}: ${result.title}`}
+          className="inline-flex min-h-11 shrink-0 items-center text-[#d4a843] group-hover:underline"
+        >
           View excerpt →
-        </span>
+        </button>
       </div>
     </article>
   )
@@ -362,7 +364,7 @@ export function ResultCardsList({
                 setFilterTab('cited')
                 setExpanded(false)
               }}
-              className={`rounded-full px-3 py-1 font-mono text-[11px] transition-colors ${
+              className={`rounded-full px-3 py-1 font-mono text-[12px] transition-colors ${
                 activeTab === 'cited'
                   ? 'bg-[#d4a843] font-semibold text-[#09090f]'
                   : 'text-[#b3b0bd] hover:text-[#fafafa]'
@@ -377,7 +379,7 @@ export function ResultCardsList({
               setFilterTab('all')
               setExpanded(false)
             }}
-            className={`rounded-full px-3 py-1 font-mono text-[11px] transition-colors ${
+            className={`rounded-full px-3 py-1 font-mono text-[12px] transition-colors ${
               activeTab === 'all'
                 ? 'bg-[#d4a843] font-semibold text-[#09090f]'
                 : 'text-[#b3b0bd] hover:text-[#fafafa]'
@@ -392,7 +394,7 @@ export function ResultCardsList({
                 setFilterTab('collection')
                 setExpanded(false)
               }}
-              className={`rounded-full px-3 py-1 font-mono text-[11px] transition-colors ${
+              className={`rounded-full px-3 py-1 font-mono text-[12px] transition-colors ${
                 activeTab === 'collection'
                   ? 'bg-[#d4a843] font-semibold text-[#09090f]'
                   : 'text-[#b3b0bd] hover:text-[#fafafa]'
