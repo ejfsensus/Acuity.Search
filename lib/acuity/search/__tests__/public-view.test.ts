@@ -78,7 +78,14 @@ const run = {
         'Model synthesis could not be completed (401 invalid api key sk-...).'
     }
   ],
-  coverage: [],
+  coverage: [
+    {
+      targetId: 'open-web',
+      provider: 'brave',
+      status: 'unsearched',
+      reason: 'BRAVE_SEARCH_API_KEY is not configured.'
+    }
+  ],
   nextContinuationCursor: 0,
   warnings: [
     'TAVILY: TAVILY_API_KEY is not set',
@@ -97,6 +104,8 @@ describe('toPublicRun', () => {
     expect(json).not.toContain('SEARXNG_JSON_DISABLED')
     expect(json).not.toContain('sk-')
     expect(json).not.toContain('TAVILY_API_KEY')
+    expect(json).not.toContain('BRAVE_SEARCH_API_KEY')
+    expect(pub.coverage[0].reason).toBe('Not configured.')
     expect(pub.providerAttempts[0].httpStatus).toBeUndefined()
     expect(pub.providerAttempts[0].errorMessage).toBe(
       'Engine unavailable right now.'

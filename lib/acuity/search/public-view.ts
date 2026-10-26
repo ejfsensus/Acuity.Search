@@ -116,6 +116,16 @@ function toPublicWarning(w: string): string | null {
   return w
 }
 
+function toPublicCoverageReason(reason?: string): string | undefined {
+  if (!reason) return undefined
+  if (/^Queued for next Continue Research pass$/.test(reason)) return reason
+  if (/API_KEY|not configured|not set|unconfigured/i.test(reason)) {
+    return 'Not configured.'
+  }
+  if (/budget/i.test(reason)) return 'Skipped to stay within the search budget.'
+  return 'Engine unavailable for this target.'
+}
+
 export function toPublicRun(run: SearchRunState): SearchRunState {
   const cited = new Set(
     run.answers.flatMap(a => a.citations?.resolvedLabels ?? [])
@@ -147,9 +157,7 @@ export function toPublicRun(run: SearchRunState): SearchRunState {
     answers: run.answers.map(toPublicAnswer),
     coverage: run.coverage.map(c => ({
       ...c,
-      reason: c.reason
-        ? clip(c.reason.replace(/https?:\/\/\S+/g, ''), 120)
-        : undefined
+      reason: toPublicCoverageReason(c.reason)
     })),
     nextContinuationCursor: run.nextContinuationCursor,
     warnings: run.warnings

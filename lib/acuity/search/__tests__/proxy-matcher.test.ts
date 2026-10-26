@@ -20,10 +20,12 @@ describe('proxy matcher', () => {
     expect(matcher.test(path)).toBe(false)
   })
 
-  it.each(['/', '/auth/login', '/api/acuity-search/runs', '/some/unknown/page'])(
-    'still runs for app route %s',
-    path => {
-      expect(matcher.test(path)).toBe(true)
-    }
-  )
+  it.each([
+    '/',
+    '/auth/login',
+    '/api/acuity-search/runs',
+    '/some/unknown/page'
+  ])('still runs for app route %s', path => {
+    expect(matcher.test(path)).toBe(true)
+  })
 })
