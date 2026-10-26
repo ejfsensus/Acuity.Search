@@ -2,10 +2,9 @@
 
 import React from 'react'
 
-import type {
-  DomainRegistryEntry,
-  DomainTopicGroup
-} from '@/lib/acuity/registry'
+import type { DomainTopicGroup } from '@/lib/acuity/registry'
+
+import type { ClientRegistryEntry } from './acuity-types'
 
 interface AcuityPortalHeroProps {
   mode: 'general' | 'literature' | 'collections'
@@ -132,7 +131,7 @@ export function TopicDomainScopePanel({
   onToggleStarterPriority
 }: {
   topicGroups: DomainTopicGroup[]
-  entries: DomainRegistryEntry[]
+  entries: ClientRegistryEntry[]
   selectedGroupIds: string[]
   starterPriorityOnly: boolean
   onToggleGroup: (groupId: string) => void
@@ -295,13 +294,13 @@ export function TopicDomainScopePanel({
                   {entry.suppliedName}
                 </span>
                 {entry.starterPriority && (
-                  <span className="shrink-0 rounded bg-[#d4a843]/15 px-1.5 py-0.5 font-mono text-[9px] text-[#e8c96a]">
+                  <span className="shrink-0 rounded bg-[#d4a843]/15 px-1.5 py-0.5 font-mono text-[12px] text-[#e8c96a]">
                     Core
                   </span>
                 )}
               </div>
               <span className="truncate font-mono text-[12px] text-[#d4a843]/90">
-                {entry.targets.map(t => t.hostname).join(', ')}
+                {entry.hostnames.join(', ')}
               </span>
             </div>
           ))}

@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { loadDomainRegistry } from '@/lib/acuity/registry'
 
 import { AcuitySearchWorkspace } from '@/components/acuity/acuity-search-workspace'
+import { toClientRegistryEntries } from '@/components/acuity/acuity-types'
 import { CitedSourceRibbon } from '@/components/acuity/result-cards'
 
 describe('AcuitySearchWorkspace UI', () => {
@@ -13,7 +14,7 @@ describe('AcuitySearchWorkspace UI', () => {
     render(
       <AcuitySearchWorkspace
         topicGroups={registry.topicGroups}
-        entries={registry.entries}
+        entries={toClientRegistryEntries(registry.entries)}
         crossCuttingTags={registry.crossCuttingTags}
         providerStatuses={{
           searxng: {

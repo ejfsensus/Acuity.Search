@@ -4,10 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 import type { ProviderConfigStatus } from '@/lib/acuity/config'
-import type {
-  DomainRegistryEntry,
-  DomainTopicGroup
-} from '@/lib/acuity/registry'
+import type { DomainTopicGroup } from '@/lib/acuity/registry'
 import type {
   AnswerPreference,
   DateRangeFilter,
@@ -35,6 +32,7 @@ import {
   TopicDomainScopePanel
 } from './acuity-portal-hero'
 import {
+  type ClientRegistryEntry,
   DEPTH_DESCRIPTIONS,
   MODE_DESCRIPTIONS,
   SORT_ORDER_LABELS
@@ -83,7 +81,7 @@ const LOCAL_STORAGE_HISTORY_KEY = 'acuity.search.history.v1'
 
 export interface AcuityWorkspaceInitialProps {
   topicGroups: DomainTopicGroup[]
-  entries: DomainRegistryEntry[]
+  entries: ClientRegistryEntry[]
   crossCuttingTags: string[]
   providerStatuses: Record<ProviderId, ProviderConfigStatus>
   llmMode?: string
