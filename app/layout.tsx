@@ -15,7 +15,6 @@ import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/sonner'
 
-import AppSidebar from '@/components/app-sidebar'
 import ArtifactRoot from '@/components/artifact/artifact-root'
 import { KeyboardShortcutHandler } from '@/components/keyboard-shortcut-handler'
 import { LibraryProvider } from '@/components/library/library-context'
@@ -112,7 +111,6 @@ export default async function RootLayout({
                       initialUsage={initialUsage}
                       enabled={usageBudgetEnabled}
                     >
-                      {userId && <AppSidebar user={user} />}
                       <KeyboardShortcutHandler />
                       <div className="flex flex-col flex-1 min-w-0">
                         <main className="flex flex-1 min-h-0 min-w-0 overflow-hidden">

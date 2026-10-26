@@ -78,10 +78,10 @@ export function CollectionDrawer({
       <div className="flex items-center justify-between border-b border-[#35313c] pb-2">
         <div>
           <h3 className="font-serif text-base font-medium text-[#fafafa]">
-            Domain Registry & Collections
+            Topic Collections & Archives
           </h3>
           <p className="font-mono text-[11px] text-[#8e899c]">
-            110 seed repositories · 10 collections · 146 URLs
+            110 specialist repositories across 10 collections
           </p>
         </div>
         <button
@@ -89,7 +89,7 @@ export function CollectionDrawer({
           onClick={onClearAllScope}
           className="rounded-lg border border-[#35313c] bg-[#181820] px-2 py-1 font-mono text-[11px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
         >
-          Reset Scope
+          Reset Filters
         </button>
       </div>
 
@@ -97,10 +97,10 @@ export function CollectionDrawer({
       <div className="flex items-center justify-between rounded-xl border border-[#35313c] bg-[#181820] px-3 py-2">
         <div>
           <div className="font-medium text-[#e8c96a]">
-            Starter Priority Sources (20)
+            Core Research Archives (20)
           </div>
           <div className="text-[11px] text-[#8e899c]">
-            High-value open archives & primary text collections
+            High-priority open archives & primary text collections
           </div>
         </div>
         <input

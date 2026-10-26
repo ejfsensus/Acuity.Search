@@ -118,6 +118,14 @@ export async function resolveRequestActor(
     }
   }
 
+  // In local personal single-user mode (auth disabled and not publicMultiUser),
+  // use a stable local owner identity so local research history persists across
+  // browsers, sessions, and restarts unless an explicit isolated guest cookie is sent.
+  const isLocalPersonalMode =
+    !config.security.publicMultiUser &&
+    (process.env.ENABLE_AUTH === 'false' ||
+      process.env.AUTH_PROVIDER === 'none')
+
   // Check explicit test/request header or signed cookie for isolated guest session
   const cookieHeader = req?.headers.get('cookie') ?? null
   const existingToken = parseCookieHeader(
@@ -133,6 +141,13 @@ export async function resolveRequestActor(
     return {
       actorId: verifiedGuest,
       isGuest: true
+    }
+  }
+
+  if (isLocalPersonalMode && process.env.NODE_ENV !== 'test') {
+    return {
+      actorId: 'local:personal-researcher',
+      isGuest: false
     }
   }
 

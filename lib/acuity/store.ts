@@ -1,4 +1,6 @@
 import crypto from 'node:crypto'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import type {
   CreateShareRequest,
@@ -11,10 +13,106 @@ interface StoredShareRecord {
   snapshot: ShareSnapshot
 }
 
+interface PersistedAcuityStore {
+  version: number
+  updatedAt: string
+  runs: SearchRunState[]
+  shares: StoredShareRecord[]
+}
+
 const runsById = new Map<string, SearchRunState>()
 const activeRunAbortControllers = new Map<string, AbortController>()
 const sharesById = new Map<string, StoredShareRecord>()
 const sharesByTokenHash = new Map<string, StoredShareRecord>()
+
+let diskStoreInitialized = false
+
+function isDiskPersistenceEnabled(): boolean {
+  return process.env.NODE_ENV !== 'test'
+}
+
+function getStoreFilePath(): string {
+  const customPath = process.env.ACUITY_SEARCH_LOCAL_STORE_PATH?.trim()
+  if (customPath) {
+    return path.resolve(process.cwd(), customPath)
+  }
+  return path.resolve(process.cwd(), '_local', 'acuity-search-store.json')
+}
+
+function ensureDiskStoreLoaded(): void {
+  if (diskStoreInitialized || !isDiskPersistenceEnabled()) {
+    return
+  }
+  diskStoreInitialized = true
+
+  try {
+    const filePath = getStoreFilePath()
+    if (!fs.existsSync(filePath)) {
+      const dir = path.dirname(filePath)
+      fs.mkdirSync(dir, { recursive: true })
+      const initialPayload: PersistedAcuityStore = {
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        runs: [],
+        shares: []
+      }
+      fs.writeFileSync(
+        filePath,
+        JSON.stringify(initialPayload, null, 2),
+        'utf8'
+      )
+      return
+    }
+
+    const raw = fs.readFileSync(filePath, 'utf8')
+    const parsed = JSON.parse(raw) as Partial<PersistedAcuityStore>
+    if (Array.isArray(parsed.runs)) {
+      for (const run of parsed.runs) {
+        if (run && typeof run.runId === 'string') {
+          runsById.set(run.runId, run)
+        }
+      }
+    }
+    if (Array.isArray(parsed.shares)) {
+      for (const rec of parsed.shares) {
+        if (rec?.snapshot?.id && rec?.tokenHash) {
+          sharesById.set(rec.snapshot.id, rec)
+          sharesByTokenHash.set(rec.tokenHash, rec)
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load local Acuity store:', error)
+  }
+}
+
+function flushStoreToDisk(): void {
+  if (!isDiskPersistenceEnabled()) {
+    return
+  }
+  try {
+    const filePath = getStoreFilePath()
+    const dir = path.dirname(filePath)
+    fs.mkdirSync(dir, { recursive: true })
+
+    // Keep most recent 200 runs on disk to bound file size
+    const sortedRuns = Array.from(runsById.values())
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+      .slice(0, 200)
+
+    const payload: PersistedAcuityStore = {
+      version: 1,
+      updatedAt: new Date().toISOString(),
+      runs: sortedRuns,
+      shares: Array.from(sharesById.values())
+    }
+    const tmpPath = `${filePath}.tmp`
+    fs.writeFileSync(tmpPath, JSON.stringify(payload, null, 2), 'utf8')
+    fs.renameSync(tmpPath, filePath)
+  } catch (error) {
+    console.warn('Failed to persist local Acuity store:', error)
+  }
+}
 
 export function hashShareToken(rawToken: string): string {
   return crypto
@@ -35,13 +133,16 @@ export function unregisterRunAbortController(runId: string): void {
 }
 
 export function saveSearchRun(run: SearchRunState): void {
+  ensureDiskStoreLoaded()
   runsById.set(run.runId, structuredClone(run))
+  flushStoreToDisk()
 }
 
 export function getSearchRunForActor(
   runId: string,
   actorId: string
 ): SearchRunState | null {
+  ensureDiskStoreLoaded()
   const run = runsById.get(runId)
   if (!run) return null
   if (run.userId !== actorId) {
@@ -51,6 +152,7 @@ export function getSearchRunForActor(
 }
 
 export function listSearchRunsForActor(actorId: string): SearchRunState[] {
+  ensureDiskStoreLoaded()
   const results: SearchRunState[] = []
   for (const run of runsById.values()) {
     if (run.userId === actorId) {
@@ -62,10 +164,25 @@ export function listSearchRunsForActor(actorId: string): SearchRunState[] {
   )
 }
 
+export function deleteSearchRunForActor(
+  runId: string,
+  actorId: string
+): boolean {
+  ensureDiskStoreLoaded()
+  const run = runsById.get(runId)
+  if (!run || run.userId !== actorId) {
+    return false
+  }
+  runsById.delete(runId)
+  flushStoreToDisk()
+  return true
+}
+
 export function cancelSearchRunForActor(
   runId: string,
   actorId: string
 ): { ok: boolean; status: 'cancelled' | 'not-found' | 'forbidden' } {
+  ensureDiskStoreLoaded()
   const run = runsById.get(runId)
   if (!run) {
     return { ok: false, status: 'not-found' }
@@ -83,6 +200,7 @@ export function cancelSearchRunForActor(
   run.status = 'cancelled'
   run.updatedAt = new Date().toISOString()
   runsById.set(runId, structuredClone(run))
+  flushStoreToDisk()
   return { ok: true, status: 'cancelled' }
 }
 
@@ -100,6 +218,7 @@ export function createSelectedOutputShare(options: {
   shareUrlPath: string
   snapshot: ShareSnapshot
 } {
+  ensureDiskStoreLoaded()
   const run = getSearchRunForActor(options.request.runId, options.actorId)
   if (!run) {
     throw new Error('Run not found or access denied')
@@ -167,6 +286,7 @@ export function createSelectedOutputShare(options: {
 
   sharesById.set(shareId, record)
   sharesByTokenHash.set(tokenHash, record)
+  flushStoreToDisk()
 
   return {
     shareId,
@@ -180,6 +300,7 @@ export function resolveShareByRawToken(rawToken: string): {
   status: 'active' | 'revoked' | 'expired' | 'not-found'
   snapshot?: ShareSnapshot
 } {
+  ensureDiskStoreLoaded()
   if (!rawToken || typeof rawToken !== 'string') {
     return { status: 'not-found' }
   }
@@ -210,6 +331,7 @@ export function revokeShareForActor(
   shareId: string,
   actorId: string
 ): { ok: boolean; status: 'revoked' | 'not-found' | 'forbidden' } {
+  ensureDiskStoreLoaded()
   const record = sharesById.get(shareId)
   if (!record) {
     return { ok: false, status: 'not-found' }
@@ -219,6 +341,7 @@ export function revokeShareForActor(
   }
 
   record.snapshot.revokedAt = new Date().toISOString()
+  flushStoreToDisk()
   return { ok: true, status: 'revoked' }
 }
 

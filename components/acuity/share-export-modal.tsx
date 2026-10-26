@@ -95,7 +95,7 @@ export function ShareExportModal({
         shareId: data.shareId,
         shareUrlPath: data.shareUrlPath
       })
-      setStatusMessage('Created unlisted selected-output snapshot.')
+      setStatusMessage('Shareable research link created.')
     } catch (error) {
       setStatusMessage(
         error instanceof Error ? error.message : 'Share creation failed'

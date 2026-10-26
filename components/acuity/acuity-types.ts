@@ -9,22 +9,28 @@ import type {
 
 export const MODE_DESCRIPTIONS: Record<
   DiscoveryMode,
-  { label: string; subtitle: string }
+  { label: string; subtitle: string; placeholder: string }
 > = {
   general: {
     label: 'General',
     subtitle:
-      'Open multi-provider enquiry across independent indexes, archives, and scholarly web sources.'
+      'Broad search across web indexes, digital archives, and scholarly sources.',
+    placeholder:
+      'Ask anything across esoteric traditions, consciousness, philosophy, or historical archives...'
   },
   literature: {
     label: 'Literature',
     subtitle:
-      'Primary texts, translations, critical editions, manuscripts, and archival holdings with translator & edition distinction.'
+      'Primary texts, translations, manuscripts, and critical editions.',
+    placeholder:
+      'Search primary texts, manuscripts, translators, or critical editions (e.g. Corpus Hermeticum Copenhaver)...'
   },
   collections: {
-    label: 'Collections',
+    label: 'Topic Specific',
     subtitle:
-      'Scoped domain-group discovery across the 110 curated Acuity source repositories and 10 thematic collections.'
+      'Focused search across 10 curated topic collections and 110 specialist repositories.',
+    placeholder:
+      'Enquire within the selected topic domains and specialist repositories...'
   }
 }
 
@@ -34,14 +40,15 @@ export const DEPTH_DESCRIPTIONS: Record<
 > = {
   quick: {
     label: 'Quick',
-    badge: '≤8 requests · ≤2 variants',
-    detail: 'Fast multi-provider pass with bounded top-4 source extraction.'
+    badge: 'Quick multi-provider search',
+    detail:
+      'Rapid federated synthesis across all active search providers with top-source verification.'
   },
   research: {
-    label: 'Research',
-    badge: '≤24 requests · ≤6 variants',
+    label: 'Deep',
+    badge: 'Deep comprehensive search',
     detail:
-      'Deep transliteration, archival expansion, and up to 12 full-text extractions.'
+      'Comprehensive query expansion, transliteration variants, and deep full-text archival extraction.'
   }
 }
 
@@ -64,7 +71,7 @@ export const ACCESS_STATUS_LABELS: Record<AccessStatus, string> = {
 }
 
 export const SORT_ORDER_LABELS: Record<SortOrder, string> = {
-  'combined-relevance': 'Combined relevance (RRF)',
+  'combined-relevance': 'Combined relevance',
   'provider-order': 'Provider order',
   newest: 'Newest'
 }
