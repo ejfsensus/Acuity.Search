@@ -183,3 +183,28 @@ export function toPublicEvent(event: SearchStreamEvent): SearchStreamEvent {
       return event
   }
 }
+
+/**
+ * Provider readiness for the browser: no endpoint hosts (the SearXNG origin
+ * is infrastructure) and no env-variable names in messages.
+ */
+export function toPublicProviderStatuses<
+  T extends {
+    provider: string
+    enabled: boolean
+    configured: boolean
+    status: string
+    message: string
+    endpointHost?: string
+  }
+>(statuses: Record<string, T>): Record<string, T> {
+  const out: Record<string, T> = {}
+  for (const [key, s] of Object.entries(statuses)) {
+    out[key] = {
+      ...s,
+      endpointHost: undefined,
+      message: s.configured ? 'Ready.' : 'Not configured.'
+    }
+  }
+  return out
+}

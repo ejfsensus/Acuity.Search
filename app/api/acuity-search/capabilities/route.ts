@@ -12,10 +12,11 @@ import {
   SCOPE_POLICIES,
   SORT_ORDERS
 } from '@/lib/acuity/search/contracts'
+import { toPublicProviderStatuses } from '@/lib/acuity/search/public-view'
 
 export async function GET() {
   const config = getAcuityConfig()
-  const providerStatuses = getProviderStatuses()
+  const providerStatuses = toPublicProviderStatuses(getProviderStatuses())
 
   return NextResponse.json({
     product: {
@@ -41,10 +42,7 @@ export async function GET() {
     providers: providerStatuses,
     capabilities: PROVIDER_CAPABILITIES,
     llm: {
-      mode: config.llm.mode,
-      configured: config.llm.configured,
-      quickModel: config.llm.quickModel,
-      researchModel: config.llm.researchModel
+      configured: config.llm.configured
     },
     codexBridge: {
       enabled: config.codexBridge.enabled,
