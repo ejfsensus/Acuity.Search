@@ -1,0 +1,7 @@
+# Private instance: only Acuity.Search (Railway private network) calls it.
+[botdetection.ip_limit]
+link_token = false
+
+[botdetection.ip_lists]
+# Railway private network + loopback are never rate limited.
+pass_ip = ["127.0.0.0/8", "::1", "fd00::/8", "10.0.0.0/8"]

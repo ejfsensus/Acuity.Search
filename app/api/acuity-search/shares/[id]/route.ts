@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server'
 
 import { resolveRequestActor } from '@/lib/acuity/auth'
-import { resolveShareByRawToken, revokeShareForActor } from '@/lib/acuity/store'
+import {
+  ensureStoreReady,
+  resolveShareByRawToken,
+  revokeShareForActor
+} from '@/lib/acuity/store'
 
 export async function GET(
   _req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id: token } = await context.params
   const resolved = resolveShareByRawToken(token)
 
@@ -40,6 +45,7 @@ export async function DELETE(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const outcome = revokeShareForActor(id, actor.actorId)

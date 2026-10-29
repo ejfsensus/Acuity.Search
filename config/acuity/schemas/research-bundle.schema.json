@@ -1,148 +1,234 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://acuity.institute/schemas/acuity.research-bundle.v1.1.json",
+  "title": "Acuity.Search research bundle (v1 / v1.1)",
+  "description": "Matches lib/acuity/export/index.ts exportRunToResearchBundle. v1.1 adds sources[].snippet/accessStatus, answer.citations, coverage and provenance.",
   "type": "object",
   "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "exportedAt",
+    "sourceProduct",
+    "queryRun",
+    "sources",
+    "evidence",
+    "codexCandidates",
+    "integrity"
+  ],
   "properties": {
     "schemaVersion": {
-      "const": "acuity.research-bundle.v1"
+      "type": "string",
+      "enum": ["acuity.research-bundle.v1", "acuity.research-bundle.v1.1"]
     },
     "exampleOnly": {
       "type": "boolean"
     },
-    "id": {
-      "type": "string",
-      "minLength": 1
+    "bundleId": {
+      "type": "string"
     },
-    "title": {
-      "type": "string",
-      "minLength": 1
-    },
-    "createdAt": {
+    "exportedAt": {
       "type": "string",
       "format": "date-time"
     },
-    "query": {
-      "type": "string",
-      "minLength": 1
-    },
-    "mode": {
-      "enum": ["general", "literature", "collections"]
-    },
-    "scope": {
+    "sourceProduct": {
       "type": "object",
       "additionalProperties": false,
+      "required": ["name", "version"],
       "properties": {
-        "policy": {
-          "enum": ["strict", "open", "collection-and-web-lanes"]
+        "name": {
+          "const": "Acuity.Search"
         },
-        "registryVersion": {
-          "type": "string",
-          "minLength": 1
+        "version": {
+          "type": "string"
         },
-        "groupIds": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "sourceIds": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "targetHosts": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
+        "gitCommit": {
+          "type": "string"
         }
-      },
+      }
+    },
+    "queryRun": {
+      "type": "object",
+      "additionalProperties": false,
       "required": [
-        "policy",
-        "registryVersion",
-        "groupIds",
-        "sourceIds",
-        "targetHosts"
-      ]
+        "runId",
+        "query",
+        "discoveryMode",
+        "depth",
+        "scope",
+        "executedQueries"
+      ],
+      "properties": {
+        "runId": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "discoveryMode": {
+          "type": "string",
+          "enum": ["general", "literature", "collections"]
+        },
+        "depth": {
+          "type": "string",
+          "enum": ["quick", "research"]
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy", "includeDomains", "excludeDomains"],
+          "properties": {
+            "policy": {
+              "type": "string",
+              "enum": ["strict", "open", "collection-and-web-lanes"]
+            },
+            "collectionGroupIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "entryIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "includeDomains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "excludeDomains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "executedQueries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "query", "status"],
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": ["searxng", "brave", "tavily", "exa"]
+              },
+              "query": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "engines": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "answer": {
       "type": "object",
       "additionalProperties": false,
+      "required": ["answerVersionId", "createdAt", "model", "markdown"],
       "properties": {
-        "version": {
-          "type": "integer",
-          "minimum": 1
+        "answerVersionId": {
+          "type": "string"
         },
-        "kind": {
-          "const": "ai-generated-research-synthesis"
-        },
-        "markdown": {
-          "type": "string",
-          "minLength": 1
+        "createdAt": {
+          "type": "string"
         },
         "model": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "provider": {
-              "type": ["string", "null"]
-            },
-            "id": {
-              "type": ["string", "null"]
-            },
-            "promptVersion": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "required": ["provider", "id", "promptVersion"]
+          "type": ["string", "null"]
         },
-        "citationMap": {
+        "markdown": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "disclosureNote": {
+          "type": "string"
+        },
+        "citations": {
           "type": "object",
-          "propertyNames": {
-            "pattern": "^[1-9][0-9]*$"
-          },
           "additionalProperties": {
-            "type": "string",
-            "minLength": 1
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["sourceId", "evidenceIds"],
+            "properties": {
+              "sourceId": {
+                "type": "string"
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "unresolvedLabels": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
-      },
-      "required": ["version", "kind", "markdown", "model", "citationMap"]
+      }
     },
     "sources": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "citationLabel",
+          "title",
+          "url",
+          "domain",
+          "providers",
+          "contentState"
+        ],
         "properties": {
-          "id": {
-            "type": "string",
-            "minLength": 1
+          "sourceId": {
+            "type": "string"
           },
-          "url": {
+          "citationLabel": {
             "type": "string",
-            "format": "uri"
-          },
-          "resolvedUrl": {
-            "type": "string",
-            "format": "uri"
+            "pattern": "^S\\d+$"
           },
           "title": {
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           },
-          "retrievedAt": {
-            "type": "string",
-            "format": "date-time"
+          "url": {
+            "type": "string"
+          },
+          "canonicalUrl": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["searxng", "brave", "tavily", "exa"]
+            }
           },
           "contentState": {
+            "type": "string",
             "enum": [
               "snippet",
               "fulltext-excerpt",
@@ -151,74 +237,37 @@
               "unavailable"
             ]
           },
-          "bibliography": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "workTitle": {
-                "type": ["string", "null"]
-              },
-              "author": {
-                "type": ["string", "null"]
-              },
-              "translator": {
-                "type": ["string", "null"]
-              },
-              "edition": {
-                "type": ["string", "null"]
-              },
-              "language": {
-                "type": ["string", "null"]
-              },
-              "publishedAt": {
-                "type": ["string", "null"]
-              }
-            },
-            "required": [
-              "workTitle",
-              "author",
-              "translator",
-              "edition",
-              "language",
-              "publishedAt"
-            ]
+          "publishedDate": {
+            "type": "string"
           },
-          "rights": {
-            "type": ["string", "null"]
-          },
-          "provenance": {
+          "authors": {
             "type": "array",
             "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "provider": {
-                  "enum": ["searxng", "brave", "tavily", "exa"]
-                },
-                "engines": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "uniqueItems": true
-                }
-              },
-              "required": ["provider", "engines"]
+              "type": "string"
             }
+          },
+          "translators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "editionOrYear": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "accessStatus": {
+            "type": "string"
+          },
+          "literatureFormat": {
+            "type": "string"
+          },
+          "workTitle": {
+            "type": "string"
           }
-        },
-        "required": [
-          "id",
-          "url",
-          "resolvedUrl",
-          "title",
-          "retrievedAt",
-          "contentState",
-          "bibliography",
-          "rights",
-          "provenance"
-        ]
+        }
       }
     },
     "evidence": {
@@ -226,103 +275,167 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "evidenceId",
+          "sourceId",
+          "url",
+          "verbatimText",
+          "sha256",
+          "contentState",
+          "locator",
+          "extractedAt"
+        ],
         "properties": {
-          "id": {
-            "type": "string",
-            "minLength": 1
+          "evidenceId": {
+            "type": "string"
           },
           "sourceId": {
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           },
-          "text": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100000
+          "url": {
+            "type": "string"
+          },
+          "verbatimText": {
+            "type": "string"
           },
           "sha256": {
             "type": "string",
             "pattern": "^[a-f0-9]{64}$"
           },
-          "locator": {
-            "type": ["string", "null"]
-          },
           "contentState": {
-            "enum": ["snippet", "fulltext-excerpt", "catalogue-metadata"]
+            "type": "string",
+            "enum": [
+              "snippet",
+              "fulltext-excerpt",
+              "catalogue-metadata",
+              "scan-no-text",
+              "unavailable"
+            ]
+          },
+          "locator": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "value"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "css-heading",
+                  "pdf-page",
+                  "epub-chapter",
+                  "char-offset"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "extractedAt": {
+            "type": "string"
           }
-        },
+        }
+      }
+    },
+    "codexCandidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
         "required": [
-          "id",
-          "sourceId",
-          "text",
-          "sha256",
-          "locator",
-          "contentState"
-        ]
+          "candidateType",
+          "title",
+          "summary",
+          "sourceIds",
+          "evidenceIds",
+          "tags"
+        ],
+        "properties": {
+          "candidateType": {
+            "type": "string",
+            "enum": ["source", "passage", "question", "tradition-note"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
       }
     },
     "coverage": {
       "type": "object",
       "additionalProperties": false,
+      "required": [
+        "providerStatuses",
+        "searchedTargetHosts",
+        "unsearchedTargetHosts",
+        "limitations"
+      ],
       "properties": {
-        "limitations": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "searchedTargetHosts": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "unsearchedTargetHosts": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
         "providerStatuses": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
+            "required": ["provider", "status"],
             "properties": {
               "provider": {
-                "enum": ["searxng", "brave", "tavily", "exa"]
+                "type": "string"
               },
               "status": {
-                "enum": [
-                  "succeeded",
-                  "partial",
-                  "failed",
-                  "not-selected",
-                  "not-configured",
-                  "not-attempted"
-                ]
+                "type": "string"
               }
-            },
-            "required": ["provider", "status"]
+            }
+          }
+        },
+        "searchedTargetHosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unsearchedTargetHosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
-      },
-      "required": [
-        "limitations",
-        "searchedTargetHosts",
-        "unsearchedTargetHosts",
-        "providerStatuses"
-      ]
+      }
     },
     "provenance": {
       "type": "object",
       "additionalProperties": false,
+      "required": [
+        "product",
+        "generatedContentIsPrimarySource",
+        "upstreamRunId"
+      ],
       "properties": {
         "product": {
           "const": "Acuity.Search"
@@ -331,33 +444,34 @@
           "const": false
         },
         "upstreamRunId": {
-          "type": "string",
-          "minLength": 1
+          "type": "string"
         }
-      },
-      "required": [
-        "product",
-        "generatedContentIsPrimarySource",
-        "upstreamRunId"
-      ]
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifestEntries"],
+      "properties": {
+        "manifestEntries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      }
     }
-  },
-  "required": [
-    "schemaVersion",
-    "exampleOnly",
-    "id",
-    "title",
-    "createdAt",
-    "query",
-    "mode",
-    "scope",
-    "answer",
-    "sources",
-    "evidence",
-    "coverage",
-    "provenance"
-  ],
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:acuity:research-bundle:v1",
-  "title": "Proposed portable research bundle; no automatic Codex endpoint implied"
+  }
 }

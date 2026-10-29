@@ -4,6 +4,7 @@ import { resolveRequestActor } from '@/lib/acuity/auth'
 import { toPublicRun } from '@/lib/acuity/search/public-view'
 import {
   deleteSearchRunForActor,
+  ensureStoreReady,
   getSearchRunForActor
 } from '@/lib/acuity/store'
 
@@ -11,6 +12,7 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const run = getSearchRunForActor(id, actor.actorId)
@@ -33,6 +35,7 @@ export async function DELETE(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const deleted = deleteSearchRunForActor(id, actor.actorId)

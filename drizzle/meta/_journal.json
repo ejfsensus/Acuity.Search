@@ -148,6 +148,13 @@
       "when": 1792863042496,
       "tag": "0020_add_parts_search_fts",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1793261000000,
+      "tag": "0022_acuity_run_store",
+      "breakpoints": true
     }
   ]
 }

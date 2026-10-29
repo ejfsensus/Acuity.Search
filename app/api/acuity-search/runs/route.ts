@@ -10,6 +10,7 @@ import {
 } from '@/lib/acuity/search/federate'
 import { toPublicEvent, toPublicRun } from '@/lib/acuity/search/public-view'
 import {
+  ensureStoreReady,
   listSearchRunsForActor,
   registerRunAbortController,
   saveSearchRun,
@@ -17,6 +18,7 @@ import {
 } from '@/lib/acuity/store'
 
 export async function GET(req: Request) {
+  await ensureStoreReady()
   try {
     const actor = await resolveRequestActor(req)
     const runs = listSearchRunsForActor(actor.actorId)
@@ -37,6 +39,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  await ensureStoreReady()
   try {
     const actor = await resolveRequestActor(req)
     const body = await req.json()

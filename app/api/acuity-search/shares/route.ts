@@ -4,9 +4,10 @@ import { ZodError } from 'zod'
 
 import { resolveRequestActor } from '@/lib/acuity/auth'
 import { createShareRequestSchema } from '@/lib/acuity/search/contracts'
-import { createSelectedOutputShare } from '@/lib/acuity/store'
+import { createSelectedOutputShare,ensureStoreReady } from '@/lib/acuity/store'
 
 export async function POST(req: Request) {
+  await ensureStoreReady()
   try {
     const actor = await resolveRequestActor(req)
     const body = await req.json()

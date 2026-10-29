@@ -3,12 +3,17 @@ import { NextResponse } from 'next/server'
 import { resolveRequestActor } from '@/lib/acuity/auth'
 import { continueFederatedSearchRun } from '@/lib/acuity/search/federate'
 import { toPublicRun } from '@/lib/acuity/search/public-view'
-import { getSearchRunForActor, saveSearchRun } from '@/lib/acuity/store'
+import {
+  ensureStoreReady,
+  getSearchRunForActor,
+  saveSearchRun
+} from '@/lib/acuity/store'
 
 export async function POST(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const existingRun = getSearchRunForActor(id, actor.actorId)

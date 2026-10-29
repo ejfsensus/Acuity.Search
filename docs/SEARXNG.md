@@ -73,3 +73,17 @@ curl -s -o /dev/null -w "%{http_code}\n" "$SEARXNG_API_URL/search?q=test&format=
    (`skipped-disabled`, `SEARXNG_CIRCUIT_OPEN`) for 5 minutes, then probed
    again. Skipped attempts do not mark the run `partial`.
 4. `GET /api/acuity-search/admin/health` reports the circuit state.
+
+## Private Acuity instance (deploy/searxng)
+
+`deploy/searxng/Dockerfile` builds a private SearXNG for Acuity.Search:
+
+- `settings.yml`: `html` + `json` formats, port `8080`, limiter on, no real secret committed.
+- `limiter.toml`: private-network ranges pass the limiter.
+- `entrypoint.sh` refuses to start without `SEARXNG_SECRET` (>=32 chars).
+
+Deploy it as its own Railway service with **no public domain** and point
+Acuity.Search at `SEARXNG_API_URL=http://<service>.railway.internal:8080`.
+The existing Morphic-project instance is left untouched (its JSON format returns 403).
+The base-image entrypoint path (`/usr/local/searxng/entrypoint.sh`) should be
+confirmed against the pinned image tag at deploy time.

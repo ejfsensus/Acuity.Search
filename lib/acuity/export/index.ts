@@ -2,8 +2,14 @@ import crypto from 'node:crypto'
 
 import type { SearchRunState } from '@/lib/acuity/search/contracts'
 
+export const RESEARCH_BUNDLE_SCHEMA_VERSION = 'acuity.research-bundle.v1.1'
+export const ACCEPTED_BUNDLE_SCHEMA_VERSIONS = [
+  'acuity.research-bundle.v1',
+  'acuity.research-bundle.v1.1'
+] as const
+
 export interface ResearchBundleV1 {
-  schemaVersion: 'acuity.research-bundle.v1'
+  schemaVersion: 'acuity.research-bundle.v1' | 'acuity.research-bundle.v1.1'
   exampleOnly?: false
   bundleId: string
   exportedAt: string
@@ -36,6 +42,12 @@ export interface ResearchBundleV1 {
     createdAt: string
     model: string | null
     markdown: string
+    /** v1.1: synthesized | results-only | fallback-results-only */
+    mode?: string
+    disclosureNote?: string
+    /** v1.1: structured map from each cited label (S1…) to its source/evidence. */
+    citations?: Record<string, { sourceId: string; evidenceIds: string[] }>
+    unresolvedLabels?: string[]
   }
   sources: Array<{
     sourceId: string
@@ -55,6 +67,11 @@ export interface ResearchBundleV1 {
     authors?: string[]
     translators?: string[]
     editionOrYear?: string
+    /** v1.1 */
+    snippet?: string
+    accessStatus?: string
+    literatureFormat?: string
+    workTitle?: string
   }>
   evidence: Array<{
     evidenceId: string
@@ -82,11 +99,98 @@ export interface ResearchBundleV1 {
     evidenceIds: string[]
     tags: string[]
   }>
+  /** v1.1: provider coverage and honest limitations of the run. */
+  coverage?: {
+    providerStatuses: Array<{ provider: string; status: string }>
+    searchedTargetHosts: string[]
+    unsearchedTargetHosts: string[]
+    limitations: string[]
+  }
+  /** v1.1 */
+  provenance?: {
+    product: 'Acuity.Search'
+    generatedContentIsPrimarySource: false
+    upstreamRunId: string
+  }
   integrity: {
     manifestEntries: Array<{
       path: string
       sha256: string
     }>
+  }
+}
+
+/** Builds the v1.1 structured citation map from the answer and the run's sources. */
+export function buildCitationMap(run: SearchRunState): {
+  citations: Record<string, { sourceId: string; evidenceIds: string[] }>
+  unresolved: string[]
+} {
+  const answer = run.answers[run.answers.length - 1]
+  const citations: Record<string, { sourceId: string; evidenceIds: string[] }> =
+    {}
+  const unresolved: string[] = []
+  if (!answer) return { citations, unresolved }
+  const byLabel = new Map(run.results.map(r => [r.citationLabel, r]))
+  const labels = new Set<string>(answer.citations?.citedLabels ?? [])
+  for (const m of answer.markdown.matchAll(/\[(S\d+)\]/g)) labels.add(m[1])
+  for (const label of Array.from(labels).sort(
+    (a, b) => Number(a.slice(1)) - Number(b.slice(1))
+  )) {
+    const src = byLabel.get(label)
+    if (!src) {
+      unresolved.push(label)
+      continue
+    }
+    const evidenceIds = run.evidence
+      .filter(e => e.sourceId === src.id)
+      .map(e => e.id)
+    citations[label] = { sourceId: src.id, evidenceIds }
+  }
+  return { citations, unresolved }
+}
+
+function buildCoverage(
+  run: SearchRunState
+): NonNullable<ResearchBundleV1['coverage']> {
+  const statusByProvider = new Map<string, string>()
+  const rank: Record<string, number> = {
+    succeeded: 3,
+    partial: 2,
+    failed: 1
+  }
+  for (const att of run.providerAttempts) {
+    const prev = statusByProvider.get(att.provider)
+    const next = att.status
+    if (!prev || (rank[next] ?? 0) > (rank[prev] ?? 0))
+      statusByProvider.set(att.provider, next)
+  }
+  const searched = new Set<string>()
+  const unsearched = new Set<string>()
+  for (const cell of run.coverage) {
+    if (
+      cell.status === 'succeeded' ||
+      cell.status === 'attempted' ||
+      cell.resultCount > 0
+    )
+      searched.add(cell.hostname)
+    else unsearched.add(cell.hostname)
+  }
+  for (const h of searched) unsearched.delete(h)
+  const limitations = [...run.warnings]
+  const extracted = new Set(run.evidence.map(e => e.sourceId))
+  const snippetOnly = run.results.filter(r => !extracted.has(r.id)).length
+  if (snippetOnly > 0)
+    limitations.push(
+      `${snippetOnly} source(s) have no extracted passage (snippet or metadata only).`
+    )
+  return {
+    providerStatuses: Array.from(statusByProvider, ([provider, status]) => ({
+      provider,
+      status
+    })),
+    searchedTargetHosts: Array.from(searched),
+    unsearchedTargetHosts: Array.from(unsearched),
+    limitations
   }
 }
 
@@ -188,6 +292,14 @@ export function exportRunToResearchBundle(
       : {}),
     ...(src.literature?.editionOrYear
       ? { editionOrYear: src.literature.editionOrYear }
+      : {}),
+    ...(src.snippet ? { snippet: src.snippet } : {}),
+    accessStatus: src.accessStatus,
+    ...(src.literature?.format
+      ? { literatureFormat: src.literature.format }
+      : {}),
+    ...(src.literature?.workTitle
+      ? { workTitle: src.literature.workTitle }
       : {})
   }))
 
@@ -240,14 +352,22 @@ export function exportRunToResearchBundle(
     }))
   }
 
+  const citationMap = buildCitationMap(run)
   const answerPayload = latestAnswer
     ? {
         answerVersionId: latestAnswer.id,
         createdAt: latestAnswer.createdAt,
         model: latestAnswer.modelId,
-        markdown: latestAnswer.markdown
+        markdown: latestAnswer.markdown,
+        mode: latestAnswer.mode,
+        ...(latestAnswer.disclosureNote
+          ? { disclosureNote: latestAnswer.disclosureNote }
+          : {}),
+        citations: citationMap.citations,
+        unresolvedLabels: citationMap.unresolved
       }
     : undefined
+  const coveragePayload = buildCoverage(run)
 
   // Compute detached section SHA-256 manifest so there is no circular self-hash
   const manifestEntries: Array<{ path: string; sha256: string }> = [
@@ -269,6 +389,11 @@ export function exportRunToResearchBundle(
     }
   ]
 
+  manifestEntries.push({
+    path: '/coverage',
+    sha256: computeSha256Hex(JSON.stringify(coveragePayload))
+  })
+
   if (answerPayload) {
     manifestEntries.push({
       path: '/answer',
@@ -277,7 +402,7 @@ export function exportRunToResearchBundle(
   }
 
   return {
-    schemaVersion: 'acuity.research-bundle.v1',
+    schemaVersion: RESEARCH_BUNDLE_SCHEMA_VERSION,
     exampleOnly: false,
     bundleId: `bundle-${run.runId}`,
     exportedAt,
@@ -290,6 +415,12 @@ export function exportRunToResearchBundle(
     sources: sourcesPayload,
     evidence: evidencePayload,
     codexCandidates,
+    coverage: coveragePayload,
+    provenance: {
+      product: 'Acuity.Search',
+      generatedContentIsPrimarySource: false,
+      upstreamRunId: run.runId
+    },
     integrity: {
       manifestEntries
     }
@@ -311,9 +442,13 @@ export function validateResearchBundleForImport(bundle: unknown): {
   }
 
   const record = bundle as Record<string, any>
-  if (record.schemaVersion !== 'acuity.research-bundle.v1') {
+  if (
+    !(ACCEPTED_BUNDLE_SCHEMA_VERSIONS as readonly string[]).includes(
+      record.schemaVersion
+    )
+  ) {
     errors.push(
-      `Unsupported schemaVersion: ${String(record.schemaVersion)} (expected acuity.research-bundle.v1)`
+      `Unsupported schemaVersion: ${String(record.schemaVersion)} (expected ${ACCEPTED_BUNDLE_SCHEMA_VERSIONS.join(' or ')})`
     )
   }
 
@@ -356,6 +491,23 @@ export function validateResearchBundleForImport(bundle: unknown): {
     record.integrity.manifestEntries.length === 0
   ) {
     errors.push('integrity.manifestEntries must be a non-empty array')
+  } else {
+    const sections: Record<string, unknown> = {
+      '/queryRun': record.queryRun,
+      '/sources': record.sources,
+      '/evidence': record.evidence,
+      '/codexCandidates': record.codexCandidates,
+      '/coverage': record.coverage,
+      '/answer': record.answer
+    }
+    for (const entry of record.integrity.manifestEntries) {
+      if (!entry || typeof entry.path !== 'string') continue
+      if (!(entry.path in sections)) continue
+      const actual = computeSha256Hex(JSON.stringify(sections[entry.path]))
+      if (actual !== String(entry.sha256).toLowerCase()) {
+        errors.push(`Integrity manifest mismatch on ${entry.path}`)
+      }
+    }
   }
 
   return {
