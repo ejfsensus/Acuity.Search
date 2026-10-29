@@ -90,7 +90,8 @@ export function AddToCodexButton({
         onClick={() =>
           isHome && state === 'idle' ? setState('naming') : void send()
         }
-        className="min-h-11 whitespace-nowrap rounded-full border border-[#7fb7a4]/80 bg-[#7fb7a4]/15 px-4 py-1 font-mono text-[12px] text-[#bfe3d6] hover:bg-[#7fb7a4]/25 disabled:opacity-60"
+        title={label}
+        className="min-h-11 max-w-full truncate whitespace-nowrap rounded-full border border-[#7fb7a4]/80 bg-[#7fb7a4]/15 px-4 py-1 font-mono text-[12px] text-[#bfe3d6] hover:bg-[#7fb7a4]/25 disabled:opacity-60"
       >
         {state === 'naming' ? 'Create sphere' : label}
       </button>
