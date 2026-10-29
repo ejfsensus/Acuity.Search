@@ -97,9 +97,21 @@ describe('embed session route', () => {
     expect(cookie).toContain(`${EMBED_SESSION_COOKIE_NAME}=`)
     expect(cookie).toContain('HttpOnly')
     expect(cookie).toContain('SameSite=Lax')
+    expect(cookie).not.toContain('Secure') // plain http in tests
     const value = decodeURIComponent(cookie.split(';')[0].split('=')[1])
     expect(verifyEmbedSession(value)?.sub).toBe('user:alice')
     expect((await post(token)).status).toBe(401)
+  })
+  it('marks the cookie Secure; Partitioned behind an HTTPS proxy', async () => {
+    const { POST } = await import('@/app/api/acuity-search/embed/session/route')
+    const res = await POST(
+      new Request('http://search/api/acuity-search/embed/session', {
+        method: 'POST',
+        headers: { 'x-forwarded-proto': 'https' },
+        body: JSON.stringify({ token: launch() })
+      })
+    )
+    expect(res.headers.get('set-cookie')).toContain('Secure; Partitioned')
   })
   it('404s when embed mode is off (standalone unchanged)', async () => {
     vi.stubEnv('ACUITY_EMBED_ENABLED', 'false')

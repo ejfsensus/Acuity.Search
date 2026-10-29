@@ -180,14 +180,18 @@ export function verifyEmbedSession(
   }
 }
 
-export function embedSessionCookie(
-  value: string,
-  env: Env = process.env
-): string {
-  const secure = env.NODE_ENV === 'production'
+export function embedSessionCookie(value: string, secure: boolean): string {
   // codex.* and search.* are same-site subdomains, so Lax is sent in the
   // iframe; Partitioned keeps it in CHIPS storage if browsers partition anyway.
+  // Secure (and Partitioned, which requires it) whenever served over HTTPS.
   return `${EMBED_SESSION_COOKIE_NAME}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_TTL_S}${secure ? '; Secure; Partitioned' : ''}`
+}
+
+/** True when the request reached us over HTTPS (directly or via a proxy). */
+export function isHttpsRequest(req: Request): boolean {
+  const forwarded = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim()
+  if (forwarded) return forwarded === 'https'
+  return new URL(req.url).protocol === 'https:'
 }
 
 export function readCookie(header: string | null, name: string): string | null {

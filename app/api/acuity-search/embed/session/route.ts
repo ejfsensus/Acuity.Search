@@ -4,6 +4,7 @@ import {
   claimJti,
   embedSessionCookie,
   isEmbedEnabled,
+  isHttpsRequest,
   signEmbedSession,
   verifyLaunchToken
 } from '@/lib/acuity/embed'
@@ -25,7 +26,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'token already used' }, { status: 401 })
   const session = signEmbedSession({ sub: claims.sub, ctx: claims.ctx })
   const res = NextResponse.json({ ok: true, ctx: claims.ctx })
-  res.headers.append('Set-Cookie', embedSessionCookie(session))
+  res.headers.append(
+    'Set-Cookie',
+    embedSessionCookie(session, isHttpsRequest(req))
+  )
   res.headers.set('Cache-Control', 'no-store')
   return res
 }
