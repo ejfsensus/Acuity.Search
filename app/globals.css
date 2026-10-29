@@ -624,3 +624,24 @@
     transition: none;
   }
 }
+
+/* mobile-native baseline: no grey tap flash, no landscape font inflation, and no
+   scroll chaining / pull-to-refresh (inside Codex's iframe this stopped the parent page
+   from rubber-banding when the results list hits its end). */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+html,
+body {
+  overscroll-behavior: none;
+}
+/* iOS zooms into fields under 16px and never zooms back out. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em) !important;
+  }
+}

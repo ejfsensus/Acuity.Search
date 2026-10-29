@@ -984,18 +984,18 @@ export function AcuitySearchWorkspace({
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         onClick={() => setLedgerOpen(prev => !prev)}
-                        className="min-h-11 rounded-full border border-[#35313c] bg-[#181820] px-4 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
+                        className="min-h-11 whitespace-nowrap rounded-full border border-[#35313c] bg-[#181820] px-4 py-1 font-mono text-[12px] text-[#b3b0bd] hover:border-[#d4a843] hover:text-[#e8c96a]"
                       >
                         {ledgerOpen ? 'Hide Ledger' : 'Inspect Ledger'}
                       </button>
                       <button
                         type="button"
                         onClick={() => setShareModalOpen(true)}
-                        className="min-h-11 rounded-full border border-[#d4a843]/80 bg-[#d4a843]/15 px-4 py-1 font-mono text-[12px] text-[#e8c96a] hover:bg-[#d4a843]/25"
+                        className="min-h-11 whitespace-nowrap rounded-full border border-[#d4a843]/80 bg-[#d4a843]/15 px-4 py-1 font-mono text-[12px] text-[#e8c96a] hover:bg-[#d4a843]/25"
                       >
                         Share / Export
                       </button>

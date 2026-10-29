@@ -74,14 +74,14 @@ export function AddToCodexButton({
           : `Add to ${embed.target.kind === 'sphere' && embed.target.title ? embed.target.title : 'this sphere'}`
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto">
       {state === 'naming' && (
         <input
           aria-label="New sphere name"
           value={title}
           onChange={e => setTitle(e.target.value)}
           maxLength={200}
-          className="min-h-11 w-56 rounded-full border border-[#35313c] bg-[#181820] px-3 font-mono text-[12px] text-[#e8e6ef]"
+          className="min-h-11 w-full min-w-0 rounded-full border border-[#35313c] bg-[#181820] px-3 font-mono text-[16px] text-[#e8e6ef] sm:w-56 [@media(pointer:fine)]:text-[12px]"
         />
       )}
       <button
@@ -90,7 +90,7 @@ export function AddToCodexButton({
         onClick={() =>
           isHome && state === 'idle' ? setState('naming') : void send()
         }
-        className="min-h-11 rounded-full border border-[#7fb7a4]/80 bg-[#7fb7a4]/15 px-4 py-1 font-mono text-[12px] text-[#bfe3d6] hover:bg-[#7fb7a4]/25 disabled:opacity-60"
+        className="min-h-11 whitespace-nowrap rounded-full border border-[#7fb7a4]/80 bg-[#7fb7a4]/15 px-4 py-1 font-mono text-[12px] text-[#bfe3d6] hover:bg-[#7fb7a4]/25 disabled:opacity-60"
       >
         {state === 'naming' ? 'Create sphere' : label}
       </button>

@@ -51,7 +51,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  minimumScale: 1
+  minimumScale: 1,
+  // mobile-native: draw under the notch (content pads with env()), Android keyboard resizes layout.
+  viewportFit: 'cover',
+  interactiveWidget: 'resizes-content'
 }
 
 export default async function RootLayout({
