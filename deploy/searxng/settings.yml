@@ -48,7 +48,8 @@ outgoing:
 
 engines:
   - name: google
-    disabled: false
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
     inactive: false
   - name: google news
     disabled: false
@@ -63,7 +64,8 @@ engines:
     disabled: false
     inactive: false
   - name: duckduckgo
-    disabled: false
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
     inactive: false
   - name: duckduckgo news
     disabled: false
@@ -87,7 +89,8 @@ engines:
     disabled: false
     inactive: false
   - name: qwant
-    disabled: false
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
     inactive: false
   - name: qwant news
     disabled: false
