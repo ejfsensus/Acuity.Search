@@ -1,6 +1,7 @@
 import crypto from 'node:crypto'
 
 import { getAcuityConfig } from '@/lib/acuity/config'
+import { embedSessionFromRequest } from '@/lib/acuity/embed'
 import { getCurrentUser } from '@/lib/auth/get-current-user'
 import { isAnonymousMode } from '@/lib/auth/provider'
 
@@ -101,6 +102,13 @@ export async function resolveRequestActor(
   const readiness = validateMultiUserReadiness()
   if (!readiness.ready) {
     throw new Error(readiness.error)
+  }
+
+  // Embedded in Codex: the signed embed session (from a single-use launch
+  // token) identifies the Codex user. Only active with ACUITY_EMBED_ENABLED.
+  const embed = embedSessionFromRequest(req)
+  if (embed) {
+    return { actorId: `codex:${embed.sub}`, isGuest: false }
   }
 
   // Try authenticated user first (when not in anonymous mode)

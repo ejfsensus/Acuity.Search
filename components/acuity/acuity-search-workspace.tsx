@@ -54,6 +54,8 @@ const EvidenceDrawer = dynamic(
   () => import('./evidence-drawer').then(m => m.EvidenceDrawer),
   { ssr: false }
 )
+import { AddToCodexButton, type EmbedProps } from './add-to-codex'
+
 const ShareExportModal = dynamic(
   () => import('./share-export-modal').then(m => m.ShareExportModal),
   { ssr: false }
@@ -86,6 +88,8 @@ export interface AcuityWorkspaceInitialProps {
   providerStatuses: Record<ProviderId, ProviderConfigStatus>
   llmMode?: string
   llmConfigured?: boolean
+  /** Present only on /embed (inside Codex). */
+  embed?: EmbedProps
 }
 
 /**
@@ -99,7 +103,8 @@ function formatInlineCitationsForStreamdown(markdown: string): string {
 export function AcuitySearchWorkspace({
   topicGroups,
   entries,
-  providerStatuses
+  providerStatuses,
+  embed
 }: AcuityWorkspaceInitialProps) {
   // Primary Discovery Controls (Seamless & Minimal for End User)
   const [query, setQuery] = useState('')
@@ -994,6 +999,17 @@ export function AcuitySearchWorkspace({
                       >
                         Share / Export
                       </button>
+                      {embed && (
+                        <AddToCodexButton
+                          runId={currentRun.runId}
+                          query={currentRun.request.query}
+                          embed={embed}
+                          disabled={
+                            currentRun.status !== 'completed' &&
+                            currentRun.status !== 'partial'
+                          }
+                        />
+                      )}
                     </div>
                   </div>
 
