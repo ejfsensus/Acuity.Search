@@ -8,7 +8,7 @@ server:
   base_url: false # "http://example.com/location"
   # rate limit the number of request on the instance, block some bots.
   # Is overwritten by ${SEARXNG_LIMITER}
-  limiter: true
+  limiter: false
   # enable features designed only for public instances.
   # Is overwritten by ${SEARXNG_PUBLIC_INSTANCE}
   public_instance: false
@@ -33,6 +33,107 @@ server:
     Referrer-Policy: no-referrer
 
 search:
+  # Uncensored: no safe search, all categories, no filtering.
+  safe_search: 0
+  autocomplete: ''
   formats:
     - html
     - json
+
+outgoing:
+  request_timeout: 6.0
+  max_request_timeout: 10.0
+  pool_connections: 100
+  pool_maxsize: 20
+
+engines:
+  - name: google
+    disabled: false
+    inactive: false
+  - name: google news
+    disabled: false
+    inactive: false
+  - name: google scholar
+    disabled: false
+    inactive: false
+  - name: bing
+    disabled: false
+    inactive: false
+  - name: bing news
+    disabled: false
+    inactive: false
+  - name: duckduckgo
+    disabled: false
+    inactive: false
+  - name: duckduckgo news
+    disabled: false
+    inactive: false
+  - name: brave
+    disabled: false
+    inactive: false
+  - name: brave.news
+    disabled: false
+    inactive: false
+  - name: startpage
+    disabled: false
+    inactive: false
+  - name: startpage news
+    disabled: false
+    inactive: false
+  - name: mojeek
+    disabled: false
+    inactive: false
+  - name: mojeek news
+    disabled: false
+    inactive: false
+  - name: qwant
+    disabled: false
+    inactive: false
+  - name: qwant news
+    disabled: false
+    inactive: false
+  - name: yahoo
+    disabled: false
+    inactive: false
+  - name: yahoo news
+    disabled: false
+    inactive: false
+  - name: wikipedia
+    disabled: false
+    inactive: false
+  - name: wikidata
+    disabled: false
+    inactive: false
+  - name: arxiv
+    disabled: false
+    inactive: false
+  - name: semantic scholar
+    disabled: false
+    inactive: false
+  - name: pubmed
+    disabled: false
+    inactive: false
+  - name: crossref
+    disabled: false
+    inactive: false
+  - name: github
+    disabled: false
+    inactive: false
+  - name: stackoverflow
+    disabled: false
+    inactive: false
+  - name: askubuntu
+    disabled: false
+    inactive: false
+  - name: superuser
+    disabled: false
+    inactive: false
+  - name: annas archive
+    disabled: false
+    inactive: false
+  - name: library genesis
+    disabled: false
+    inactive: false
+  - name: openlibrary
+    disabled: false
+    inactive: false
