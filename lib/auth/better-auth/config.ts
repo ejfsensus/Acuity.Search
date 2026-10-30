@@ -391,6 +391,10 @@ function createAuth() {
               discoveryUrl: `${getOidcIssuer()}/.well-known/openid-configuration`,
               clientId: getOidcClientId(),
               clientSecret: getOidcClientSecret(),
+              // Token-endpoint client auth. acuity-auth registers clients as
+              // client_secret_basic; OIDC_TOKEN_AUTH=post for IdPs that need it.
+              authentication:
+                process.env.OIDC_TOKEN_AUTH?.trim() === 'post' ? 'post' : 'basic',
               scopes: (
                 process.env.OIDC_SCOPE?.trim() || 'openid profile email'
               ).split(' '),
