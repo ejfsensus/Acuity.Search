@@ -35,7 +35,7 @@ import type {
 } from '@/lib/auth/types'
 import { db } from '@/lib/db'
 
-import { getOidcProviderId } from '../oauth-config'
+import { getOidcProviderId, isLocalLoginEnabled } from '../oauth-config'
 
 /**
  * Whether an account already exists for the address. Used to decide whether
@@ -229,6 +229,9 @@ export const betterAuthProvider: AuthProvider = {
       // The button label and readiness come from the server: OIDC_* env vars
       // are invisible to the client bundle, so the form cannot decide itself.
       oauthProvider: oidcConfigured ? getOidcProviderName() : null,
+      // Never hide the password form when no IdP is usable: that would lock
+      // everyone out regardless of AUTH_LOCAL_LOGIN_ENABLED.
+      localLogin: isLocalLoginEnabled() || !oidcConfigured,
       emailVerification: false,
       share: true
     }
@@ -362,6 +365,12 @@ export const betterAuthProvider: AuthProvider = {
     email: string
     password: string
   }): Promise<AuthActionResult> {
+    if (!isLocalLoginEnabled() && isOidcConfigured()) {
+      return {
+        success: false,
+        error: 'Password sign-in is disabled. Continue with Acuity instead.'
+      }
+    }
     if (!(await attemptAllowed('sign-in', email))) {
       return { success: false, error: TOO_MANY_REQUESTS }
     }

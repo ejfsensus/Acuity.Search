@@ -27,6 +27,7 @@ const capabilities = {
   deleteUser: true,
   oauth: true,
   oauthProvider: null as string | null,
+  localLogin: true as boolean,
   emailVerification: true,
   share: true
 }
@@ -350,5 +351,18 @@ describe('LoginForm', () => {
     expect(
       screen.queryByRole('link', { name: 'Sign Up' })
     ).not.toBeInTheDocument()
+  })
+
+  it('hides the password form when local login is disabled', () => {
+    renderForm({ oauth: true, oauthProvider: 'Acuity', localLogin: false })
+    expect(
+      screen.getByRole('button', { name: 'Sign In with Acuity' })
+    ).toBeTruthy()
+    expect(screen.queryByLabelText('Password')).toBeNull()
+  })
+
+  it('shows the password form by default (fallback on)', () => {
+    renderForm({ oauth: true, oauthProvider: 'Acuity' })
+    expect(screen.getByLabelText('Password')).toBeTruthy()
   })
 })

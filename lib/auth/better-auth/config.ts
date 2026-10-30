@@ -8,8 +8,12 @@ import { asc, count, eq, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
 
 import {
+  getOidcClientId,
+  getOidcClientSecret,
+  getOidcIssuer,
   getOidcProviderId,
   getOidcProviderName as getOidcProviderNameUtil,
+  idpEnforcesSignup,
   isOidcConfigured as isOidcConfiguredUtil
 } from '../oauth-config'
 
@@ -313,6 +317,7 @@ export async function countAuthUsers(): Promise<number> {
 export async function validateOidcUserCreation(
   data: {
     source?: { action?: string; method?: string } | null | undefined
+    user?: { email?: string | null; emailVerified?: boolean | null } | null
   },
   countUsers: () => Promise<number>
 ): Promise<{ error: string; errorDescription?: string } | undefined> {
@@ -322,7 +327,9 @@ export async function validateOidcUserCreation(
   }
 
   try {
-    if (getSignUpMode() !== 'open') {
+    const idpVerified =
+      idpEnforcesSignup() && data?.user?.emailVerified === true
+    if (getSignUpMode() !== 'open' && !idpVerified) {
       return {
         error: 'sign_up_not_allowed',
         errorDescription:
@@ -381,9 +388,9 @@ function createAuth() {
               // discovery URL becomes "...//.well-known/..." and most IdPs
               // answer 404, which better-auth reports as "discovery left no
               // usable authorization endpoint or token exchange".
-              discoveryUrl: `${process.env.OIDC_ISSUER?.trim().replace(/\/+$/, '')}/.well-known/openid-configuration`,
-              clientId: process.env.OIDC_CLIENT_ID?.trim() ?? '',
-              clientSecret: process.env.OIDC_CLIENT_SECRET?.trim() ?? '',
+              discoveryUrl: `${getOidcIssuer()}/.well-known/openid-configuration`,
+              clientId: getOidcClientId(),
+              clientSecret: getOidcClientSecret(),
               scopes: (
                 process.env.OIDC_SCOPE?.trim() || 'openid profile email'
               ).split(' '),
@@ -446,6 +453,16 @@ function createAuth() {
             })
           }
         : undefined
+    },
+    // Unified login: an existing local account is linked to its Acuity IdP
+    // identity on first OIDC sign-in, but only when the IdP asserts
+    // email_verified (better-auth refuses implicit linking otherwise, as the
+    // provider is deliberately not listed in trustedProviders).
+    account: {
+      accountLinking: {
+        enabled: true,
+        allowDifferentEmails: false
+      }
     },
     plugins: [admin({ defaultRole: 'user' }), ...oidcPlugins, nextCookies()],
     user: {
