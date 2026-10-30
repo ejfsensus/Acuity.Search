@@ -69,7 +69,7 @@ function scrubLibraryPath(value: string): string {
 export function toPublicSource(s: SourceResult): SourceResult {
   return {
     ...s,
-    snippet: clip(s.snippet, PUBLIC_SNIPPET_CHARS),
+    snippet: scrubLibraryPath(clip(s.snippet, PUBLIC_SNIPPET_CHARS)),
     ...(s.passage && {
       passage: { ...s.passage, ref: scrubLibraryPath(s.passage.ref) }
     })
@@ -79,7 +79,7 @@ export function toPublicSource(s: SourceResult): SourceResult {
 export function toPublicEvidence(e: EvidenceRecord): EvidenceRecord {
   return {
     ...e,
-    verbatimText: clip(e.verbatimText, PUBLIC_EVIDENCE_CHARS),
+    verbatimText: scrubLibraryPath(clip(e.verbatimText, PUBLIC_EVIDENCE_CHARS)),
     redirectChain: []
   }
 }
@@ -160,7 +160,9 @@ export function toPublicRun(run: SearchRunState): SearchRunState {
       cited.has(e.citationLabel)
         ? {
             ...e,
-            verbatimText: clip(e.verbatimText, PUBLIC_EVIDENCE_CHARS * 2),
+            verbatimText: scrubLibraryPath(
+              clip(e.verbatimText, PUBLIC_EVIDENCE_CHARS * 2)
+            ),
             redirectChain: []
           }
         : toPublicEvidence(e)
