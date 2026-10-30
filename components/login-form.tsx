@@ -151,57 +151,61 @@ export function LoginForm({
                     : 'Sign In with Google'}
                 </Button>
 
-                <div className="relative my-2">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
+                {capabilities.localLogin !== false && (
+                  <div className="relative my-2">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-muted px-2 text-muted-foreground">
+                        Or
+                      </span>
+                    </div>
                   </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-muted px-2 text-muted-foreground">
-                      Or
-                    </span>
-                  </div>
-                </div>
+                )}
               </>
             )}
 
-            <form onSubmit={handleLogin} className="flex flex-col gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  required
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  {capabilities.passwordReset && (
-                    <Link
-                      href="/auth/forgot-password"
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
-                  )}
+            {capabilities.localLogin !== false && (
+              <form onSubmit={handleLogin} className="flex flex-col gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
                 </div>
-                <PasswordInput
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  required
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Sign In'}
-              </Button>
-            </form>
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                    <Label htmlFor="password">Password</Label>
+                    {capabilities.passwordReset && (
+                      <Link
+                        href="/auth/forgot-password"
+                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    )}
+                  </div>
+                  <PasswordInput
+                    id="password"
+                    type="password"
+                    placeholder="********"
+                    required
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                </div>
+                {error && <p className="text-sm text-red-500">{error}</p>}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? 'Logging in...' : 'Sign In'}
+                </Button>
+              </form>
+            )}
           </div>
           {capabilities.signUp && (
             <div className="mt-6 text-center text-sm">
