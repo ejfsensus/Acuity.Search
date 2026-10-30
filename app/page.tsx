@@ -7,6 +7,10 @@ import { getCurrentUser } from '@/lib/auth/get-current-user'
 import { AcuitySearchWorkspace } from '@/components/acuity/acuity-search-workspace'
 import { toClientRegistryEntries } from '@/components/acuity/acuity-types'
 
+// Rendered per request: the Sacred Texts tab depends on runtime env and the
+// reader's session (a build-time prerender would freeze it off).
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const registry = loadDomainRegistry()
   const providerStatuses = toPublicProviderStatuses(getProviderStatuses())
