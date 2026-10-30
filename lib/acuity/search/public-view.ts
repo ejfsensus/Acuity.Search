@@ -61,8 +61,19 @@ export function toPublicAttempt(a: ProviderAttempt): ProviderAttempt {
   }
 }
 
+/** Agent sandbox paths are infrastructure; the reader sees library-relative paths. */
+function scrubLibraryPath(value: string): string {
+  return value.split('docs/sacred-texts/').join('')
+}
+
 export function toPublicSource(s: SourceResult): SourceResult {
-  return { ...s, snippet: clip(s.snippet, PUBLIC_SNIPPET_CHARS) }
+  return {
+    ...s,
+    snippet: clip(s.snippet, PUBLIC_SNIPPET_CHARS),
+    ...(s.passage && {
+      passage: { ...s.passage, ref: scrubLibraryPath(s.passage.ref) }
+    })
+  }
 }
 
 export function toPublicEvidence(e: EvidenceRecord): EvidenceRecord {

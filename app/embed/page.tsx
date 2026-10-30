@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
+import { isSacredTextsAvailable } from '@/lib/acuity/agent/config'
 import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
 import {
   EMBED_SESSION_COOKIE_NAME,
@@ -36,6 +37,7 @@ export default async function EmbedPage() {
       crossCuttingTags={registry.crossCuttingTags}
       providerStatuses={toPublicProviderStatuses(getProviderStatuses())}
       llmConfigured={config.llm.configured}
+      sacredTexts={{ available: isSacredTextsAvailable(), signedIn: true }}
       embed={{
         target: session.ctx,
         parentOrigin: embedAllowedOrigins()[0] ?? null

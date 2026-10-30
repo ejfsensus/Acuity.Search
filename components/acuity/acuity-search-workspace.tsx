@@ -75,6 +75,9 @@ function scopeTagline(
   if (mode === 'literature') {
     return 'Searching the open web for texts, translations & editions'
   }
+  if (mode === 'sacred-texts') {
+    return 'The Library agent reads the Acuity sacred-text library'
+  }
   return selectedGroupCount > 0
     ? 'Open web, with your chosen topics weighted first'
     : 'Open web search · curated & scholarly sources ranked first'
@@ -90,6 +93,8 @@ export interface AcuityWorkspaceInitialProps {
   llmConfigured?: boolean
   /** Present only on /embed (inside Codex). */
   embed?: EmbedProps
+  /** Sacred Texts mode (Acuity.Agent relay): tab shown only when available. */
+  sacredTexts?: { available: boolean; signedIn: boolean }
 }
 
 /**
@@ -104,8 +109,12 @@ export function AcuitySearchWorkspace({
   topicGroups,
   entries,
   providerStatuses,
-  embed
+  embed,
+  sacredTexts
 }: AcuityWorkspaceInitialProps) {
+  const visibleModes: DiscoveryMode[] = sacredTexts?.available
+    ? ['general', 'literature', 'collections', 'sacred-texts']
+    : ['general', 'literature', 'collections']
   // Primary Discovery Controls (Seamless & Minimal for End User)
   const [query, setQuery] = useState('')
   const [mode, setMode] = useState<DiscoveryMode>('general')
@@ -278,6 +287,10 @@ export function AcuitySearchWorkspace({
     }
 
     const activeMode = overrideParams?.mode ?? mode
+    if (activeMode === 'sacred-texts' && !sacredTexts?.signedIn) {
+      setErrorMessage('Sign in to consult the Library.')
+      return
+    }
     const activeGroups =
       overrideParams?.groupIds ??
       (activeMode === 'collections'
@@ -524,7 +537,7 @@ export function AcuitySearchWorkspace({
             aria-label="Discovery modes"
             className="order-3 flex w-full justify-center rounded-full border border-[#35313c] bg-[#111118] p-1 shadow-sm sm:order-2 sm:w-auto"
           >
-            {(['general', 'literature', 'collections'] as const).map(m => {
+            {visibleModes.map(m => {
               const active = mode === m
               return (
                 <button
@@ -744,6 +757,16 @@ export function AcuitySearchWorkspace({
               role="search"
               className="acuity-searchbox relative w-full rounded-3xl border border-[#35313c]/90 bg-[#111118]/95 p-3.5 shadow-[0_12px_48px_rgba(0,0,0,0.55)] transition-colors"
             >
+              {mode === 'sacred-texts' && (
+                <p
+                  role="note"
+                  className="mb-2 rounded-lg border border-[#35313c] bg-[#111118]/80 px-3 py-2 text-[13px] leading-relaxed text-[#b3b0bd]"
+                >
+                  {sacredTexts?.signedIn
+                    ? 'The Library agent reads the Acuity sacred-text library and answers with cited passages. Deep enquiries can take a few minutes.'
+                    : 'Sign in to consult the Library. The Library agent answers from the Acuity sacred-text library with cited passages.'}
+                </p>
+              )}
               <label htmlFor="acuity-enquiry" className="sr-only">
                 Ask Acuity
               </label>

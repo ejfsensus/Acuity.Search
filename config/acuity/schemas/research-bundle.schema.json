@@ -19,7 +19,11 @@
   "properties": {
     "schemaVersion": {
       "type": "string",
-      "enum": ["acuity.research-bundle.v1", "acuity.research-bundle.v1.1"]
+      "enum": [
+        "acuity.research-bundle.v1",
+        "acuity.research-bundle.v1.1",
+        "acuity.research-bundle.v1.2"
+      ]
     },
     "exampleOnly": {
       "type": "boolean"
@@ -67,7 +71,7 @@
         },
         "discoveryMode": {
           "type": "string",
-          "enum": ["general", "literature", "collections"]
+          "enum": ["general", "literature", "collections", "sacred-texts"]
         },
         "depth": {
           "type": "string",
@@ -117,7 +121,7 @@
             "properties": {
               "provider": {
                 "type": "string",
-                "enum": ["searxng", "brave", "tavily", "exa"]
+                "enum": ["searxng", "brave", "tavily", "exa", "acuity-agent"]
               },
               "query": {
                 "type": "string"
@@ -224,7 +228,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["searxng", "brave", "tavily", "exa"]
+              "enum": ["searxng", "brave", "tavily", "exa", "acuity-agent"]
             }
           },
           "contentState": {
@@ -266,6 +270,24 @@
           },
           "workTitle": {
             "type": "string"
+          },
+          "passageId": {
+            "type": "string"
+          },
+          "passageRef": {
+            "type": "string"
+          },
+          "tradition": {
+            "type": "string"
+          },
+          "bookCode": {
+            "type": "string"
+          },
+          "licence": {
+            "type": "string"
+          },
+          "origin": {
+            "enum": ["sacred-text-index", "local-corpus"]
           }
         }
       }
@@ -333,6 +355,9 @@
           },
           "extractedAt": {
             "type": "string"
+          },
+          "verbatim": {
+            "type": "boolean"
           }
         }
       }
@@ -445,6 +470,19 @@
         },
         "upstreamRunId": {
           "type": "string"
+        },
+        "delegate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["product", "chatId"],
+          "properties": {
+            "product": {
+              "const": "Acuity.Agent"
+            },
+            "chatId": {
+              "type": "null"
+            }
+          }
         }
       }
     },

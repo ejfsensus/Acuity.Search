@@ -217,3 +217,15 @@ export class FederationConcurrencyPool {
     }
   }
 }
+
+/**
+ * Sacred Texts mode (Acuity.Agent relay): one Agent run, no provider fan-out.
+ * Total deadline by depth; ACUITY_AGENT_TIMEOUT_MS caps Deep.
+ */
+export const SACRED_TEXTS_BUDGETS: Record<
+  ResearchDepth,
+  { totalLatencyBudgetMs: number }
+> = {
+  quick: { totalLatencyBudgetMs: 120_000 },
+  research: { totalLatencyBudgetMs: 240_000 }
+}

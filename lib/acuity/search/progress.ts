@@ -48,6 +48,8 @@ export interface RunProgress {
   answerText: string
   completedRun: SearchRunState | null
   error: string | null
+  /** Sacred Texts mode: friendly label of what the Library agent is doing. */
+  agentStage: string | null
 }
 
 export function initialProgress(): RunProgress {
@@ -63,7 +65,8 @@ export function initialProgress(): RunProgress {
     extractionsPlanned: 0,
     answerText: '',
     completedRun: null,
-    error: null
+    error: null,
+    agentStage: null
   }
 }
 
@@ -130,6 +133,12 @@ export function reduceProgress(
       }
     case 'run.Error':
       return { ...state, error: event.error }
+    case 'agent.Stage':
+      return {
+        ...state,
+        agentStage: event.label,
+        stage: advance(state.stage, 'searching')
+      }
     default:
       return state
   }

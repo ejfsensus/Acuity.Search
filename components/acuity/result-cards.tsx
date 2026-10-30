@@ -156,7 +156,13 @@ export function CitedSourceRibbon({
 
                 <div className="mt-2 flex items-center justify-between gap-1 border-t border-[#35313c]/40 pt-1.5 font-mono text-[12px] text-[#8e899c]">
                   <span className="truncate">
-                    {providers.map(p => PROVIDER_DISPLAY_NAMES[p]).join(' · ')}
+                    {[
+                      ...providers.map(p => PROVIDER_DISPLAY_NAMES[p]),
+                      src.passage?.tradition,
+                      src.passage?.verbatim ? 'Quoted verbatim' : undefined
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </span>
                   <span className="shrink-0 text-[#b3b0bd]">
                     {CONTENT_STATE_LABELS[src.contentState].label}

@@ -666,7 +666,7 @@ describe('Acuity.Search Acceptance Fixtures (config/acuity/acceptance-fixtures.j
     )
 
     const bundle = exportRunToResearchBundle(run)
-    expect(bundle.schemaVersion).toBe('acuity.research-bundle.v1.1')
+    expect(bundle.schemaVersion).toBe('acuity.research-bundle.v1.2')
     expect(bundle.exampleOnly).toBe(false)
     expect(bundle.evidence[0].sha256).toBe(
       computeVerbatimSha256(run.evidence[0].verbatimText)

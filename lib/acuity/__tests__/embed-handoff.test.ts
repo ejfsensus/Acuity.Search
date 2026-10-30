@@ -221,6 +221,6 @@ describe('handoff', () => {
     const sent = JSON.parse((fetchMock.mock.calls[0] as any)[1].body)
     expect(sent.target).toEqual({ kind: 'home' })
     expect(sent.title).toBe('New sphere')
-    expect(sent.bundle.schemaVersion).toBe('acuity.research-bundle.v1.1')
+    expect(sent.bundle.schemaVersion).toBe('acuity.research-bundle.v1.2')
   })
 })

@@ -1,3 +1,4 @@
+import { executeAgentRun } from '@/lib/acuity/agent/run'
 import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
 import { generateAcuityAnswerVersion } from '@/lib/acuity/prompts'
 import {
@@ -140,6 +141,18 @@ export async function executeFederatedSearchRun(
   const userId = options.userId || 'guest-isolated'
   const isGuest = options.isGuest ?? true
   const nowIso = new Date().toISOString()
+
+  // Sacred Texts mode relays one question to Acuity.Agent; no provider fan-out.
+  if (request.mode === 'sacred-texts') {
+    return executeAgentRun(request, {
+      runId,
+      userId,
+      isGuest,
+      signal: options.signal,
+      onEvent: options.onEvent,
+      fetchImpl: options.fetchImpl
+    })
+  }
 
   const policy = resolveDefaultScopePolicy(request)
   const hadRequestedInclusions =

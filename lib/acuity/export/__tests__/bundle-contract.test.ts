@@ -170,7 +170,7 @@ describe('acuity.research-bundle v1.1 contract', () => {
     const errors: string[] = []
     check(schema, bundle, '$', errors)
     expect(errors).toEqual([])
-    expect(bundle.schemaVersion).toBe('acuity.research-bundle.v1.1')
+    expect(bundle.schemaVersion).toBe('acuity.research-bundle.v1.2')
     expect(bundle.sources[1].snippet).toBe('Snippet only')
     expect(bundle.coverage?.limitations.join(' ')).toContain(
       'no extracted passage'

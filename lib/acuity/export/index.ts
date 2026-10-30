@@ -2,14 +2,17 @@ import crypto from 'node:crypto'
 
 import type { SearchRunState } from '@/lib/acuity/search/contracts'
 
-export const RESEARCH_BUNDLE_SCHEMA_VERSION = 'acuity.research-bundle.v1.1'
+export const RESEARCH_BUNDLE_SCHEMA_VERSION = 'acuity.research-bundle.v1.2'
 export const ACCEPTED_BUNDLE_SCHEMA_VERSIONS = [
   'acuity.research-bundle.v1',
-  'acuity.research-bundle.v1.1'
+  'acuity.research-bundle.v1.1',
+  'acuity.research-bundle.v1.2'
 ] as const
 
+type BundleProvider = 'searxng' | 'brave' | 'tavily' | 'exa' | 'acuity-agent'
+
 export interface ResearchBundleV1 {
-  schemaVersion: 'acuity.research-bundle.v1' | 'acuity.research-bundle.v1.1'
+  schemaVersion: (typeof ACCEPTED_BUNDLE_SCHEMA_VERSIONS)[number]
   exampleOnly?: false
   bundleId: string
   exportedAt: string
@@ -21,7 +24,7 @@ export interface ResearchBundleV1 {
   queryRun: {
     runId: string
     query: string
-    discoveryMode: 'general' | 'literature' | 'collections'
+    discoveryMode: 'general' | 'literature' | 'collections' | 'sacred-texts'
     depth: 'quick' | 'research'
     scope: {
       policy: 'strict' | 'open' | 'collection-and-web-lanes'
@@ -31,7 +34,7 @@ export interface ResearchBundleV1 {
       excludeDomains: string[]
     }
     executedQueries: Array<{
-      provider: 'searxng' | 'brave' | 'tavily' | 'exa'
+      provider: BundleProvider
       query: string
       status: string
       engines?: string[]
@@ -56,7 +59,7 @@ export interface ResearchBundleV1 {
     url: string
     canonicalUrl?: string
     domain: string
-    providers: Array<'searxng' | 'brave' | 'tavily' | 'exa'>
+    providers: BundleProvider[]
     contentState:
       | 'snippet'
       | 'fulltext-excerpt'
@@ -72,6 +75,13 @@ export interface ResearchBundleV1 {
     accessStatus?: string
     literatureFormat?: string
     workTitle?: string
+    /** v1.2: Library passages (Sacred Texts mode). */
+    passageId?: string
+    passageRef?: string
+    tradition?: string
+    bookCode?: string
+    origin?: 'sacred-text-index' | 'local-corpus'
+    licence?: string
   }>
   evidence: Array<{
     evidenceId: string
@@ -90,6 +100,8 @@ export interface ResearchBundleV1 {
       value: string
     }
     extractedAt: string
+    /** v1.2: the answer quotes this passage word for word. */
+    verbatim?: boolean
   }>
   codexCandidates: Array<{
     candidateType: 'source' | 'passage' | 'question' | 'tradition-note'
@@ -111,6 +123,8 @@ export interface ResearchBundleV1 {
     product: 'Acuity.Search'
     generatedContentIsPrimarySource: false
     upstreamRunId: string
+    /** v1.2: the product that produced the answer on Search's behalf. */
+    delegate?: { product: 'Acuity.Agent'; chatId: null }
   }
   integrity: {
     manifestEntries: Array<{
@@ -239,6 +253,16 @@ export function exportRunToMarkdown(run: SearchRunState): string {
       ].filter(Boolean)
       lines.push(`  Literature Metadata: ${litParts.join(' · ')}`)
     }
+    if (src.passage) {
+      const passageParts = [
+        src.passage.tradition ? `Tradition: ${src.passage.tradition}` : null,
+        src.passage.bookCode ? `Book: ${src.passage.bookCode}` : null,
+        `Passage: ${src.passage.ref.split('docs/sacred-texts/').join('')}`,
+        src.passage.verbatim ? 'Quoted verbatim' : null,
+        src.passage.licence ? `Licence: ${src.passage.licence}` : null
+      ].filter(Boolean)
+      lines.push(`  Library Passage: ${passageParts.join(' · ')}`)
+    }
     if (src.snippet) {
       lines.push(`  > ${src.snippet.replace(/\n+/g, ' ')}`)
     }
@@ -300,8 +324,25 @@ export function exportRunToResearchBundle(
       : {}),
     ...(src.literature?.workTitle
       ? { workTitle: src.literature.workTitle }
+      : {}),
+    ...(src.passage
+      ? {
+          passageRef: src.passage.ref.split('docs/sacred-texts/').join(''),
+          origin: src.passage.origin,
+          ...(src.passage.passageId
+            ? { passageId: src.passage.passageId }
+            : {}),
+          ...(src.passage.tradition
+            ? { tradition: src.passage.tradition }
+            : {}),
+          ...(src.passage.bookCode ? { bookCode: src.passage.bookCode } : {}),
+          ...(src.passage.licence ? { licence: src.passage.licence } : {})
+        }
       : {})
   }))
+  const verbatimSources = new Set(
+    run.results.filter(r => r.passage?.verbatim).map(r => r.id)
+  )
 
   const evidencePayload: ResearchBundleV1['evidence'] = run.evidence.map(
     ev => ({
@@ -315,7 +356,8 @@ export function exportRunToResearchBundle(
         type: ev.locator.type,
         value: ev.locator.value
       },
-      extractedAt: ev.extractedAt
+      extractedAt: ev.extractedAt,
+      ...(verbatimSources.has(ev.sourceId) ? { verbatim: true } : {})
     })
   )
 
@@ -419,7 +461,10 @@ export function exportRunToResearchBundle(
     provenance: {
       product: 'Acuity.Search',
       generatedContentIsPrimarySource: false,
-      upstreamRunId: run.runId
+      upstreamRunId: run.runId,
+      ...(run.request.mode === 'sacred-texts'
+        ? { delegate: { product: 'Acuity.Agent' as const, chatId: null } }
+        : {})
     },
     integrity: {
       manifestEntries

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { isSacredTextsAvailable } from '@/lib/acuity/agent/config'
 import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
 import { DEPTH_BUDGETS } from '@/lib/acuity/search/budget'
 import { PROVIDER_CAPABILITIES } from '@/lib/acuity/search/capabilities'
@@ -43,6 +44,9 @@ export async function GET() {
     capabilities: PROVIDER_CAPABILITIES,
     llm: {
       configured: config.llm.configured
+    },
+    sacredTexts: {
+      available: isSacredTextsAvailable()
     },
     codexBridge: {
       enabled: config.codexBridge.enabled,

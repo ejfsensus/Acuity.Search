@@ -2,6 +2,7 @@ import type {
   AccessStatus,
   ContentState,
   DiscoveryMode,
+  ProvenanceProviderId,
   ProviderId,
   ResearchDepth,
   SortOrder
@@ -31,6 +32,13 @@ export const MODE_DESCRIPTIONS: Record<
       'Focused search across 10 curated topic collections and 110 specialist repositories.',
     placeholder:
       'Enquire within the selected topic domains and specialist repositories...'
+  },
+  'sacred-texts': {
+    label: 'Sacred Texts',
+    subtitle:
+      'The Library agent reads the Acuity sacred-text library and answers with cited passages.',
+    placeholder:
+      'Ask the Library about a teaching, passage, or theme across traditions...'
   }
 }
 
@@ -76,7 +84,8 @@ export const SORT_ORDER_LABELS: Record<SortOrder, string> = {
   newest: 'Newest'
 }
 
-export const PROVIDER_DISPLAY_NAMES: Record<ProviderId, string> = {
+export const PROVIDER_DISPLAY_NAMES: Record<ProvenanceProviderId, string> = {
+  'acuity-agent': 'Acuity Library',
   searxng: 'SearXNG',
   brave: 'Brave',
   tavily: 'Tavily',

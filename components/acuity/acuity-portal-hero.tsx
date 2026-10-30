@@ -3,17 +3,18 @@
 import React from 'react'
 
 import type { DomainTopicGroup } from '@/lib/acuity/registry'
+import type { DiscoveryMode } from '@/lib/acuity/search/contracts'
 
 import type { ClientRegistryEntry } from './acuity-types'
 
 interface AcuityPortalHeroProps {
-  mode: 'general' | 'literature' | 'collections'
+  mode: DiscoveryMode
   topicGroups: DomainTopicGroup[]
   selectedGroupIds: string[]
   onToggleGroup: (groupId: string) => void
   onSelectExampleQuery: (
     query: string,
-    mode: 'general' | 'literature' | 'collections',
+    mode: DiscoveryMode,
     groupIds?: string[]
   ) => void
   compact?: boolean

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { ZodError } from 'zod'
 
+import { SacredTextsUnavailableError } from '@/lib/acuity/agent/run'
 import { resolveRequestActor } from '@/lib/acuity/auth'
 import type { SearchStreamEvent } from '@/lib/acuity/search/contracts'
 import {
@@ -16,6 +17,8 @@ import {
   saveSearchRun,
   unregisterRunAbortController
 } from '@/lib/acuity/store'
+
+const KEEPALIVE_MS = 15_000
 
 export async function GET(req: Request) {
   await ensureStoreReady()
@@ -47,6 +50,14 @@ export async function POST(req: Request) {
       req.headers.get('accept')?.includes('text/event-stream') ||
       body?.stream === true
 
+    // Sacred Texts mode: signed-in readers only; guests get the teaser and no Agent call.
+    if (body?.mode === 'sacred-texts' && actor.isGuest) {
+      return NextResponse.json(
+        { error: 'Sign in to consult the Library.', code: 'SIGN_IN_REQUIRED' },
+        { status: 401 }
+      )
+    }
+
     const runId = `run-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
     const abortController = new AbortController()
     registerRunAbortController(runId, abortController)
@@ -70,6 +81,13 @@ export async function POST(req: Request) {
             } catch {}
           }
 
+          // Comment lines keep proxies (Cloudflare ~100 s idle cap) from closing quiet streams.
+          const keepalive = setInterval(() => {
+            try {
+              controller.enqueue(encoder.encode(': keepalive\n\n'))
+            } catch {}
+          }, KEEPALIVE_MS)
+
           try {
             const completedRun = await executeFederatedSearchRun(body, {
               runId,
@@ -83,15 +101,21 @@ export async function POST(req: Request) {
             // Scope errors are reader-actionable; anything else stays in logs.
             console.error('[acuity-search] run failed', err)
             const message =
-              err instanceof StrictScopeValidationError
+              err instanceof StrictScopeValidationError ||
+              err instanceof SacredTextsUnavailableError
                 ? err.message
                 : 'The enquiry could not be completed. Please try again.'
             sendEvent({
               type: 'run.Error',
               runId,
-              error: message
+              error: message,
+              retryable:
+                err instanceof SacredTextsUnavailableError
+                  ? err.retryable
+                  : true
             })
           } finally {
+            clearInterval(keepalive)
             unregisterRunAbortController(runId)
             try {
               controller.close()
@@ -139,6 +163,16 @@ export async function POST(req: Request) {
           code: 'STRICT_SCOPE_VALIDATION_ERROR'
         },
         { status: 400 }
+      )
+    }
+    if (error instanceof SacredTextsUnavailableError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'SACRED_TEXTS_UNAVAILABLE',
+          retryable: error.retryable
+        },
+        { status: 503 }
       )
     }
     if (error instanceof ZodError) {

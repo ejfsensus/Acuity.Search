@@ -46,7 +46,9 @@ export function SearchProgress({
   const currentIdx = STAGE_ORDER.indexOf(progress.stage)
   const fraction = progressFraction(progress)
   const currentLabel =
-    progress.stage === 'done' ? 'Complete' : STAGE_LABELS[progress.stage]
+    progress.stage === 'done'
+      ? 'Complete'
+      : (progress.agentStage ?? STAGE_LABELS[progress.stage])
 
   const detail = (stage: VisibleStage): string | null => {
     if (stage === 'searching' && progress.providersStarted > 0) {

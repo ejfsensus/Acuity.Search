@@ -1,6 +1,11 @@
 import { z } from 'zod'
 
-export const DISCOVERY_MODES = ['general', 'literature', 'collections'] as const
+export const DISCOVERY_MODES = [
+  'general',
+  'literature',
+  'collections',
+  'sacred-texts'
+] as const
 export type DiscoveryMode = (typeof DISCOVERY_MODES)[number]
 
 export const RESEARCH_DEPTHS = ['quick', 'research'] as const
@@ -178,8 +183,11 @@ export interface ProviderAttempt {
   completedAt: string
 }
 
+/** Search providers plus the Acuity.Agent relay used by Sacred Texts mode. */
+export type ProvenanceProviderId = ProviderId | 'acuity-agent'
+
 export interface SourceProvenanceEntry {
-  provider: ProviderId
+  provider: ProvenanceProviderId
   providerRank: number
   variantId: string
   executedQuery: string
@@ -225,6 +233,19 @@ export interface SourceResult {
   qualityTier?: 'curated' | 'scholarly' | 'general' | 'low'
   /** Lexical query relevance 0..1 of title/snippet. */
   relevance?: number
+  /** Sacred Texts mode: the Library passage behind this source. */
+  passage?: LibraryPassage
+}
+
+export interface LibraryPassage {
+  ref: string
+  origin: 'sacred-text-index' | 'local-corpus'
+  tradition?: string
+  bookCode?: string
+  passageId?: string
+  licence?: string
+  /** The answer quotes this passage word for word. */
+  verbatim: boolean
 }
 
 export interface EvidenceLocator {
@@ -375,4 +396,5 @@ export type SearchStreamEvent =
   | { type: 'answer.Delta'; runId: string; textDelta: string }
   | { type: 'answer.Completed'; runId: string; answer: AnswerVersion }
   | { type: 'run.Completed'; runId: string; run: SearchRunState }
-  | { type: 'run.Error'; runId: string; error: string }
+  | { type: 'run.Error'; runId: string; error: string; retryable?: boolean }
+  | { type: 'agent.Stage'; runId: string; label: string }
