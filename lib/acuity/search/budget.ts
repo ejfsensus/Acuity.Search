@@ -226,6 +226,8 @@ export const SACRED_TEXTS_BUDGETS: Record<
   ResearchDepth,
   { totalLatencyBudgetMs: number }
 > = {
-  quick: { totalLatencyBudgetMs: 120_000 },
-  research: { totalLatencyBudgetMs: 240_000 }
+  // The Agent's library research routinely takes 2–3 min (observed 120–150s),
+  // so Quick at 120s aborted every run before the final source list arrived.
+  quick: { totalLatencyBudgetMs: 300_000 },
+  research: { totalLatencyBudgetMs: 480_000 }
 }

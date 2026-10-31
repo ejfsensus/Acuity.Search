@@ -25,7 +25,7 @@ export function getAgentRelayConfig(): AgentRelayConfig {
     .replace(/\/+$/, '')
   const apiKey = (process.env.ACUITY_AGENT_API_KEY || '').trim()
   const enabled = process.env.ACUITY_SEARCH_SACRED_TEXTS_ENABLED === 'true'
-  const timeoutMs = int('ACUITY_AGENT_TIMEOUT_MS', 240_000, 10_000, 600_000)
+  const timeoutMs = int('ACUITY_AGENT_TIMEOUT_MS', 480_000, 10_000, 900_000)
   return {
     enabled,
     configured: Boolean(apiUrl && apiKey && /^https?:\/\//.test(apiUrl)),
@@ -33,7 +33,10 @@ export function getAgentRelayConfig(): AgentRelayConfig {
     apiKey,
     model: (process.env.ACUITY_AGENT_MODEL || 'deepseek-flash').trim(),
     timeoutMs,
-    quickTimeoutMs: Math.min(timeoutMs, 120_000),
+    quickTimeoutMs: Math.min(
+      timeoutMs,
+      int('ACUITY_AGENT_QUICK_TIMEOUT_MS', 300_000, 10_000, 900_000)
+    ),
     idleTimeoutMs: int('ACUITY_AGENT_IDLE_TIMEOUT_MS', 90_000, 5_000, 300_000),
     maxConcurrency: int('ACUITY_AGENT_MAX_CONCURRENCY', 2, 1, 20)
   }
