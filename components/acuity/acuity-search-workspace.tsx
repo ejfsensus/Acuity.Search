@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
+import { IconLogout } from '@tabler/icons-react'
+
 import type { ProviderConfigStatus } from '@/lib/acuity/config'
 import type { DomainTopicGroup } from '@/lib/acuity/registry'
 import type {
@@ -25,8 +27,9 @@ import {
 } from '@/lib/acuity/search/progress'
 import { sortSourceResults } from '@/lib/acuity/search/rank'
 
+import { signOutEverywhere } from '@/components/sign-out-button'
+
 import {
-  AcuityEmblem,
   AcuityPortalHero,
   CURATED_ENQUIRY_PROMPTS,
   TopicDomainScopePanel
@@ -103,6 +106,31 @@ export interface AcuityWorkspaceInitialProps {
  */
 function formatInlineCitationsForStreamdown(markdown: string): string {
   return markdown.replace(/\[(S\d+)\](?!\()/g, '[$1](#cite-$1)')
+}
+
+function WorkspaceSignOut() {
+  const [busy, setBusy] = useState(false)
+  return (
+    <button
+      type="button"
+      data-testid="sign-out"
+      aria-label="Sign out"
+      title="Sign out"
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true)
+        try {
+          await signOutEverywhere()
+        } finally {
+          setBusy(false)
+        }
+      }}
+      className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[#35313c] bg-[#111118] px-3 py-1 font-mono text-[12px] text-[#b3b0bd] transition-colors hover:border-[#d4a843]/60 hover:text-[#fafafa] disabled:opacity-60"
+    >
+      <IconLogout className="size-4" aria-hidden="true" />
+      <span className="hidden sm:inline">Sign out</span>
+    </button>
+  )
 }
 
 export function AcuitySearchWorkspace({
@@ -505,7 +533,14 @@ export function AcuitySearchWorkspace({
               aria-label="Acuity.Search — new enquiry"
               className="flex min-h-11 items-center gap-1.5 rounded-full border border-[#35313c]/80 bg-[#111118] px-2.5 py-1 text-left transition-colors hover:border-[#d4a843] sm:px-3 sm:py-1.5"
             >
-              <AcuityEmblem className="size-5 shrink-0" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand-mark.png"
+                alt=""
+                width={28}
+                height={28}
+                className="size-7 shrink-0 rounded-md"
+              />
               <span className="font-serif text-sm font-medium tracking-tight text-[#fafafa] sm:text-base">
                 Acuity<span className="text-[#d4a843]">.Search</span>
               </span>
@@ -600,6 +635,7 @@ export function AcuitySearchWorkspace({
               <span className="hidden sm:inline">Evidence</span> Ledger
               {currentRun ? ` (${currentRun.evidence.length})` : ''}
             </button>
+            {!embed && <WorkspaceSignOut />}
           </div>
         </div>
       </header>
