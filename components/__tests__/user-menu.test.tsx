@@ -11,7 +11,11 @@ import { AppUserProvider } from '@/lib/contexts/app-user-context'
 import UserMenu from '@/components/user-menu'
 
 vi.mock('@/lib/actions/auth', () => ({
-  signOut: vi.fn()
+  signOut: vi.fn(),
+  getIdpSignOutUrl: vi.fn(
+    async (back: string) =>
+      `https://auth.test/sign-out?return=${encodeURIComponent(back)}`
+  )
 }))
 
 const { mockPush, mockRefresh } = vi.hoisted(() => ({
@@ -95,7 +99,12 @@ describe('UserMenu', () => {
     vi.clearAllMocks()
   })
 
-  it('signs out through the auth server action and refreshes the router', async () => {
+  it('signs out of Search and then the Acuity identity provider', async () => {
+    const assign = vi.fn()
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { ...window.location, origin: 'https://search.test', assign }
+    })
     vi.mocked(signOut).mockResolvedValue({ success: true })
     render(
       <AppUserProvider user={user} capabilities={capabilities}>
@@ -105,13 +114,14 @@ describe('UserMenu', () => {
 
     chatStore.getOrCreate('cached', { messages: [] })
 
-    fireEvent.click(screen.getByRole('menuitem', { name: /Logout/ }))
+    fireEvent.click(screen.getByRole('menuitem', { name: /Sign out/ }))
 
     await waitFor(() => {
       expect(signOut).toHaveBeenCalledTimes(1)
       expect(chatStore.get('cached')).toBeUndefined()
-      expect(mockPush).toHaveBeenCalledWith('/')
-      expect(mockRefresh).toHaveBeenCalled()
+      expect(assign).toHaveBeenCalledWith(
+        'https://auth.test/sign-out?return=https%3A%2F%2Fsearch.test%2Fauth%2Flogin'
+      )
     })
   })
 

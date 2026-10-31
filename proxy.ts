@@ -96,6 +96,6 @@ export const config = {
      *   faces and crawlers received the login page)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|api/favicon|fonts/|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf|txt|xml)$).*)'
+    '/((?!_next/static|_next/image|favicon.ico|api/favicon|fonts/|robots.txt|sitemap.xml|manifest.webmanifest|site.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf|txt|xml)$).*)'
   ]
 }

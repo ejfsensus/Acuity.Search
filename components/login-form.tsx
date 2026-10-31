@@ -17,7 +17,6 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -122,13 +121,20 @@ export function LoginForm({
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
-            <IconLogo className="size-12" />
-            Welcome back
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand-mark.png"
+              alt=""
+              width={56}
+              height={56}
+              className="size-14 rounded-xl"
+            />
+            Acuity.Search
           </CardTitle>
           <CardDescription>
             {confirmed
               ? 'If you just confirmed your email, sign in to continue.'
-              : 'Sign in to your account'}
+              : 'Sign in to continue to Acuity.Search'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -136,7 +142,6 @@ export function LoginForm({
             {capabilities.oauth && (
               <>
                 <Button
-                  variant="outline"
                   type="button"
                   className="w-full"
                   onClick={
@@ -147,7 +152,7 @@ export function LoginForm({
                   disabled={isLoading}
                 >
                   {capabilities.oauthProvider
-                    ? `Sign In with ${capabilities.oauthProvider}`
+                    ? `Continue with ${capabilities.oauthProvider}`
                     : 'Sign In with Google'}
                 </Button>
 
@@ -157,7 +162,7 @@ export function LoginForm({
                       <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-muted px-2 text-muted-foreground">
+                      <span className="bg-card px-2 text-muted-foreground">
                         Or
                       </span>
                     </div>
@@ -167,44 +172,57 @@ export function LoginForm({
             )}
 
             {capabilities.localLogin !== false && (
-              <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    {capabilities.passwordReset && (
-                      <Link
-                        href="/auth/forgot-password"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      >
-                        Forgot password?
-                      </Link>
-                    )}
+              <details
+                open={!capabilities.oauth || undefined}
+                className="group"
+              >
+                <summary className="cursor-pointer text-center text-xs text-muted-foreground hover:underline list-none [&::-webkit-details-marker]:hidden">
+                  {capabilities.oauth
+                    ? 'Use a Search account instead'
+                    : 'Sign in with email'}
+                </summary>
+                <form
+                  onSubmit={handleLogin}
+                  className="mt-4 flex flex-col gap-4"
+                >
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      required
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                    />
                   </div>
-                  <PasswordInput
-                    id="password"
-                    type="password"
-                    placeholder="********"
-                    required
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                  />
-                </div>
-                {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Logging in...' : 'Sign In'}
-                </Button>
-              </form>
+                  <div className="grid gap-2">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password</Label>
+                      {capabilities.passwordReset && (
+                        <Link
+                          href="/auth/forgot-password"
+                          className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                        >
+                          Forgot password?
+                        </Link>
+                      )}
+                    </div>
+                    <PasswordInput
+                      id="password"
+                      type="password"
+                      placeholder="********"
+                      required
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                    />
+                  </div>
+                  {error && <p className="text-sm text-red-500">{error}</p>}
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Sign In'}
+                  </Button>
+                </form>
+              </details>
             )}
           </div>
           {capabilities.signUp && (

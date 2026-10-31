@@ -270,6 +270,40 @@ export const betterAuthProvider: AuthProvider = {
     ]
     const pathname = request.nextUrl.pathname
 
+    // AUTH_REQUIRE_LOGIN=true: the whole app sits behind sign-in. Pages
+    // redirect to /auth/login?next=<original URL>; API calls get 401 JSON.
+    // Codex-embedded requests authenticate with the embed session cookie
+    // (validated by each route), so they pass through here.
+    if (!session && process.env.AUTH_REQUIRE_LOGIN === 'true') {
+      const open = [
+        '/auth',
+        '/share',
+        '/relay',
+        '/embed',
+        '/api/auth',
+        '/api/favicon',
+        '/api/acuity-search/embed/session',
+        '/api/acuity-search/admin/health'
+      ]
+      const isOpen = open.some(
+        p => pathname === p || pathname.startsWith(`${p}/`)
+      )
+      const hasEmbedSession = request.cookies.has('acuity_embed_session')
+      if (!isOpen && !(hasEmbedSession && pathname.startsWith('/api/'))) {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json(
+            { error: 'Sign in required', code: 'SIGN_IN_REQUIRED' },
+            { status: 401 }
+          )
+        }
+        const url = request.nextUrl.clone()
+        url.pathname = '/auth/login'
+        url.search = ''
+        url.searchParams.set('next', pathname + request.nextUrl.search)
+        return NextResponse.redirect(url)
+      }
+    }
+
     if (
       !session &&
       pathname !== '/' &&

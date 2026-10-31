@@ -45,7 +45,16 @@ export const metadata: Metadata = {
     title,
     description,
     card: 'summary_large_image'
-  }
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon-32.png', type: 'image/png', sizes: '32x32' }
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }]
+  },
+  manifest: '/site.webmanifest',
+  appleWebApp: { capable: true, title: 'Search', statusBarStyle: 'black' }
 }
 
 export const viewport: Viewport = {
@@ -54,6 +63,7 @@ export const viewport: Viewport = {
   minimumScale: 1,
   // mobile-native: draw under the notch (content pads with env()), Android keyboard resizes layout.
   viewportFit: 'cover',
+  themeColor: '#000000',
   interactiveWidget: 'resizes-content'
 }
 
