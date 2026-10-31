@@ -465,7 +465,12 @@ function createAuth() {
     account: {
       accountLinking: {
         enabled: true,
-        allowDifferentEmails: false
+        allowDifferentEmails: false,
+        // Local accounts here are created without email verification (no
+        // SMTP). When the Acuity IdP is authoritative for sign-up and asserts
+        // a verified email, let it link to the existing local account of the
+        // same address (sign-up on this instance is invite/bootstrap-gated).
+        requireLocalEmailVerified: !idpEnforcesSignup()
       }
     },
     plugins: [admin({ defaultRole: 'user' }), ...oidcPlugins, nextCookies()],
