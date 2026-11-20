@@ -6,6 +6,8 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { createProviderRegistry, LanguageModel } from 'ai'
 import { createOllama } from 'ai-sdk-ollama'
 
+import { byokLanguageModel } from '@/lib/acuity/byok/openrouter'
+
 // Strip a trailing /v1 from the configured base URL, then re-append it,
 // so both shapes work for OpenAI-compatible hosts:
 //   OPENAI_COMPATIBLE_API_BASE_URL=https://api.deepseek.com
@@ -49,6 +51,12 @@ if (ollamaProvider) {
 export const registry = createProviderRegistry(providers)
 
 export function getModel(model: string): LanguageModel {
+  // Open edition: every model call runs on the member's own OpenRouter key and
+  // chosen model. Throws ByokKeyRequiredError when the member has none; the
+  // deployment's own provider keys are never used.
+  const byok = byokLanguageModel()
+  if (byok) return byok.model
+
   // For Ollama models, bypass the registry to pass model-level settings
   // that ai-sdk-ollama requires (think, supportedUrls override).
   if (model.startsWith('ollama:') && ollamaProvider) {

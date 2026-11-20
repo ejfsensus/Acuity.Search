@@ -24,7 +24,11 @@ export async function POST(req: Request) {
   const { claims } = verified
   if (!(await claimJti(claims.jti, claims.exp)))
     return NextResponse.json({ error: 'token already used' }, { status: 401 })
-  const session = signEmbedSession({ sub: claims.sub, ctx: claims.ctx })
+  const session = signEmbedSession({
+    sub: claims.sub,
+    ...(claims.email ? { email: claims.email } : {}),
+    ctx: claims.ctx
+  })
   const res = NextResponse.json({ ok: true, ctx: claims.ctx })
   res.headers.append(
     'Set-Cookie',

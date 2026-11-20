@@ -3,7 +3,11 @@ import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
 import { SacredTextsUnavailableError } from '@/lib/acuity/agent/run'
-import { resolveRequestActor } from '@/lib/acuity/auth'
+import { byokContextForActor, resolveRequestActor } from '@/lib/acuity/auth'
+import { getByokConfig } from '@/lib/acuity/byok/config'
+import { runWithByok } from '@/lib/acuity/byok/context'
+import { ByokKeyRequiredError } from '@/lib/acuity/byok/errors'
+import { allowByokRun } from '@/lib/acuity/byok/rate-limit'
 import type { SearchStreamEvent } from '@/lib/acuity/search/contracts'
 import {
   executeFederatedSearchRun,
@@ -58,6 +62,40 @@ export async function POST(req: Request) {
       )
     }
 
+    // Open edition: the run may only spend this member's own keys.
+    const byok = await byokContextForActor(actor)
+    if (
+      body?.mode === 'sacred-texts' &&
+      byok.required &&
+      !byok.credentials.openrouter
+    ) {
+      const err = new ByokKeyRequiredError('openrouter', byok.profileUrl)
+      return NextResponse.json(
+        {
+          error:
+            'The Library consultation runs on your own OpenRouter key. Add one in your Acuity profile to use it.',
+          code: err.code,
+          profileUrl: byok.profileUrl
+        },
+        { status: 403 }
+      )
+    }
+    if (
+      byok.required &&
+      byok.credentials.openrouter &&
+      body?.answerPreference !== 'results-only' &&
+      !allowByokRun(actor.actorId, getByokConfig().userRunsPerMinute)
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            'You are sending enquiries very quickly. Please wait a minute and try again.',
+          code: 'BYOK_RATE_LIMITED'
+        },
+        { status: 429, headers: { 'Retry-After': '60' } }
+      )
+    }
+
     const runId = `run-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
     const abortController = new AbortController()
     registerRunAbortController(runId, abortController)
@@ -89,13 +127,15 @@ export async function POST(req: Request) {
           }, KEEPALIVE_MS)
 
           try {
-            const completedRun = await executeFederatedSearchRun(body, {
-              runId,
-              userId: actor.actorId,
-              isGuest: actor.isGuest,
-              signal: abortController.signal,
-              onEvent: sendEvent
-            })
+            const completedRun = await runWithByok(byok, () =>
+              executeFederatedSearchRun(body, {
+                runId,
+                userId: actor.actorId,
+                isGuest: actor.isGuest,
+                signal: abortController.signal,
+                onEvent: sendEvent
+              })
+            )
             saveSearchRun(completedRun)
           } catch (err) {
             // Scope errors are reader-actionable; anything else stays in logs.
@@ -136,12 +176,14 @@ export async function POST(req: Request) {
     }
 
     try {
-      const runState = await executeFederatedSearchRun(body, {
-        runId,
-        userId: actor.actorId,
-        isGuest: actor.isGuest,
-        signal: abortController.signal
-      })
+      const runState = await runWithByok(byok, () =>
+        executeFederatedSearchRun(body, {
+          runId,
+          userId: actor.actorId,
+          isGuest: actor.isGuest,
+          signal: abortController.signal
+        })
+      )
       saveSearchRun(runState)
 
       const headers = new Headers()

@@ -31,6 +31,8 @@ export type EmbedContext =
 
 export interface EmbedSession {
   sub: string
+  /** Verified member email from Codex (lets Search use the member's own AI keys). */
+  email?: string
   ctx: EmbedContext
   exp: number
 }
@@ -62,6 +64,7 @@ export function signLaunchTokenForTests(
 
 export interface LaunchClaims {
   sub: string
+  email?: string
   jti: string
   exp: number
   iat: number
@@ -119,6 +122,11 @@ export function verifyLaunchToken(
     ok: true,
     claims: {
       sub: claims.sub,
+      ...(typeof claims.email === 'string' &&
+      claims.email.length <= 254 &&
+      /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(claims.email)
+        ? { email: claims.email.toLowerCase() }
+        : {}),
       jti: claims.jti,
       exp: claims.exp,
       iat: claims.iat,
@@ -174,6 +182,8 @@ export function verifyEmbedSession(
     const parsed = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'))
     if (typeof parsed.exp !== 'number' || parsed.exp <= nowS) return null
     if (typeof parsed.sub !== 'string') return null
+    if (parsed.email !== undefined && typeof parsed.email !== 'string')
+      return null
     return parsed as EmbedSession
   } catch {
     return null

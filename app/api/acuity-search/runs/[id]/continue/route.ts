@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import { resolveRequestActor } from '@/lib/acuity/auth'
+import { byokContextForActor, resolveRequestActor } from '@/lib/acuity/auth'
+import { runWithByok } from '@/lib/acuity/byok/context'
 import { continueFederatedSearchRun } from '@/lib/acuity/search/federate'
 import { toPublicRun } from '@/lib/acuity/search/public-view'
 import {
@@ -25,11 +26,14 @@ export async function POST(
     )
   }
 
-  const updatedRun = await continueFederatedSearchRun(existingRun, {
-    userId: actor.actorId,
-    isGuest: actor.isGuest,
-    signal: req.signal
-  })
+  const byok = await byokContextForActor(actor)
+  const updatedRun = await runWithByok(byok, () =>
+    continueFederatedSearchRun(existingRun, {
+      userId: actor.actorId,
+      isGuest: actor.isGuest,
+      signal: req.signal
+    })
+  )
   saveSearchRun(updatedRun)
 
   const headers = new Headers()

@@ -1,5 +1,7 @@
 import crypto from 'node:crypto'
 
+import { currentByok } from '@/lib/acuity/byok/context'
+
 import type { AgentRelayConfig } from './config'
 import { type AgentChunk, UiStreamParser } from './sse'
 
@@ -46,6 +48,11 @@ function failureForStatus(status: number): AgentRelayError {
   return new AgentRelayError('unavailable', `Agent returned ${status}`, status)
 }
 
+function byokMemberHeader(): Record<string, string> {
+  const email = currentByok()?.identity?.email
+  return email ? { 'x-acuity-byok-member': email } : {}
+}
+
 export interface RunAgentOptions {
   config: AgentRelayConfig
   question: string
@@ -74,7 +81,10 @@ export async function runAgentQuestion(
   const headers = {
     Authorization: `Bearer ${config.apiKey}`,
     'Content-Type': 'application/json',
-    'x-acuity-on-behalf-of': onBehalfOf(options.userId)
+    'x-acuity-on-behalf-of': onBehalfOf(options.userId),
+    // Open edition: the Agent answers on this member's own OpenRouter key.
+    // Only sent over the relay's authenticated service-account request.
+    ...byokMemberHeader()
   }
 
   const deadline = AbortSignal.timeout(options.deadlineMs)

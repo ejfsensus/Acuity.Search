@@ -1,3 +1,8 @@
+import {
+  composioAccess,
+  composioFailureMessage,
+  composioSearch
+} from '@/lib/acuity/byok/composio'
 import { isPlaceholderValue } from '@/lib/acuity/config'
 import type { DateRangeFilter } from '@/lib/acuity/search/contracts'
 import type {
@@ -62,11 +67,36 @@ export async function executeExaSearch(
 ): Promise<ProviderExecutionOutput> {
   const startedAtDate = new Date()
   const startPerf = performance.now()
-  const apiKey = process.env.EXA_API_KEY?.trim()
+  // Open edition: Exa runs through the member's own Composio project.
+  const access = composioAccess('exa')
+  const apiKey =
+    access.kind === 'env' ? process.env.EXA_API_KEY?.trim() : undefined
 
   const executedQuery = input.query
 
-  if (isPlaceholderValue(apiKey)) {
+  if (access.kind === 'skip') {
+    return {
+      attempt: {
+        attemptId: input.attemptId,
+        provider: 'exa',
+        variantId: input.variantId,
+        executedQuery,
+        targetId: input.targetId,
+        status: 'skipped-unconfigured',
+        latencyMs: Math.round(performance.now() - startPerf),
+        rawResultCount: 0,
+        acceptedResultCount: 0,
+        filteredOutCount: 0,
+        errorCode: access.code,
+        errorMessage: access.message,
+        startedAt: startedAtDate.toISOString(),
+        completedAt: new Date().toISOString()
+      },
+      candidates: []
+    }
+  }
+
+  if (access.kind === 'env' && isPlaceholderValue(apiKey)) {
     return {
       attempt: {
         attemptId: input.attemptId,
@@ -104,31 +134,41 @@ export async function executeExaSearch(
     : timeoutSignal
 
   try {
-    const response = await fetchFn('https://api.exa.ai/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey!
-      },
-      body: JSON.stringify({
-        query: executedQuery,
-        numResults,
-        type: 'auto',
-        contents: {
-          highlights: {
-            numSentences: 3,
-            highlightsPerUrl: 2
-          },
-          text: {
-            maxCharacters: 1200
-          }
+    const nativeBody: Record<string, unknown> = {
+      query: executedQuery,
+      numResults,
+      type: 'auto',
+      contents: {
+        highlights: {
+          numSentences: 3,
+          highlightsPerUrl: 2
         },
-        ...(includeDomains.length > 0 ? { includeDomains } : {}),
-        ...(excludeDomains.length > 0 ? { excludeDomains } : {}),
-        ...(startPublishedDate ? { startPublishedDate } : {})
-      }),
-      signal: combinedSignal
-    })
+        text: {
+          maxCharacters: 1200
+        }
+      },
+      ...(includeDomains.length > 0 ? { includeDomains } : {}),
+      ...(excludeDomains.length > 0 ? { excludeDomains } : {}),
+      ...(startPublishedDate ? { startPublishedDate } : {})
+    }
+    const response =
+      access.kind === 'composio'
+        ? await composioSearch(
+            'exa',
+            access,
+            nativeBody,
+            combinedSignal,
+            fetchFn
+          )
+        : await fetchFn('https://api.exa.ai/search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': apiKey!
+            },
+            body: JSON.stringify(nativeBody),
+            signal: combinedSignal
+          })
 
     if (!response.ok) {
       return {
@@ -145,7 +185,10 @@ export async function executeExaSearch(
           acceptedResultCount: 0,
           filteredOutCount: 0,
           errorCode: `EXA_HTTP_${response.status}`,
-          errorMessage: `Exa returned HTTP ${response.status} ${response.statusText}`,
+          errorMessage:
+            access.kind === 'composio'
+              ? composioFailureMessage('exa', response.status)
+              : `Exa returned HTTP ${response.status} ${response.statusText}`,
           startedAt: startedAtDate.toISOString(),
           completedAt: new Date().toISOString()
         },

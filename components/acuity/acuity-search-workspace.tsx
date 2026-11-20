@@ -58,6 +58,7 @@ const EvidenceDrawer = dynamic(
   { ssr: false }
 )
 import { AddToCodexButton, type EmbedProps } from './add-to-codex'
+import { ByokBanner, type ByokStatusProps } from './byok-banner'
 
 const ShareExportModal = dynamic(
   () => import('./share-export-modal').then(m => m.ShareExportModal),
@@ -98,6 +99,8 @@ export interface AcuityWorkspaceInitialProps {
   embed?: EmbedProps
   /** Sacred Texts mode (Acuity.Agent relay): tab shown only when available. */
   sacredTexts?: { available: boolean; signedIn: boolean }
+  /** Open edition: which of the member's own AI keys are present (never the keys). */
+  byok?: ByokStatusProps
 }
 
 /**
@@ -138,7 +141,8 @@ export function AcuitySearchWorkspace({
   entries,
   providerStatuses,
   embed,
-  sacredTexts
+  sacredTexts,
+  byok
 }: AcuityWorkspaceInitialProps) {
   const visibleModes: DiscoveryMode[] = sacredTexts?.available
     ? ['general', 'literature', 'collections', 'sacred-texts']
@@ -914,6 +918,9 @@ export function AcuitySearchWorkspace({
               </div>
             )}
           </div>
+
+          {/* Open edition: prompt for the member's own keys */}
+          <ByokBanner status={byok} />
 
           {/* Error Banner */}
           {errorMessage && (

@@ -31,6 +31,14 @@ function friendlyError(code?: string): string | undefined {
   if (!code) return undefined
   if (FRIENDLY_ERRORS[code]) return FRIENDLY_ERRORS[code]
   if (code.startsWith('SEARXNG_HTML_FALLBACK')) return undefined
+  // Open edition: Exa and Tavily run on the member's own Composio project.
+  if (code.endsWith('_BYOK_MISSING'))
+    return 'Add your Composio key in your Acuity profile to use this engine.'
+  if (/^(EXA|TAVILY)_HTTP_401$/.test(code))
+    return 'Your Composio key was not accepted.'
+  if (/^(EXA|TAVILY)_HTTP_424$/.test(code))
+    return 'Not connected in your Composio project yet.'
+  if (/^(EXA|TAVILY)_HTTP_429$/.test(code)) return 'Rate-limited just now.'
   if (/UNCONFIGURED|NOT_CONFIGURED|MISSING_KEY/i.test(code)) {
     return 'Not configured.'
   }

@@ -1,5 +1,8 @@
 import { isSacredTextsAvailable } from '@/lib/acuity/agent/config'
-import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
+import { isByokRequired } from '@/lib/acuity/byok/config'
+import { buildByokContext, byokPublicStatus } from '@/lib/acuity/byok/context'
+import { providerStatusesFor } from '@/lib/acuity/byok/status'
+import { getAcuityConfig } from '@/lib/acuity/config'
 import { loadDomainRegistry } from '@/lib/acuity/registry'
 import { toPublicProviderStatuses } from '@/lib/acuity/search/public-view'
 import { getCurrentUser } from '@/lib/auth/get-current-user'
@@ -13,13 +16,18 @@ export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   const registry = loadDomainRegistry()
-  const providerStatuses = toPublicProviderStatuses(getProviderStatuses())
   const config = getAcuityConfig()
   const sacredTextsAvailable = isSacredTextsAvailable()
-  // Only resolve the session when the tab can show (keeps the page static otherwise).
-  const signedIn = sacredTextsAvailable
-    ? Boolean(await getCurrentUser().catch(() => null))
-    : false
+  const byokRequired = isByokRequired()
+  // Only resolve the session when it matters (keeps the page static otherwise).
+  const user =
+    sacredTextsAvailable || byokRequired
+      ? await getCurrentUser().catch(() => null)
+      : null
+  const signedIn = Boolean(user)
+  const byok = await buildByokContext(user?.email ? { email: user.email } : null)
+  const byokStatus = byokPublicStatus(byok)
+  const providerStatuses = toPublicProviderStatuses(providerStatusesFor(byok))
 
   return (
     <AcuitySearchWorkspace
@@ -27,7 +35,10 @@ export default async function Page() {
       entries={toClientRegistryEntries(registry.entries)}
       crossCuttingTags={registry.crossCuttingTags}
       providerStatuses={providerStatuses}
-      llmConfigured={config.llm.configured}
+      llmConfigured={
+        byokStatus.required ? byokStatus.llm : config.llm.configured
+      }
+      byok={byokStatus}
       sacredTexts={{ available: sacredTextsAvailable, signedIn }}
     />
   )

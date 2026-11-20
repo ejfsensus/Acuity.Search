@@ -11,6 +11,8 @@ export interface ResolvedActorIdentity {
   actorId: string
   isGuest: boolean
   setCookieHeader?: string
+  /** Verified Acuity account email (signed-in or embedded member); used to fetch their own AI keys. */
+  email?: string | null
 }
 
 export function signGuestSessionToken(guestId: string, secret: string): string {
@@ -108,7 +110,11 @@ export async function resolveRequestActor(
   // token) identifies the Codex user. Only active with ACUITY_EMBED_ENABLED.
   const embed = embedSessionFromRequest(req)
   if (embed) {
-    return { actorId: `codex:${embed.sub}`, isGuest: false }
+    return {
+      actorId: `codex:${embed.sub}`,
+      isGuest: false,
+      email: embed.email ?? null
+    }
   }
 
   // Try authenticated user first (when not in anonymous mode)
@@ -118,7 +124,8 @@ export async function resolveRequestActor(
       if (user?.id) {
         return {
           actorId: user.id,
-          isGuest: false
+          isGuest: false,
+          email: user.email ?? null
         }
       }
     } catch {
@@ -173,4 +180,12 @@ export async function resolveRequestActor(
     isGuest: true,
     setCookieHeader
   }
+}
+
+/** Builds the member's key context for a request (no keys for guests). */
+export async function byokContextForActor(actor: ResolvedActorIdentity) {
+  const { buildByokContext } = await import('@/lib/acuity/byok/context')
+  return buildByokContext(
+    !actor.isGuest && actor.email ? { email: actor.email } : null
+  )
 }

@@ -1,5 +1,8 @@
 import { executeAgentRun } from '@/lib/acuity/agent/run'
-import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
+import { isByokRequired } from '@/lib/acuity/byok/config'
+import { currentByok } from '@/lib/acuity/byok/context'
+import { providerStatusesFor } from '@/lib/acuity/byok/status'
+import { getAcuityConfig } from '@/lib/acuity/config'
 import { generateAcuityAnswerVersion } from '@/lib/acuity/prompts'
 import {
   compileScopeFromSelection,
@@ -198,7 +201,7 @@ export async function executeFederatedSearchRun(
     warnings.push(plan.scopeConflictWarning)
   }
 
-  const providerStatuses = getProviderStatuses()
+  const providerStatuses = providerStatusesFor(currentByok())
   for (const prov of request.providers) {
     const st = providerStatuses[prov]
     if (!st.configured) {
@@ -548,7 +551,11 @@ export async function executeFederatedSearchRun(
   const synthesisSources = results.filter(r => r.qualityTier !== 'low')
   const noStrongSources = quality.evidenceStrength === 'none'
   // Only skip synthesis when a model would otherwise write an essay.
-  const suppressSynthesis = noStrongSources && getAcuityConfig().llm.configured
+  const suppressSynthesis =
+    noStrongSources &&
+    (isByokRequired()
+      ? Boolean(currentByok()?.credentials.openrouter)
+      : getAcuityConfig().llm.configured)
   const answer = await generateAcuityAnswerVersion({
     versionNumber: 1,
     request: suppressSynthesis

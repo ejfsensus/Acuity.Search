@@ -2,7 +2,9 @@ import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
 import { isSacredTextsAvailable } from '@/lib/acuity/agent/config'
-import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
+import { buildByokContext, byokPublicStatus } from '@/lib/acuity/byok/context'
+import { providerStatusesFor } from '@/lib/acuity/byok/status'
+import { getAcuityConfig } from '@/lib/acuity/config'
 import {
   EMBED_SESSION_COOKIE_NAME,
   embedAllowedOrigins,
@@ -30,13 +32,20 @@ export default async function EmbedPage() {
   }
   const registry = loadDomainRegistry()
   const config = getAcuityConfig()
+  const byok = await buildByokContext(
+    session.email ? { email: session.email } : null
+  )
+  const byokStatus = byokPublicStatus(byok)
   return (
     <AcuitySearchWorkspace
       topicGroups={registry.topicGroups}
       entries={toClientRegistryEntries(registry.entries)}
       crossCuttingTags={registry.crossCuttingTags}
-      providerStatuses={toPublicProviderStatuses(getProviderStatuses())}
-      llmConfigured={config.llm.configured}
+      providerStatuses={toPublicProviderStatuses(providerStatusesFor(byok))}
+      llmConfigured={
+        byokStatus.required ? byokStatus.llm : config.llm.configured
+      }
+      byok={byokStatus}
       sacredTexts={{ available: isSacredTextsAvailable(), signedIn: true }}
       embed={{
         target: session.ctx,
