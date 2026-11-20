@@ -1,3 +1,4 @@
+import { isByokRequired } from '@/lib/acuity/byok/config'
 import { isPlaceholderValue } from '@/lib/acuity/config'
 import type {
   CompiledScope,
@@ -87,7 +88,10 @@ export async function executeBraveSearch(
 ): Promise<ProviderExecutionOutput> {
   const startedAtDate = new Date()
   const startPerf = performance.now()
-  const apiKey = process.env.BRAVE_SEARCH_API_KEY?.trim()
+  // Open edition: Brave would run on Acuity's own key, so it is not used.
+  const apiKey = isByokRequired()
+    ? undefined
+    : process.env.BRAVE_SEARCH_API_KEY?.trim()
 
   const executedQuery = buildBraveScopedQuery(
     input.query,

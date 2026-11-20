@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 
-import { getAcuityConfig, getProviderStatuses } from '@/lib/acuity/config'
+import { isSacredTextsAvailable } from '@/lib/acuity/agent/config'
+import { byokContextForActor, resolveRequestActor } from '@/lib/acuity/auth'
+import { byokPublicStatus } from '@/lib/acuity/byok/context'
+import { providerStatusesFor } from '@/lib/acuity/byok/status'
+import { getAcuityConfig } from '@/lib/acuity/config'
 import { DEPTH_BUDGETS } from '@/lib/acuity/search/budget'
 import { PROVIDER_CAPABILITIES } from '@/lib/acuity/search/capabilities'
 import {
@@ -12,10 +16,14 @@ import {
   SCOPE_POLICIES,
   SORT_ORDERS
 } from '@/lib/acuity/search/contracts'
+import { toPublicProviderStatuses } from '@/lib/acuity/search/public-view'
 
-export async function GET() {
+export async function GET(req: Request) {
   const config = getAcuityConfig()
-  const providerStatuses = getProviderStatuses()
+  const actor = await resolveRequestActor(req)
+  const byok = await byokContextForActor(actor)
+  const providerStatuses = toPublicProviderStatuses(providerStatusesFor(byok))
+  const byokStatus = byokPublicStatus(byok)
 
   return NextResponse.json({
     product: {
@@ -41,10 +49,11 @@ export async function GET() {
     providers: providerStatuses,
     capabilities: PROVIDER_CAPABILITIES,
     llm: {
-      mode: config.llm.mode,
-      configured: config.llm.configured,
-      quickModel: config.llm.quickModel,
-      researchModel: config.llm.researchModel
+      configured: byokStatus.required ? byokStatus.llm : config.llm.configured
+    },
+    byok: byokStatus,
+    sacredTexts: {
+      available: isSacredTextsAvailable()
     },
     codexBridge: {
       enabled: config.codexBridge.enabled,

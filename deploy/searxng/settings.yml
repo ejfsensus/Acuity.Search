@@ -1,0 +1,142 @@
+use_default_settings: true
+server:
+  # Is overwritten by ${SEARXNG_PORT} and ${SEARXNG_BIND_ADDRESS}
+  port: 8080
+  bind_address: '0.0.0.0'
+  # public URL of the instance, to ensure correct inbound links. Is overwritten
+  # by ${SEARXNG_URL}.
+  base_url: false # "http://example.com/location"
+  # rate limit the number of request on the instance, block some bots.
+  # Is overwritten by ${SEARXNG_LIMITER}
+  limiter: false
+  # enable features designed only for public instances.
+  # Is overwritten by ${SEARXNG_PUBLIC_INSTANCE}
+  public_instance: false
+
+  # If your instance owns a /etc/searxng/settings.yml file, then set the following
+  # values there.
+
+  # Never commit a real value. deploy/searxng/entrypoint.sh refuses to start
+  # unless ${SEARXNG_SECRET} is set, and SearXNG overrides this with it.
+  secret_key: 'set-SEARXNG_SECRET-in-env'
+  # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
+  image_proxy: false
+  # 1.0 and 1.1 are supported
+  http_protocol_version: '1.0'
+  # POST queries are more secure as they don't show up in history but may cause
+  # problems when using Firefox containers
+  method: 'POST'
+  default_http_headers:
+    X-Content-Type-Options: nosniff
+    X-Download-Options: noopen
+    X-Robots-Tag: noindex, nofollow
+    Referrer-Policy: no-referrer
+
+search:
+  # Uncensored: no safe search, all categories, no filtering.
+  safe_search: 0
+  autocomplete: ''
+  formats:
+    - html
+    - json
+
+outgoing:
+  request_timeout: 6.0
+  max_request_timeout: 10.0
+  pool_connections: 100
+  pool_maxsize: 20
+
+engines:
+  - name: google
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
+    inactive: false
+  - name: google news
+    disabled: false
+    inactive: false
+  - name: google scholar
+    disabled: false
+    inactive: false
+  - name: bing
+    disabled: false
+    inactive: false
+  - name: bing news
+    disabled: false
+    inactive: false
+  - name: duckduckgo
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
+    inactive: false
+  - name: duckduckgo news
+    disabled: false
+    inactive: false
+  - name: brave
+    disabled: false
+    inactive: false
+  - name: brave.news
+    disabled: false
+    inactive: false
+  - name: startpage
+    disabled: false
+    inactive: false
+  - name: startpage news
+    disabled: false
+    inactive: false
+  - name: mojeek
+    disabled: false
+    inactive: false
+  - name: mojeek news
+    disabled: false
+    inactive: false
+  - name: qwant
+    # blocked from Railway datacenter IPs (access denied / CAPTCHA)
+    disabled: true
+    inactive: false
+  - name: qwant news
+    disabled: false
+    inactive: false
+  - name: yahoo
+    disabled: false
+    inactive: false
+  - name: yahoo news
+    disabled: false
+    inactive: false
+  - name: wikipedia
+    disabled: false
+    inactive: false
+  - name: wikidata
+    disabled: false
+    inactive: false
+  - name: arxiv
+    disabled: false
+    inactive: false
+  - name: semantic scholar
+    disabled: false
+    inactive: false
+  - name: pubmed
+    disabled: false
+    inactive: false
+  - name: crossref
+    disabled: false
+    inactive: false
+  - name: github
+    disabled: false
+    inactive: false
+  - name: stackoverflow
+    disabled: false
+    inactive: false
+  - name: askubuntu
+    disabled: false
+    inactive: false
+  - name: superuser
+    disabled: false
+    inactive: false
+  - name: annas archive
+    disabled: false
+    inactive: false
+  - name: library genesis
+    disabled: false
+    inactive: false
+  - name: openlibrary
+    disabled: false
+    inactive: false

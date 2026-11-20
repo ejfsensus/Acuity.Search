@@ -7,6 +7,14 @@ import type {
   SearchRunState,
   ShareSnapshot
 } from '@/lib/acuity/search/contracts'
+import {
+  deleteRun as pgDeleteRun,
+  isPgStoreEnabled,
+  loadRecentRuns,
+  loadShares,
+  upsertRun,
+  upsertShare
+} from '@/lib/acuity/store-pg'
 
 interface StoredShareRecord {
   tokenHash: string
@@ -26,6 +34,57 @@ const sharesById = new Map<string, StoredShareRecord>()
 const sharesByTokenHash = new Map<string, StoredShareRecord>()
 
 let diskStoreInitialized = false
+let pgHydration: Promise<void> | null = null
+
+const pendingPgWrites = new Set<Promise<void>>()
+
+function persistInBackground(task: () => Promise<void>, label: string): void {
+  if (!isPgStoreEnabled()) return
+  const write = task()
+    .catch(error =>
+      console.warn(`[acuity-search] Postgres ${label} failed:`, error)
+    )
+    .finally(() => pendingPgWrites.delete(write))
+  pendingPgWrites.add(write)
+}
+
+/** Waits for queued Postgres write-throughs (graceful shutdown and tests). */
+export async function flushPendingStoreWrites(): Promise<void> {
+  await Promise.all([...pendingPgWrites])
+}
+
+/**
+ * Loads runs and shares from Postgres once per process (no-op without
+ * DATABASE_URL). Await this at the start of any route that reads the store.
+ */
+export async function ensureStoreReady(): Promise<void> {
+  if (!isPgStoreEnabled()) {
+    ensureDiskStoreLoaded()
+    return
+  }
+  if (!pgHydration) {
+    pgHydration = (async () => {
+      const [runs, shares] = await Promise.all([loadRecentRuns(), loadShares()])
+      for (const row of runs) {
+        const run = row.state as SearchRunState
+        if (run?.runId && !runsById.has(run.runId)) runsById.set(run.runId, run)
+      }
+      for (const row of shares) {
+        const snapshot = row.snapshot as ShareSnapshot
+        if (snapshot?.id) {
+          const record = { tokenHash: row.token_hash, snapshot }
+          sharesById.set(snapshot.id, record)
+          sharesByTokenHash.set(row.token_hash, record)
+        }
+      }
+      diskStoreInitialized = true
+    })().catch(error => {
+      pgHydration = null
+      throw error
+    })
+  }
+  await pgHydration
+}
 
 function isDiskPersistenceEnabled(): boolean {
   return process.env.NODE_ENV !== 'test'
@@ -40,7 +99,11 @@ function getStoreFilePath(): string {
 }
 
 function ensureDiskStoreLoaded(): void {
-  if (diskStoreInitialized || !isDiskPersistenceEnabled()) {
+  if (
+    diskStoreInitialized ||
+    !isDiskPersistenceEnabled() ||
+    isPgStoreEnabled()
+  ) {
     return
   }
   diskStoreInitialized = true
@@ -87,7 +150,7 @@ function ensureDiskStoreLoaded(): void {
 }
 
 function flushStoreToDisk(): void {
-  if (!isDiskPersistenceEnabled()) {
+  if (!isDiskPersistenceEnabled() || isPgStoreEnabled()) {
     return
   }
   try {
@@ -136,6 +199,11 @@ export function saveSearchRun(run: SearchRunState): void {
   ensureDiskStoreLoaded()
   runsById.set(run.runId, structuredClone(run))
   flushStoreToDisk()
+  const copy = structuredClone(run)
+  persistInBackground(
+    () => upsertRun(copy.runId, copy.userId, copy),
+    'save run'
+  )
 }
 
 export function getSearchRunForActor(
@@ -175,6 +243,7 @@ export function deleteSearchRunForActor(
   }
   runsById.delete(runId)
   flushStoreToDisk()
+  persistInBackground(() => pgDeleteRun(runId), 'delete run')
   return true
 }
 
@@ -201,6 +270,11 @@ export function cancelSearchRunForActor(
   run.updatedAt = new Date().toISOString()
   runsById.set(runId, structuredClone(run))
   flushStoreToDisk()
+  const cancelled = structuredClone(run)
+  persistInBackground(
+    () => upsertRun(cancelled.runId, cancelled.userId, cancelled),
+    'cancel run'
+  )
   return { ok: true, status: 'cancelled' }
 }
 
@@ -287,6 +361,10 @@ export function createSelectedOutputShare(options: {
   sharesById.set(shareId, record)
   sharesByTokenHash.set(tokenHash, record)
   flushStoreToDisk()
+  persistInBackground(
+    () => upsertShare(shareId, options.actorId, tokenHash, snapshot),
+    'save share'
+  )
 
   return {
     shareId,
@@ -342,6 +420,16 @@ export function revokeShareForActor(
 
   record.snapshot.revokedAt = new Date().toISOString()
   flushStoreToDisk()
+  persistInBackground(
+    () =>
+      upsertShare(
+        record.snapshot.id,
+        record.snapshot.ownerId,
+        record.tokenHash,
+        record.snapshot
+      ),
+    'revoke share'
+  )
   return { ok: true, status: 'revoked' }
 }
 
@@ -350,4 +438,5 @@ export function clearAcuityStoreForTests(): void {
   activeRunAbortControllers.clear()
   sharesById.clear()
   sharesByTokenHash.clear()
+  pgHydration = null
 }

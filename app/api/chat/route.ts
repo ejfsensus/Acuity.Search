@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers'
 import { after } from 'next/server'
 
+import { isByokRequired } from '@/lib/acuity/byok/config'
+import { buildByokContext, enterByok } from '@/lib/acuity/byok/context'
 import {
   calculateConversationTurn,
   calculateConversationTurnFromIds,
@@ -112,6 +114,28 @@ export async function POST(req: Request) {
         status: 403,
         statusText: 'Forbidden'
       })
+    }
+
+    // Open edition: chat runs only on the member's own OpenRouter key.
+    if (isByokRequired()) {
+      const byok = await buildByokContext(
+        currentUser?.email ? { email: currentUser.email } : null
+      )
+      if (!byok.credentials.openrouter) {
+        return new Response(
+          JSON.stringify({
+            error: currentUser
+              ? 'Chat runs on your own OpenRouter key. Add one in your Acuity profile to continue.'
+              : 'Sign in and add your own OpenRouter key in your Acuity profile to chat.',
+            type: 'general',
+            code: 'BYOK_KEY_REQUIRED',
+            profileUrl: byok.profileUrl,
+            retryable: false
+          }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        )
+      }
+      enterByok(byok)
     }
 
     const guestChatEnabled = process.env.ENABLE_GUEST_CHAT === 'true'

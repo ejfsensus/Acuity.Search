@@ -5,12 +5,13 @@ import {
   exportRunToMarkdown,
   exportRunToResearchBundle
 } from '@/lib/acuity/export'
-import { getSearchRunForActor } from '@/lib/acuity/store'
+import { ensureStoreReady, getSearchRunForActor } from '@/lib/acuity/store'
 
 export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const run = getSearchRunForActor(id, actor.actorId)

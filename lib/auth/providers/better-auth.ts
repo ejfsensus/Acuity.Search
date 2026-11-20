@@ -35,7 +35,7 @@ import type {
 } from '@/lib/auth/types'
 import { db } from '@/lib/db'
 
-import { getOidcProviderId } from '../oauth-config'
+import { getOidcProviderId, isLocalLoginEnabled } from '../oauth-config'
 
 /**
  * Whether an account already exists for the address. Used to decide whether
@@ -229,6 +229,9 @@ export const betterAuthProvider: AuthProvider = {
       // The button label and readiness come from the server: OIDC_* env vars
       // are invisible to the client bundle, so the form cannot decide itself.
       oauthProvider: oidcConfigured ? getOidcProviderName() : null,
+      // Never hide the password form when no IdP is usable: that would lock
+      // everyone out regardless of AUTH_LOCAL_LOGIN_ENABLED.
+      localLogin: isLocalLoginEnabled() || !oidcConfigured,
       emailVerification: false,
       share: true
     }
@@ -257,8 +260,49 @@ export const betterAuthProvider: AuthProvider = {
     // /search hosts the shared-chat pages: app/search/[id]/page.tsx decides
     // visibility (public chats are viewable logged out, private ones are
     // rejected there), so the proxy must not pre-empt that check.
-    const publicPaths = ['/auth', '/share', '/api', '/relay', '/search']
+    const publicPaths = [
+      '/auth',
+      '/share',
+      '/api',
+      '/relay',
+      '/search',
+      '/embed'
+    ]
     const pathname = request.nextUrl.pathname
+
+    // AUTH_REQUIRE_LOGIN=true: the whole app sits behind sign-in. Pages
+    // redirect to /auth/login?next=<original URL>; API calls get 401 JSON.
+    // Codex-embedded requests authenticate with the embed session cookie
+    // (validated by each route), so they pass through here.
+    if (!session && process.env.AUTH_REQUIRE_LOGIN === 'true') {
+      const open = [
+        '/auth',
+        '/share',
+        '/relay',
+        '/embed',
+        '/api/auth',
+        '/api/favicon',
+        '/api/acuity-search/embed/session',
+        '/api/acuity-search/admin/health'
+      ]
+      const isOpen = open.some(
+        p => pathname === p || pathname.startsWith(`${p}/`)
+      )
+      const hasEmbedSession = request.cookies.has('acuity_embed_session')
+      if (!isOpen && !(hasEmbedSession && pathname.startsWith('/api/'))) {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json(
+            { error: 'Sign in required', code: 'SIGN_IN_REQUIRED' },
+            { status: 401 }
+          )
+        }
+        const url = request.nextUrl.clone()
+        url.pathname = '/auth/login'
+        url.search = ''
+        url.searchParams.set('next', pathname + request.nextUrl.search)
+        return NextResponse.redirect(url)
+      }
+    }
 
     if (
       !session &&
@@ -355,6 +399,12 @@ export const betterAuthProvider: AuthProvider = {
     email: string
     password: string
   }): Promise<AuthActionResult> {
+    if (!isLocalLoginEnabled() && isOidcConfigured()) {
+      return {
+        success: false,
+        error: 'Password sign-in is disabled. Continue with Acuity instead.'
+      }
+    }
     if (!(await attemptAllowed('sign-in', email))) {
       return { success: false, error: TOO_MANY_REQUESTS }
     }

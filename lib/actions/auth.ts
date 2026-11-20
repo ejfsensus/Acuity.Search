@@ -1,6 +1,6 @@
 'use server'
 
-import { getOidcProviderId } from '@/lib/auth/oauth-config'
+import { getOidcIssuer, getOidcProviderId } from '@/lib/auth/oauth-config'
 import { getAuthProvider } from '@/lib/auth/provider'
 import type { AuthActionResult } from '@/lib/auth/types'
 
@@ -76,4 +76,20 @@ export async function updatePassword(
     return unavailable()
   }
   return provider.updatePassword(password, token)
+}
+
+/**
+ * Single sign-out: URL of the Acuity identity provider's sign-out page, which
+ * ends the IdP session (so "Continue with Acuity" asks for credentials again)
+ * and returns to `returnTo`. Empty when no Acuity IdP is configured.
+ */
+export async function getIdpSignOutUrl(returnTo: string): Promise<string> {
+  const issuer = getOidcIssuer()
+  if (!issuer) return ''
+  try {
+    const origin = new URL(issuer).origin
+    return `${origin}/sign-out?return=${encodeURIComponent(returnTo)}`
+  } catch {
+    return ''
+  }
 }

@@ -1,5 +1,12 @@
-import { generateText } from 'ai'
+import { generateText, streamText } from 'ai'
 
+import { getByokConfig } from '@/lib/acuity/byok/config'
+import { currentByok } from '@/lib/acuity/byok/context'
+import {
+  ByokKeyRequiredError,
+  describeOpenRouterError
+} from '@/lib/acuity/byok/errors'
+import { invalidateByok } from '@/lib/acuity/byok/resolver'
 import { getAcuityConfig } from '@/lib/acuity/config'
 import type {
   AnswerVersion,
@@ -124,6 +131,8 @@ export async function generateAcuityAnswerVersion(options: {
   sources: SourceResult[]
   evidence: EvidenceRecord[]
   signal?: AbortSignal
+  /** When set, synthesis is streamed and each text delta is reported. */
+  onDelta?: (textDelta: string) => void
 }): Promise<AnswerVersion> {
   const config = getAcuityConfig()
   const nowIso = new Date().toISOString()
@@ -155,10 +164,19 @@ export async function generateAcuityAnswerVersion(options: {
     }
   }
 
-  // 2. If LLM is unconfigured, gracefully fall back to results-only without failing the run
-  if (!config.llm.configured || config.llm.mode === 'unconfigured') {
-    const disclosure =
-      'Language model synthesis is currently unconfigured (ACUITY_SEARCH_LLM_MODE=unconfigured). Presenting traceable search results and extracted evidence directly.'
+  // 2. If LLM is unconfigured, gracefully fall back to results-only without failing the run.
+  // Open edition: "configured" means the member has added their own OpenRouter key.
+  const byokRequired = getByokConfig().mode === 'required'
+  const byokCtx = currentByok()
+  const llmAvailable = byokRequired
+    ? Boolean(byokCtx?.credentials.openrouter)
+    : config.llm.configured && config.llm.mode !== 'unconfigured'
+  if (!llmAvailable) {
+    const disclosure = byokRequired
+      ? byokCtx?.identity
+        ? 'Written answers use your own OpenRouter key. Add one in your Acuity profile to turn them on — the sources and verbatim evidence below are always free.'
+        : 'Sign in and add your own OpenRouter key in your Acuity profile for written answers — the sources and verbatim evidence below are always free.'
+      : 'Language model synthesis is currently unconfigured (ACUITY_SEARCH_LLM_MODE=unconfigured). Presenting traceable search results and extracted evidence directly.'
     const markdown = buildDeterministicEvidenceSummary({
       request: options.request,
       sources: options.sources,
@@ -202,10 +220,11 @@ export async function generateAcuityAnswerVersion(options: {
   }
 
   // 3. Attempt configured LLM synthesis grounded strictly in the Evidence Ledger
-  const rawModelKey =
-    config.llm.quickModel ||
-    config.llm.researchModel ||
-    `${config.llm.mode}:default`
+  const rawModelKey = byokRequired
+    ? `openrouter:${byokCtx?.credentials.openrouter?.llmModel ?? 'default'}`
+    : config.llm.quickModel ||
+      config.llm.researchModel ||
+      `${config.llm.mode}:default`
   const modelKey = rawModelKey.includes(':')
     ? rawModelKey
     : `${config.llm.mode}:${rawModelKey}`
@@ -235,16 +254,34 @@ Compose an insightful, contemplative research narrative that examines the user's
 - Weave the read into a compelling narrative of discovery that satisfies the inquisitive mind and beckons toward further exploration.`
 
     const lm = getModel(modelKey)
-    const generated = await generateText({
-      model: lm,
-      system: fullSystem,
-      prompt,
-      temperature: config.llm.temperature,
-      maxOutputTokens: config.llm.maxOutputTokens,
-      abortSignal: options.signal
-    })
-
-    const rawText = generated.text.trim()
+    let rawText: string
+    if (options.onDelta) {
+      const streamed = streamText({
+        model: lm,
+        system: fullSystem,
+        prompt,
+        temperature: config.llm.temperature,
+        maxOutputTokens: config.llm.maxOutputTokens,
+        abortSignal: options.signal
+      })
+      let acc = ''
+      for await (const delta of streamed.textStream) {
+        acc += delta
+        options.onDelta(delta)
+      }
+      rawText = acc.trim()
+      if (!rawText) throw new Error('empty model response')
+    } else {
+      const generated = await generateText({
+        model: lm,
+        system: fullSystem,
+        prompt,
+        temperature: config.llm.temperature,
+        maxOutputTokens: config.llm.maxOutputTokens,
+        abortSignal: options.signal
+      })
+      rawText = generated.text.trim()
+    }
     const verification = verifyAnswerCitations(
       rawText,
       options.sources,
@@ -270,7 +307,19 @@ Compose an insightful, contemplative research narrative that examines the user's
     }
   } catch (error) {
     // Never delete or discard retrieved search results when model synthesis fails!
-    const disclosure = `Model synthesis could not be completed (${error instanceof Error ? error.message : 'inference unavailable'}). Retrieved sources and verbatim evidence are preserved in full below.`
+    let reason: string
+    if (error instanceof ByokKeyRequiredError) {
+      reason = error.message
+    } else if (byokRequired) {
+      const described = describeOpenRouterError(error)
+      // A rejected key may have been replaced in the profile; fetch it afresh next time.
+      if (described.status === 401 && byokCtx?.identity)
+        invalidateByok(byokCtx.identity)
+      reason = described.message
+    } else {
+      reason = `Model synthesis could not be completed (${error instanceof Error ? error.message : 'inference unavailable'}).`
+    }
+    const disclosure = `${reason} Retrieved sources and verbatim evidence are preserved in full below.`
     const markdown = buildDeterministicEvidenceSummary({
       request: options.request,
       sources: options.sources,

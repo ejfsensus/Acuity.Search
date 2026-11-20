@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
 
 import { resolveRequestActor } from '@/lib/acuity/auth'
+import { toPublicRun } from '@/lib/acuity/search/public-view'
 import {
   deleteSearchRunForActor,
+  ensureStoreReady,
   getSearchRunForActor
 } from '@/lib/acuity/store'
 
@@ -10,6 +12,7 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const run = getSearchRunForActor(id, actor.actorId)
@@ -25,13 +28,14 @@ export async function GET(
   if (actor.setCookieHeader) {
     headers.set('Set-Cookie', actor.setCookieHeader)
   }
-  return NextResponse.json({ run }, { headers })
+  return NextResponse.json({ run: toPublicRun(run) }, { headers })
 }
 
 export async function DELETE(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const deleted = deleteSearchRunForActor(id, actor.actorId)

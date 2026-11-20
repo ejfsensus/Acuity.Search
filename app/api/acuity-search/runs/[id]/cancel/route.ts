@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { resolveRequestActor } from '@/lib/acuity/auth'
 import {
   cancelSearchRunForActor,
+  ensureStoreReady,
   getSearchRunForActor
 } from '@/lib/acuity/store'
 
@@ -10,6 +11,7 @@ export async function POST(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const outcome = cancelSearchRunForActor(id, actor.actorId)

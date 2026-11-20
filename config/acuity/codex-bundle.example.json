@@ -1,89 +1,93 @@
 {
-  "schemaVersion": "acuity.research-bundle.v1",
+  "schemaVersion": "acuity.research-bundle.v1.1",
   "exampleOnly": true,
-  "id": "example-bundle-001",
-  "title": "Illustrative Acuity.Search export",
-  "createdAt": "2026-10-25T12:00:00Z",
-  "query": "Illustrative research question; not a real search",
-  "mode": "collections",
-  "scope": {
-    "policy": "strict",
-    "registryVersion": "example-only",
-    "groupIds": ["gnostic-hermetic"],
-    "sourceIds": ["src-001"],
-    "targetHosts": ["example.invalid"]
+  "bundleId": "bundle-example-001",
+  "exportedAt": "2026-10-29T12:00:00.000Z",
+  "sourceProduct": {
+    "name": "Acuity.Search",
+    "version": "1.0.0"
+  },
+  "queryRun": {
+    "runId": "example-only",
+    "query": "Illustrative research question; not a real search",
+    "discoveryMode": "collections",
+    "depth": "quick",
+    "scope": {
+      "policy": "strict",
+      "collectionGroupIds": ["gnostic-hermetic"],
+      "entryIds": ["src-001"],
+      "includeDomains": ["example.invalid"],
+      "excludeDomains": []
+    },
+    "executedQueries": []
   },
   "answer": {
-    "version": 1,
-    "kind": "ai-generated-research-synthesis",
-    "markdown": "EXAMPLE ONLY: an illustrative source reference [1]. No search or model call occurred.",
-    "model": {
-      "provider": null,
-      "id": null,
-      "promptVersion": "example-only"
+    "answerVersionId": "ans-example-001",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "model": null,
+    "markdown": "EXAMPLE ONLY: an illustrative source reference [S1]. No search or model call occurred.",
+    "mode": "results-only",
+    "citations": {
+      "S1": {
+        "sourceId": "source-example-001",
+        "evidenceIds": ["evidence-example-001"]
+      }
     },
-    "citationMap": {
-      "1": "evidence-example-001"
-    }
+    "unresolvedLabels": []
   },
   "sources": [
     {
-      "id": "source-example-001",
-      "url": "https://example.invalid/document",
-      "resolvedUrl": "https://example.invalid/document",
+      "sourceId": "source-example-001",
+      "citationLabel": "S1",
       "title": "Synthetic fixture source",
-      "retrievedAt": "2026-10-25T12:00:00Z",
+      "url": "https://example.invalid/document",
+      "domain": "example.invalid",
+      "providers": [],
       "contentState": "snippet",
-      "bibliography": {
-        "workTitle": null,
-        "author": null,
-        "translator": null,
-        "edition": null,
-        "language": null,
-        "publishedAt": null
-      },
-      "rights": null,
-      "provenance": []
+      "snippet": "Synthetic snippet.",
+      "accessStatus": "access-unknown"
     }
   ],
   "evidence": [
     {
-      "id": "evidence-example-001",
+      "evidenceId": "evidence-example-001",
       "sourceId": "source-example-001",
-      "text": "Synthetic fixture passage only. This is not retrieved research evidence.",
+      "url": "https://example.invalid/document",
+      "verbatimText": "Synthetic fixture passage only. This is not retrieved research evidence.",
       "sha256": "e3e40cb87c67aceff68631a9d8d7af63f7b58014da25512b1b51721705ae9666",
-      "locator": null,
-      "contentState": "snippet"
+      "contentState": "snippet",
+      "locator": {
+        "type": "char-offset",
+        "value": "0-72"
+      },
+      "extractedAt": "2026-10-29T12:00:00.000Z"
     }
   ],
+  "codexCandidates": [],
   "coverage": {
-    "limitations": [
-      "Synthetic example: never import as research evidence. No providers were contacted."
-    ],
-    "searchedTargetHosts": [],
-    "unsearchedTargetHosts": ["example.invalid"],
     "providerStatuses": [
       {
         "provider": "searxng",
         "status": "not-attempted"
-      },
-      {
-        "provider": "brave",
-        "status": "not-attempted"
-      },
-      {
-        "provider": "tavily",
-        "status": "not-attempted"
-      },
-      {
-        "provider": "exa",
-        "status": "not-attempted"
       }
+    ],
+    "searchedTargetHosts": [],
+    "unsearchedTargetHosts": ["example.invalid"],
+    "limitations": [
+      "Synthetic example: never import as research evidence. No providers were contacted."
     ]
   },
   "provenance": {
     "product": "Acuity.Search",
     "generatedContentIsPrimarySource": false,
     "upstreamRunId": "example-only"
+  },
+  "integrity": {
+    "manifestEntries": [
+      {
+        "path": "/evidence",
+        "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+      }
+    ]
   }
 }

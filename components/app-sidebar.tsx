@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 import { isAnonymousMode } from '@/lib/auth/provider'
 import type { AppUser } from '@/lib/auth/types'
-import { cn } from '@/lib/utils'
 
 import {
   Sidebar,
@@ -21,7 +20,6 @@ import { LibraryMenuItem } from './sidebar/library-menu-item'
 import { NewChatMenuItem } from './sidebar/new-chat-menu-item'
 import { VersionFooter } from './sidebar/version-footer'
 import { VersionFooterSkeleton } from './sidebar/version-footer-skeleton'
-import { IconLogo } from './ui/icons'
 
 export default function AppSidebar({ user }: { user?: AppUser | null }) {
   // Anonymous mode has no per-user library, and the server actions reject it,
@@ -33,7 +31,14 @@ export default function AppSidebar({ user }: { user?: AppUser | null }) {
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
       <SidebarHeader className="flex flex-row justify-between items-center">
         <Link href="/" className="flex items-center gap-2 px-2 py-3">
-          <IconLogo className={cn('size-5')} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand-mark.png"
+            alt=""
+            width={28}
+            height={28}
+            className="size-7 rounded-md"
+          />
           <span className="font-semibold text-sm">Acuity.Search</span>
         </Link>
         <SidebarTrigger />

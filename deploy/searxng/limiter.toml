@@ -1,0 +1,7 @@
+# Private instance (Railway private network only). Limiter is off in settings.yml;
+# this file only keeps botdetection permissive if the limiter is ever enabled.
+[botdetection.ip_limit]
+link_token = false
+
+[botdetection.ip_lists]
+pass_ip = ["0.0.0.0/0", "::/0"]

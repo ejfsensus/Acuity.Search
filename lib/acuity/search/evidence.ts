@@ -11,13 +11,23 @@ export function computeVerbatimSha256(verbatimText: string): string {
   return crypto.createHash('sha256').update(verbatimText, 'utf8').digest('hex')
 }
 
+/**
+ * Drops NUL and other C0 control characters (keeps tab/newline/CR). Binary
+ * captures (e.g. raw PDF bytes) otherwise break Postgres jsonb and SurrealDB.
+ */
+export function stripControlChars(text: string): string {
+  // eslint-disable-next-line no-control-regex
+  return text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+}
+
 export function createEvidenceRecordFromExtraction(options: {
   evidenceId: string
   source: SourceResult
   extraction: ExtractionOutput
 }): EvidenceRecord {
   const verbatim =
-    options.extraction.verbatimText.trim() || options.source.snippet.trim()
+    stripControlChars(options.extraction.verbatimText).trim() ||
+    stripControlChars(options.source.snippet).trim()
   const sha256 = computeVerbatimSha256(verbatim)
 
   return {
@@ -42,7 +52,9 @@ export function createSnippetEvidenceRecord(options: {
   evidenceId: string
   source: SourceResult
 }): EvidenceRecord {
-  const verbatim = options.source.snippet.trim() || options.source.title.trim()
+  const verbatim =
+    stripControlChars(options.source.snippet).trim() ||
+    stripControlChars(options.source.title).trim()
   const sha256 = computeVerbatimSha256(verbatim)
 
   return {

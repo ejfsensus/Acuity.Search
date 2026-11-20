@@ -123,3 +123,56 @@ describe('validateOidcUserCreation (unrelated provisioning)', () => {
     expect(result).toBeUndefined()
   })
 })
+
+describe('validateOidcUserCreation (Acuity IdP enforces sign-up)', () => {
+  it('allows an IdP-verified identity in invite mode when OIDC_IDP_ENFORCES_SIGNUP=true', async () => {
+    vi.stubEnv('AUTH_SIGNUP_MODE', 'invite')
+    vi.stubEnv('OIDC_IDP_ENFORCES_SIGNUP', 'true')
+    const result = await validateOidcUserCreation(
+      {
+        source: oauthCreateUserSource,
+        user: { email: 'a@acuity.institute', emailVerified: true }
+      },
+      async () => 5
+    )
+    expect(result).toBeUndefined()
+  })
+
+  it('still rejects an unverified identity in invite mode', async () => {
+    vi.stubEnv('AUTH_SIGNUP_MODE', 'invite')
+    vi.stubEnv('OIDC_IDP_ENFORCES_SIGNUP', 'true')
+    const result = await validateOidcUserCreation(
+      {
+        source: oauthCreateUserSource,
+        user: { email: 'a@acuity.institute', emailVerified: false }
+      },
+      async () => 5
+    )
+    expect(result?.error).toBe('sign_up_not_allowed')
+  })
+
+  it('keeps the bootstrap window closed to OAuth even when the IdP enforces sign-up', async () => {
+    vi.stubEnv('AUTH_SIGNUP_MODE', 'invite')
+    vi.stubEnv('OIDC_IDP_ENFORCES_SIGNUP', 'true')
+    const result = await validateOidcUserCreation(
+      {
+        source: oauthCreateUserSource,
+        user: { email: 'a@acuity.institute', emailVerified: true }
+      },
+      async () => 0
+    )
+    expect(result?.error).toBe('bootstrap_window_open')
+  })
+
+  it('defaults to the upstream behaviour (flag off)', async () => {
+    vi.stubEnv('AUTH_SIGNUP_MODE', 'invite')
+    const result = await validateOidcUserCreation(
+      {
+        source: oauthCreateUserSource,
+        user: { email: 'a@acuity.institute', emailVerified: true }
+      },
+      async () => 5
+    )
+    expect(result?.error).toBe('sign_up_not_allowed')
+  })
+})

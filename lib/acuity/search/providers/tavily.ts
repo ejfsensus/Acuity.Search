@@ -1,3 +1,8 @@
+import {
+  composioAccess,
+  composioFailureMessage,
+  composioSearch
+} from '@/lib/acuity/byok/composio'
 import { isPlaceholderValue } from '@/lib/acuity/config'
 import type { DateRangeFilter } from '@/lib/acuity/search/contracts'
 import type {
@@ -39,12 +44,37 @@ export async function executeTavilySearch(
 ): Promise<ProviderExecutionOutput> {
   const startedAtDate = new Date()
   const startPerf = performance.now()
-  const apiKey = process.env.TAVILY_API_KEY?.trim()
+  // Open edition: Tavily runs through the member's own Composio project.
+  const access = composioAccess('tavily')
+  const apiKey =
+    access.kind === 'env' ? process.env.TAVILY_API_KEY?.trim() : undefined
 
   const executedQuery =
     input.query.length < 5 ? input.query.padEnd(5, ' ') : input.query
 
-  if (isPlaceholderValue(apiKey)) {
+  if (access.kind === 'skip') {
+    return {
+      attempt: {
+        attemptId: input.attemptId,
+        provider: 'tavily',
+        variantId: input.variantId,
+        executedQuery,
+        targetId: input.targetId,
+        status: 'skipped-unconfigured',
+        latencyMs: Math.round(performance.now() - startPerf),
+        rawResultCount: 0,
+        acceptedResultCount: 0,
+        filteredOutCount: 0,
+        errorCode: access.code,
+        errorMessage: access.message,
+        startedAt: startedAtDate.toISOString(),
+        completedAt: new Date().toISOString()
+      },
+      candidates: []
+    }
+  }
+
+  if (access.kind === 'env' && isPlaceholderValue(apiKey)) {
     return {
       attempt: {
         attemptId: input.attemptId,
@@ -85,30 +115,35 @@ export async function executeTavilySearch(
     : timeoutSignal
 
   try {
-    const response = await fetchFn('https://api.tavily.com/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        api_key: apiKey,
-        query: executedQuery,
-        max_results: maxResults,
-        search_depth: input.request.depth === 'research' ? 'advanced' : 'basic',
-        // Never use vendor-generated answers as evidence; only request images if explicitly asked
-        include_answers: false,
-        include_images: Boolean(input.request.includeMultimedia),
-        include_raw_content: false,
-        ...(includeDomains.length > 0
-          ? { include_domains: includeDomains }
-          : {}),
-        ...(excludeDomains.length > 0
-          ? { exclude_domains: excludeDomains }
-          : {}),
-        ...(timeRange ? { time_range: timeRange } : {})
-      }),
-      signal: combinedSignal
-    })
+    const nativeBody: Record<string, unknown> = {
+      query: executedQuery,
+      max_results: maxResults,
+      search_depth: input.request.depth === 'research' ? 'advanced' : 'basic',
+      // Never use vendor-generated answers as evidence; only request images if explicitly asked
+      include_answers: false,
+      include_images: Boolean(input.request.includeMultimedia),
+      include_raw_content: false,
+      ...(includeDomains.length > 0 ? { include_domains: includeDomains } : {}),
+      ...(excludeDomains.length > 0 ? { exclude_domains: excludeDomains } : {}),
+      ...(timeRange ? { time_range: timeRange } : {})
+    }
+    const response =
+      access.kind === 'composio'
+        ? await composioSearch(
+            'tavily',
+            access,
+            nativeBody,
+            combinedSignal,
+            fetchFn
+          )
+        : await fetchFn('https://api.tavily.com/search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ api_key: apiKey, ...nativeBody }),
+            signal: combinedSignal
+          })
 
     if (!response.ok) {
       return {
@@ -125,7 +160,10 @@ export async function executeTavilySearch(
           acceptedResultCount: 0,
           filteredOutCount: 0,
           errorCode: `TAVILY_HTTP_${response.status}`,
-          errorMessage: `Tavily returned HTTP ${response.status} ${response.statusText}`,
+          errorMessage:
+            access.kind === 'composio'
+              ? composioFailureMessage('tavily', response.status)
+              : `Tavily returned HTTP ${response.status} ${response.statusText}`,
           startedAt: startedAtDate.toISOString(),
           completedAt: new Date().toISOString()
         },

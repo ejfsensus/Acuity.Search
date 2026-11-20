@@ -45,10 +45,10 @@ export function EvidenceDrawer({
         </div>
 
         <div className="rounded-xl border border-[#35313c] bg-[#181820]/70 p-3">
-          <div className="font-mono text-[11px] uppercase tracking-wider text-[#d4a843]">
+          <div className="font-mono text-[12px] uppercase tracking-wider text-[#d4a843]">
             Research Standard
           </div>
-          <p className="mt-1 text-[11px] leading-relaxed text-[#b3b0bd]">
+          <p className="mt-1 text-[12px] leading-relaxed text-[#b3b0bd]">
             Sources are drawn from verified archives and scholarly collections.
             Every quoted passage is preserved verbatim as originally published.
           </p>
@@ -72,7 +72,7 @@ export function EvidenceDrawer({
             <span className="rounded bg-[#d4a843]/20 px-2 py-0.5 font-mono text-xs font-semibold text-[#e8c96a]">
               [{selectedSource.citationLabel}] Selected Source
             </span>
-            <span className="font-mono text-[11px] text-[#8e899c]">
+            <span className="font-mono text-[12px] text-[#8e899c]">
               {CONTENT_STATE_LABELS[selectedSource.contentState].label} ·{' '}
               {ACCESS_STATUS_LABELS[selectedSource.accessStatus]}
             </span>
@@ -86,28 +86,28 @@ export function EvidenceDrawer({
             href={selectedSource.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 block break-all font-mono text-[11px] text-[#d4a843] hover:underline"
+            className="mt-1 block break-all font-mono text-[12px] text-[#d4a843] hover:underline"
           >
             {selectedSource.url} ↗
           </a>
 
           {selectedSource.canonicalUrl &&
             selectedSource.canonicalUrl !== selectedSource.url && (
-              <div className="mt-1 break-all font-mono text-[10px] text-[#8e899c]">
+              <div className="mt-1 break-all font-mono text-[12px] text-[#8e899c]">
                 Canonical: {selectedSource.canonicalUrl}
               </div>
             )}
 
           {/* Provenance Breakdown */}
           <div className="mt-2.5 border-t border-[#35313c] pt-2">
-            <div className="font-mono text-[10px] uppercase tracking-wider text-[#8e899c]">
+            <div className="font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
               Found via
             </div>
             <div className="mt-1 flex flex-col gap-1">
               {selectedSource.provenance.map((prov, idx) => (
                 <div
                   key={`${prov.provider}-${prov.variantId}-${idx}`}
-                  className="flex flex-wrap items-center justify-between rounded-lg border border-[#35313c] bg-[#09090f]/80 px-2 py-1 font-mono text-[10px]"
+                  className="flex flex-wrap items-center justify-between rounded-lg border border-[#35313c] bg-[#09090f]/80 px-2 py-1 font-mono text-[12px]"
                 >
                   <span className="text-[#e8c96a]">
                     {PROVIDER_DISPLAY_NAMES[prov.provider]} · Result #
@@ -129,7 +129,7 @@ export function EvidenceDrawer({
 
           {/* Verbatim Evidence Records */}
           <div className="mt-3 flex flex-col gap-2 border-t border-[#35313c] pt-2.5">
-            <div className="font-mono text-[10px] uppercase tracking-wider text-[#d4a843]">
+            <div className="font-mono text-[12px] uppercase tracking-wider text-[#d4a843]">
               Original Excerpts ({selectedEvidence.length})
             </div>
             {selectedEvidence.map(ev => (
@@ -137,7 +137,7 @@ export function EvidenceDrawer({
                 key={ev.id}
                 className="rounded-xl border border-[#35313c] bg-[#09090f] p-2.5"
               >
-                <div className="flex flex-wrap items-center justify-between gap-1 font-mono text-[10px] text-[#8e899c]">
+                <div className="flex flex-wrap items-center justify-between gap-1 font-mono text-[12px] text-[#8e899c]">
                   <span>
                     {ev.locator.type === 'pdf-page'
                       ? `Page ${ev.locator.pageNumber ?? ev.locator.value}`
@@ -152,12 +152,12 @@ export function EvidenceDrawer({
                 <pre className="mt-1.5 max-h-48 overflow-y-auto whitespace-pre-wrap break-words font-sans text-xs leading-relaxed text-[#fafafa]">
                   {ev.verbatimText}
                 </pre>
-                <div className="mt-2 break-all border-t border-[#35313c]/60 pt-1.5 font-mono text-[10px] text-[#8e899c]">
+                <div className="mt-2 break-all border-t border-[#35313c]/60 pt-1.5 font-mono text-[12px] text-[#8e899c]">
                   Verification hash:{' '}
                   <span className="text-[#b3b0bd]">{ev.sha256}</span>
                 </div>
                 {ev.redirectChain.length > 1 && (
-                  <div className="mt-1 break-all font-mono text-[10px] text-[#8e899c]">
+                  <div className="mt-1 break-all font-mono text-[12px] text-[#8e899c]">
                     Redirects ({ev.redirectChain.length - 1}):{' '}
                     {ev.redirectChain.join(' → ')}
                   </div>
@@ -180,14 +180,14 @@ export function EvidenceDrawer({
           <h4 className="font-serif text-sm font-medium text-[#fafafa]">
             Search Details
           </h4>
-          <span className="font-mono text-[10px] text-[#d4a843]">
+          <span className="font-mono text-[12px] text-[#d4a843]">
             {run.budget.usedSearchRequests} queries completed
           </span>
         </div>
 
         {/* Executed Queries */}
         <div className="mt-2">
-          <div className="font-mono text-[10px] uppercase tracking-wider text-[#8e899c]">
+          <div className="font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
             Search Queries Used ({run.plan.variants.length})
           </div>
           <div className="mt-1 flex flex-col gap-1">
@@ -196,7 +196,7 @@ export function EvidenceDrawer({
                 key={v.id}
                 className="rounded-lg border border-[#35313c] bg-[#09090f]/70 px-2 py-1"
               >
-                <div className="flex items-center justify-between font-mono text-[10px]">
+                <div className="flex items-center justify-between font-mono text-[12px]">
                   <span className="text-[#e8c96a]">
                     {v.kind === 'literal'
                       ? 'Direct query'
@@ -209,7 +209,7 @@ export function EvidenceDrawer({
                             : 'Collection filter'}
                   </span>
                 </div>
-                <div className="mt-0.5 break-words font-mono text-[11px] text-[#fafafa]">
+                <div className="mt-0.5 break-words font-mono text-[12px] text-[#fafafa]">
                   {v.query}
                 </div>
               </div>
@@ -219,14 +219,14 @@ export function EvidenceDrawer({
 
         {/* Provider Attempts */}
         <div className="mt-3">
-          <div className="font-mono text-[10px] uppercase tracking-wider text-[#8e899c]">
+          <div className="font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
             Search Providers Consulted ({run.providerAttempts.length})
           </div>
           <div className="mt-1 flex flex-col gap-1.5">
             {run.providerAttempts.map(att => (
               <div
                 key={att.attemptId}
-                className="rounded-lg border border-[#35313c] bg-[#09090f]/80 p-2 font-mono text-[10px]"
+                className="rounded-lg border border-[#35313c] bg-[#09090f]/80 p-2 font-mono text-[12px]"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-[#fafafa]">
@@ -267,7 +267,7 @@ export function EvidenceDrawer({
         {/* Target Coverage & Continue Research */}
         <div className="mt-3 border-t border-[#35313c] pt-2.5">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#8e899c]">
+            <span className="font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
               Collection Coverage ({run.coverage.length} archives examined)
             </span>
           </div>
@@ -290,7 +290,7 @@ export function EvidenceDrawer({
       {/* Quick Source Switcher */}
       {run.results.length > 0 && (
         <div className="rounded-2xl border border-[#35313c] bg-[#181820]/60 p-3">
-          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-[#8e899c]">
+          <div className="mb-1.5 font-mono text-[12px] uppercase tracking-wider text-[#8e899c]">
             All Sources ({run.results.length})
           </div>
           <div className="flex flex-wrap gap-1">
@@ -299,7 +299,7 @@ export function EvidenceDrawer({
                 key={src.id}
                 type="button"
                 onClick={() => onSelectSource(src.id)}
-                className={`rounded-md border px-2 py-0.5 font-mono text-[11px] ${
+                className={`rounded-md border px-2 py-0.5 font-mono text-[12px] ${
                   selectedSource?.id === src.id
                     ? 'border-[#d4a843] bg-[#d4a843]/25 text-[#e8c96a]'
                     : 'border-[#35313c] bg-[#09090f] text-[#b3b0bd] hover:border-[#d4a843]/50'

@@ -136,7 +136,7 @@ export function ShareExportModal({
             <h2 className="font-serif text-xl font-medium text-[#fafafa]">
               Portable Export & Selected-Output Share
             </h2>
-            <p className="font-mono text-[11px] text-[#8e899c]">
+            <p className="font-mono text-[12px] text-[#8e899c]">
               Private conversation history is never exposed automatically.
             </p>
           </div>
@@ -152,7 +152,7 @@ export function ShareExportModal({
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5 text-xs">
           {/* Direct Export Actions */}
           <div className="rounded-xl border border-[#35313c] bg-[#181820] p-3.5">
-            <div className="mb-2 font-mono text-[11px] uppercase tracking-wider text-[#d4a843]">
+            <div className="mb-2 font-mono text-[12px] uppercase tracking-wider text-[#d4a843]">
               1. Portable Research Exports
             </div>
             <div className="flex flex-wrap gap-2">
@@ -188,12 +188,12 @@ export function ShareExportModal({
 
           {/* Selected-Output Share Snapshot Builder */}
           <div className="rounded-xl border border-[#35313c] bg-[#181820] p-3.5">
-            <div className="mb-2 font-mono text-[11px] uppercase tracking-wider text-[#d4a843]">
+            <div className="mb-2 font-mono text-[12px] uppercase tracking-wider text-[#d4a843]">
               2. Create Unlisted Selected-Output Snapshot
             </div>
 
             <label className="flex flex-col gap-1">
-              <span className="font-mono text-[11px] text-[#b3b0bd]">
+              <span className="font-mono text-[12px] text-[#b3b0bd]">
                 Snapshot Title
               </span>
               <input
@@ -226,7 +226,7 @@ export function ShareExportModal({
             </div>
 
             <div className="mt-3">
-              <label className="flex items-center gap-2 font-mono text-[11px] text-[#b3b0bd]">
+              <label className="flex items-center gap-2 font-mono text-[12px] text-[#b3b0bd]">
                 <span>Snapshot Expiry:</span>
                 <select
                   value={
@@ -248,7 +248,7 @@ export function ShareExportModal({
             </div>
 
             <div className="mt-3">
-              <div className="mb-1 font-mono text-[11px] text-[#b3b0bd]">
+              <div className="mb-1 font-mono text-[12px] text-[#b3b0bd]">
                 Select Sources to Include ({selectedSourceIds.length} of{' '}
                 {run.results.length})
               </div>
@@ -264,13 +264,13 @@ export function ShareExportModal({
                       onChange={() => handleToggleSource(src.id)}
                       className="accent-[#d4a843]"
                     />
-                    <span className="font-mono text-[11px] text-[#e8c96a]">
+                    <span className="font-mono text-[12px] text-[#e8c96a]">
                       [{src.citationLabel}]
                     </span>
                     <span className="truncate text-xs text-[#fafafa]">
                       {src.title}
                     </span>
-                    <span className="ml-auto font-mono text-[10px] text-[#8e899c]">
+                    <span className="ml-auto font-mono text-[12px] text-[#8e899c]">
                       {src.hostname}
                     </span>
                   </label>
@@ -305,14 +305,14 @@ export function ShareExportModal({
                         href={createdShare.shareUrlPath}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded border border-[#35313c] px-2 py-1 font-mono text-[11px] text-[#e8c96a] hover:border-[#d4a843]"
+                        className="rounded border border-[#35313c] px-2 py-1 font-mono text-[12px] text-[#e8c96a] hover:border-[#d4a843]"
                       >
                         Open Snapshot ↗
                       </a>
                       <button
                         type="button"
                         onClick={handleRevokeShare}
-                        className="rounded border border-[#d16060]/60 bg-[#d16060]/15 px-2 py-1 font-mono text-[11px] text-[#e58c8c] hover:bg-[#d16060]/25"
+                        className="rounded border border-[#d16060]/60 bg-[#d16060]/15 px-2 py-1 font-mono text-[12px] text-[#e58c8c] hover:bg-[#d16060]/25"
                       >
                         Revoke Link
                       </button>

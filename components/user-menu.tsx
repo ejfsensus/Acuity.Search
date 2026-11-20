@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 import {
   IconChartBar as ChartBar,
@@ -12,9 +11,7 @@ import {
   IconUserCircle as UserRound
 } from '@tabler/icons-react'
 
-import { signOut } from '@/lib/actions/auth'
 import type { AppUser } from '@/lib/auth/types'
-import { chatStore } from '@/lib/chat-store'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -35,13 +32,13 @@ import { UsageDialog } from '@/components/usage-dialog'
 
 import { Button } from './ui/button'
 import { ExternalLinkItems } from './external-link-items'
+import { signOutEverywhere } from './sign-out-button'
 
 interface UserMenuProps {
   user: AppUser
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
-  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const [usageOpen, setUsageOpen] = useState(false)
@@ -64,10 +61,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   }
 
   const handleLogout = async () => {
-    await signOut()
-    chatStore.setUser(null)
-    router.push('/')
-    router.refresh()
+    await signOutEverywhere()
   }
 
   const handleOpenAccount = () => {
@@ -168,7 +162,7 @@ export default function UserMenu({ user }: UserMenuProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="size-4" />
-            <span>Logout</span>
+            <span>Sign out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

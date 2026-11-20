@@ -2,6 +2,7 @@ import type {
   AccessStatus,
   ContentState,
   DiscoveryMode,
+  ProvenanceProviderId,
   ProviderId,
   ResearchDepth,
   SortOrder
@@ -31,6 +32,13 @@ export const MODE_DESCRIPTIONS: Record<
       'Focused search across 10 curated topic collections and 110 specialist repositories.',
     placeholder:
       'Enquire within the selected topic domains and specialist repositories...'
+  },
+  'sacred-texts': {
+    label: 'Sacred Texts',
+    subtitle:
+      'The Library agent reads the Acuity sacred-text library and answers with cited passages.',
+    placeholder:
+      'Ask the Library about a teaching, passage, or theme across traditions...'
   }
 }
 
@@ -76,9 +84,32 @@ export const SORT_ORDER_LABELS: Record<SortOrder, string> = {
   newest: 'Newest'
 }
 
-export const PROVIDER_DISPLAY_NAMES: Record<ProviderId, string> = {
+export const PROVIDER_DISPLAY_NAMES: Record<ProvenanceProviderId, string> = {
+  'acuity-agent': 'Acuity Library',
   searxng: 'SearXNG',
   brave: 'Brave',
   tavily: 'Tavily',
   exa: 'Exa'
+}
+
+/**
+ * Minimal registry entry shape sent to the browser. The full entry (targets,
+ * curation, reference URLs) stays on the server — sending all 110 entries
+ * inflated the home page HTML by ~200 KB.
+ */
+export type ClientRegistryEntry = Pick<
+  import('@/lib/acuity/registry').DomainRegistryEntry,
+  'id' | 'topicGroupId' | 'starterPriority' | 'suppliedName'
+> & { hostnames: string[] }
+
+export function toClientRegistryEntries(
+  entries: import('@/lib/acuity/registry').DomainRegistryEntry[]
+): ClientRegistryEntry[] {
+  return entries.map(e => ({
+    id: e.id,
+    topicGroupId: e.topicGroupId,
+    starterPriority: e.starterPriority,
+    suppliedName: e.suppliedName,
+    hostnames: e.targets.map(t => t.hostname)
+  }))
 }

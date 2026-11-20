@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
+import { embedFrameAncestors, isEmbedEnabled } from '@/lib/acuity/embed-config'
 import {
   exceedsRelayBodyCap,
   RELAY_PREFIX,
@@ -42,6 +43,15 @@ export async function proxy(request: NextRequest) {
     return relay
   }
 
+  // Embedded mode: /embed is only served when enabled, and only the Codex
+  // origin may frame it. Standalone pages keep their existing headers.
+  const isEmbedPath =
+    request.nextUrl.pathname === '/embed' ||
+    request.nextUrl.pathname.startsWith('/embed/')
+  if (isEmbedPath && !isEmbedEnabled()) {
+    return new NextResponse('Not found', { status: 404 })
+  }
+
   // Get the protocol from X-Forwarded-Proto header or request protocol
   const protocol =
     request.headers.get('x-forwarded-proto') || request.nextUrl.protocol
@@ -64,6 +74,11 @@ export async function proxy(request: NextRequest) {
   response.headers.set('x-host', host)
   response.headers.set('x-protocol', protocol)
   response.headers.set('x-base-url', baseUrl)
+  if (isEmbedPath) {
+    response.headers.set('Content-Security-Policy', embedFrameAncestors())
+    response.headers.delete('X-Frame-Options')
+    response.headers.set('Referrer-Policy', 'no-referrer')
+  }
 
   return response
 }
@@ -76,8 +91,11 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - api/favicon (source favicon images, which need no session)
+     * - fonts/, robots.txt, sitemap.xml and static font/text/xml assets,
+     *   which must never bounce to /auth/login (fonts fell back to system
+     *   faces and crawlers received the login page)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|api/favicon|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'
+    '/((?!_next/static|_next/image|favicon.ico|api/favicon|fonts/|robots.txt|sitemap.xml|manifest.webmanifest|site.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf|txt|xml)$).*)'
   ]
 }

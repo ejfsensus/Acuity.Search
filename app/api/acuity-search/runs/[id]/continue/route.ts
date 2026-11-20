@@ -1,13 +1,20 @@
 import { NextResponse } from 'next/server'
 
-import { resolveRequestActor } from '@/lib/acuity/auth'
+import { byokContextForActor, resolveRequestActor } from '@/lib/acuity/auth'
+import { runWithByok } from '@/lib/acuity/byok/context'
 import { continueFederatedSearchRun } from '@/lib/acuity/search/federate'
-import { getSearchRunForActor, saveSearchRun } from '@/lib/acuity/store'
+import { toPublicRun } from '@/lib/acuity/search/public-view'
+import {
+  ensureStoreReady,
+  getSearchRunForActor,
+  saveSearchRun
+} from '@/lib/acuity/store'
 
 export async function POST(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  await ensureStoreReady()
   const { id } = await context.params
   const actor = await resolveRequestActor(req)
   const existingRun = getSearchRunForActor(id, actor.actorId)
@@ -19,16 +26,19 @@ export async function POST(
     )
   }
 
-  const updatedRun = await continueFederatedSearchRun(existingRun, {
-    userId: actor.actorId,
-    isGuest: actor.isGuest,
-    signal: req.signal
-  })
+  const byok = await byokContextForActor(actor)
+  const updatedRun = await runWithByok(byok, () =>
+    continueFederatedSearchRun(existingRun, {
+      userId: actor.actorId,
+      isGuest: actor.isGuest,
+      signal: req.signal
+    })
+  )
   saveSearchRun(updatedRun)
 
   const headers = new Headers()
   if (actor.setCookieHeader) {
     headers.set('Set-Cookie', actor.setCookieHeader)
   }
-  return NextResponse.json({ run: updatedRun }, { headers })
+  return NextResponse.json({ run: toPublicRun(updatedRun) }, { headers })
 }

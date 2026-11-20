@@ -59,6 +59,32 @@
 
 ---
 
+### 2.5 Open edition: members' own keys (`lib/acuity/byok/`)
+
+With `ACUITY_BYOK_MODE=required` (the default) Search never spends Acuity's AI or
+paid-search keys:
+
+- **Written answers and chat** use the member's OpenRouter key and chosen model
+  (`getModel` returns an OpenRouter model built per request). No key → the run
+  is results-only with a friendly note and a link to the profile (`#ai-keys`).
+  OpenRouter 401/402/429/404 become plain-English disclosures; a 401 drops the
+  cached key so a replaced key is picked up at once.
+- **Exa and Tavily** run through the member's Composio project
+  (`tools/execute/EXA_SEARCH|TAVILY_SEARCH`, the member's connected account, or
+  Composio instant accounts if they opted in). Composio responses are reshaped
+  into the native `{ results }` so scope checks and ranking are unchanged.
+  **Brave is off** (it would run on Acuity's key). **SearXNG stays free.**
+- **Sacred Texts** (Agent relay) needs the member's OpenRouter key; the relay
+  sends the member's verified email (`x-acuity-byok-member`) over the
+  authenticated service-account request so the Agent uses the same key.
+- Keys are fetched from acuity-auth's `/internal/byok/resolve` over the private
+  network with a service token, cached in memory for 60 s (hashed identity), and
+  never sent to the browser or logged. Pages and `/capabilities` expose only a
+  key-free status (`byok.llm`, `byok.webSearch`, `profileUrl`).
+- Identity: signed-in members by verified email; Codex embeds by the `email`
+  claim Codex adds to the launch token. Guests get results only.
+- Per-member AI run limit: `ACUITY_BYOK_USER_RPM` (default 20/min).
+
 ## 3. API Routes
 
 | Route                                   | Method          | Description                                                                                                                   |

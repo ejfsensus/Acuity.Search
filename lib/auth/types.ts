@@ -34,6 +34,11 @@ export interface AuthCapabilities {
    * the server: the client bundle cannot see OIDC_* environment variables.
    */
   oauthProvider?: string | null
+  /**
+   * Local email/password sign-in is offered (AUTH_LOCAL_LOGIN_ENABLED,
+   * default on). Unified login keeps it as a fallback during rollout.
+   */
+  localLogin?: boolean
   /** Sign-up requires confirming the email address before signing in. */
   emailVerification: boolean
   /** Sharing a chat records it under a real user (false in anonymous mode). */

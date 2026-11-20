@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
-import { resolveShareByRawToken } from '@/lib/acuity/store'
+import { ensureStoreReady, resolveShareByRawToken } from '@/lib/acuity/store'
 
 import { AcuityEmblem } from '@/components/acuity/acuity-portal-hero'
 
 export default async function SharedSnapshotPage(props: {
   params: Promise<{ token: string }>
 }) {
+  await ensureStoreReady()
   const { token } = await props.params
   const resolved = resolveShareByRawToken(token)
 

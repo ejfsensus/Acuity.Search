@@ -50,3 +50,7 @@ _local/
 /Acuity-Search-Agent-Pack/
 /*.zip
 
+
+# Playwright
+/test-results/
+/playwright-report/
